@@ -19,5 +19,5 @@ jobs:
           cd f-cine
           git pull
           npm install
-          npm build
-          serve -s build &> /dev/null
+          npm run build
+          serve -s build &> /dev/null &
