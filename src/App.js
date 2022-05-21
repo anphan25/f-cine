@@ -6,7 +6,7 @@ function App() {
     // handle success
     console.log(response);
   });
-  return <div className="App"></div>;
+  return <div className="App">d</div>;
 }
 
 export default App;
