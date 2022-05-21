@@ -1,6 +1,6 @@
 on:
   push:
-    brarches:
+    branches:
     [ main ]
 name: Auto deploy for f-cine
 jobs:
