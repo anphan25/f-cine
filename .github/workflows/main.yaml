@@ -1,0 +1,24 @@
+on:
+  push:
+    brarches:
+    [main]
+name: Auto deploy for f-cine
+jobs:
+  Build-and-deploy:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Build and deploy project
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: 22
+        script: | 
+          pkill node
+          cd f-cine
+          git pull
+          npm install
+          npm build
+          serve -s build
