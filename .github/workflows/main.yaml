@@ -20,4 +20,4 @@ jobs:
           git pull
           npm install
           npm build
-          serve -s build
+          serve -s build &> /dev/null
