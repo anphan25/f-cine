@@ -1,7 +1,7 @@
 on:
   push:
     brarches:
-    'main'
+    [ main ]
 name: Auto deploy for f-cine
 jobs:
   Build-and-deploy:
