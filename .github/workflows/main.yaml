@@ -9,6 +9,7 @@ jobs:
     steps:
     - name: Build and deploy project
       uses: appleboy/ssh-action@master
+      if: github.ref == 'refs/heads/master'
       with:
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.SSH_USERNAME }}
