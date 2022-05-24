@@ -1,5 +1,5 @@
 import React from 'react';
-import Router from 'routes/Routes';
+import Router from './routes/Routes';
 const axios = require('axios').default;
 
 function App() {

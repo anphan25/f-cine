@@ -1,9 +1,9 @@
 import { Suspense, lazy } from 'react';
 import { Navigate, useRoutes } from 'react-router-dom';
-import { MainLayout } from 'layouts/MainLayout';
-import LoadingPage from 'components/loading/LoadingPage';
+import { MainLayout } from '../layouts/MainLayout';
+import LoadingPage from '../components/loading/LoadingPage';
 import ProtectedRoutes from './ProtectedRoutes';
-import { AuthLayout } from 'layouts/AuthLayout';
+import { AuthLayout } from '../layouts/AuthLayout';
 
 const Loading = (Component) => (props) => {
   return (
@@ -54,9 +54,9 @@ export default function Router() {
   ]);
 }
 
-const Login = Loading(lazy(() => import('pages/Login')));
-const Home = Loading(lazy(() => import('pages/Home')));
-const MovieList = Loading(lazy(() => import('pages/MovieList')));
-const MovieDetails = Loading(lazy(() => import('pages/MovieDetails')));
-const Profile = Loading(lazy(() => import('pages/Profile')));
-const NotFound = Loading(lazy(() => import('pages/NotFound')));
+const Login = Loading(lazy(() => import('../pages/Login')));
+const Home = Loading(lazy(() => import('../pages/Home')));
+const MovieList = Loading(lazy(() => import('../pages/MovieList')));
+const MovieDetails = Loading(lazy(() => import('../pages/MovieDetails')));
+const Profile = Loading(lazy(() => import('../pages/Profile')));
+const NotFound = Loading(lazy(() => import('../pages/NotFound')));
