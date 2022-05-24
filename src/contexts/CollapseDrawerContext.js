@@ -35,6 +35,7 @@ function CollapseDrawerProvider({ children }) {
 
   const handleToggleCollapse = () => {
     setCollapse({ ...collapse, click: !collapse.click });
+    console.log(collapse);
   };
 
   const handleHoverEnter = () => {

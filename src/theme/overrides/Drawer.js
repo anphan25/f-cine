@@ -6,6 +6,9 @@ export default function Drawer(theme) {
   return {
     MuiDrawer: {
       styleOverrides: {
+        paper: {
+          width: 'inherit',
+        },
         modal: {
           '&[role="presentation"]': {
             '& .MuiDrawer-paperAnchorLeft': {

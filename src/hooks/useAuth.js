@@ -1,5 +1,11 @@
 import React from 'react';
 
 export const useAuth = () => {
-  return <div>useAuth</div>;
+  const user = {
+    role: 'admin',
+  };
+  return {
+    isAuthenticated: true,
+    role: user.role,
+  };
 };

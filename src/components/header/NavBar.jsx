@@ -2,8 +2,9 @@ import { AppBar, styled } from '@mui/material';
 import React from 'react';
 import { SIDEBAR, NAVBAR } from '../../utils/constants';
 import PropTypes from 'prop-types';
+import { useLocation } from 'react-router-dom';
 
-const RootStyle = styled(AppBar, {
+const DashboardStyle = styled(AppBar, {
   shouldForwardProp: (prop) => prop !== 'isCollapse',
 })(({ isCollapse, theme }) => ({
   boxShadow: 'none',
@@ -20,14 +21,29 @@ const RootStyle = styled(AppBar, {
   },
 }));
 
-const NavBar = ({ onOpenSidebar, isCollapse = false }) => {
-  return <RootStyle>NavBar</RootStyle>;
+const HomeStyle = styled(AppBar)(({ theme }) => ({
+  boxShadow: 'none',
+  height: NAVBAR.BASE_HEIGHT,
+  width: '100%',
+  zIndex: theme.zIndex.appBar + 1,
+  [theme.breakpoints.up('lg')]: {
+    width: '100%',
+  },
+}));
+
+const NavBar = ({ isCollapse = false }) => {
+  const { pathname } = useLocation();
+
+  const isDashboard = pathname === '/dashboard';
+  return !isDashboard ? (
+    <HomeStyle>NavBar</HomeStyle>
+  ) : (
+    <DashboardStyle isCollapse={isCollapse}>NavBar</DashboardStyle>
+  );
 };
 
 NavBar.propTypes = {
-  onOpenSidebar: PropTypes.func,
   isCollapse: PropTypes.bool,
-  verticalLayout: PropTypes.bool,
 };
 
 export default NavBar;

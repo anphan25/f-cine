@@ -4,3 +4,6 @@ export { default as MovieList } from './MovieList';
 export { default as MovieDetails } from './MovieDetails';
 export { default as Profile } from './Profile';
 export { default as NotFound } from './NotFound';
+export { default as Dashboard } from './Dashboard';
+export { default as PermissionDenied } from './PermissionDenied';
+export { default as Payment } from './Payment';
