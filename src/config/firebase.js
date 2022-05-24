@@ -8,8 +8,8 @@ const firebase = {
   appId: process.env.REACT_APP_FIREBASE_APP_ID,
 };
 
-const firebaseApp = initializeApp(firebase);
+// const firebaseApp = initializeApp(firebase);
 
-export const auth = getAuth(firebaseApp);
-export const db = getFirestore(firebaseApp);
-export const storage = getStorage(firebaseApp);
+// export const auth = getAuth(firebaseApp);
+// export const db = getFirestore(firebaseApp);
+// export const storage = getStorage(firebaseApp);
