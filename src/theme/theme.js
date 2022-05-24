@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import {
   createTheme,
   ThemeProvider as MUIThemeProvider,
@@ -6,25 +6,16 @@ import {
 import breakpoints from './breakpoints';
 import palette from './palette';
 import typography from './typography';
-import shadows from './shadows';
-import useAppTheme from 'hooks/useAppTheme';
+import Overrides from './overrides';
 
 const ThemeProvider = ({ children }) => {
-  const { mode } = useAppTheme();
+  const theme = createTheme({
+    palette,
+    breakpoints,
+    typography,
+  });
 
-  const theme = useMemo(
-    () =>
-      createTheme({
-        palette: mode === 'light' ? palette.light : palette.dark,
-        breakpoints,
-        typography,
-        shadows: mode === 'light' ? shadows.light : shadows.dark,
-        shape: {
-          borderRadius: 12,
-        },
-      }),
-    [mode]
-  );
+  theme.components = Overrides(theme);
 
   return <MUIThemeProvider theme={theme}>{children}</MUIThemeProvider>;
 };
