@@ -1,6 +1,6 @@
 import { AppBar, styled } from '@mui/material';
 import React from 'react';
-import { SIDEBAR, NAVBAR } from 'utils/constants';
+import { SIDEBAR, NAVBAR } from '../../utils/constants';
 import PropTypes from 'prop-types';
 
 const RootStyle = styled(AppBar, {

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { createContext, useState, useEffect } from 'react';
-import useResponsive from 'hooks/useResponsive';
+import useResponsive from '../hooks/useResponsive';
 
 const initialState = {
   collapseClick: false,

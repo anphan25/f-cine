@@ -1,7 +1,7 @@
 import { AppBar, styled } from '@mui/material';
-import useResponsive from 'hooks/useResponsive';
+import useResponsive from '../../hooks/useResponsive';
 import React from 'react';
-import { SIDEBAR } from 'utils/constants';
+import { SIDEBAR } from '../../utils/constants';
 
 const RootStyle = styled('div', {
   shouldForwardProp: (prop) => prop !== 'isCollapse',

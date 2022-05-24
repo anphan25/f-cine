@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Box, styled, Typography } from '@mui/material';
 import { Link, Outlet } from 'react-router-dom';
-import { SideBar, NavBar } from 'components';
-import { SIDEBAR, NAVBAR } from 'utils/constants';
-import useCollapseDrawer from 'hooks/useCollapseDrawer';
+import { SideBar, NavBar } from '../components';
+import { SIDEBAR, NAVBAR } from '../utils/constants';
+import useCollapseDrawer from '../hooks/useCollapseDrawer';
 
 const RootStyle = styled('div', {
   shouldForwardProp: (prop) => prop !== 'collapseClick',
