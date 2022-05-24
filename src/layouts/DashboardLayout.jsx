@@ -20,14 +20,16 @@ const RootStyle = styled('div', {
   },
 }));
 
-const MainStyle = styled('main')(({ theme }) => ({
+const MainStyle = styled('div')(({ theme }) => ({
+  width: '100%',
   marginTop: NAVBAR.BASE_HEIGHT,
   backgroundColor: theme.palette.neutral[200],
+  zIndex: -1,
 }));
 
 export const DashboardLayout = () => {
   const { collapseClick, isCollapse } = useCollapseDrawer();
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
 
   return (
     <Box
@@ -36,10 +38,10 @@ export const DashboardLayout = () => {
         minHeight: { lg: 1 },
       }}
     >
-      <SideBar isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />
+      <SideBar />
 
       <RootStyle collapseClick={collapseClick}>
-        <NavBar />
+        <NavBar isCollapse={isCollapse} />
         <MainStyle>
           <Outlet />
           <Typography variant="caption" component="p">
