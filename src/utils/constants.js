@@ -5,3 +5,7 @@ export const SIDEBAR = {
 export const NAVBAR = {
   BASE_HEIGHT: 70,
 };
+
+export const FOOTER = {
+  BASE_HEIGHT: 300,
+};
