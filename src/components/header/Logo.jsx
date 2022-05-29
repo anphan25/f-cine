@@ -1,6 +1,6 @@
-import { Avatar, Stack, Typography } from '@mui/material';
-import React from 'react';
-import { logo } from 'assets/images';
+import { Avatar, Stack, Typography } from "@mui/material";
+import React from "react";
+import { logo } from "assets/images";
 
 const Logo = () => {
   return (
