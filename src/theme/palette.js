@@ -47,7 +47,6 @@ const palette = {
     700: "#6F767E",
     800: "#2E2E30",
     900: "#1A1D1F",
-    border: "#e3e3e3",
   },
   chart: {
     violet: ["#826AF9", "#9E86FF", "#D0AEFF", "#F7D2FF"],
@@ -59,6 +58,9 @@ const palette = {
 
   background: {
     0: "#FBFBFB",
+  },
+  border: {
+    0: "#e3e3e3",
   },
 };
 

@@ -16,32 +16,32 @@ const Home = () => {
     <>
       <Slider></Slider>
       <TextHeader>
-        <Typography align="left" variant="h4" color="#2E2E30">
-          Now showing
+        <Typography align="left" variant="h4" color="neutral.800">
+          Now Showing
         </Typography>
         <Typography
           align="right"
           fontWeight="600"
-          color="#6346FA"
+          color="primary.main"
           sx={{ cursor: "pointer" }}
         >
-          View all
+          View All
         </Typography>
       </TextHeader>
 
       <PosterCardList></PosterCardList>
 
       <TextHeader>
-        <Typography align="left" variant="h4" color="#2E2E30">
-          Upcoming soon
+        <Typography align="left" variant="h4" color="neutral.800">
+          Upcoming Soon
         </Typography>
         <Typography
           align="right"
           fontWeight="600"
-          color="#6346FA"
+          color="primary.main"
           sx={{ cursor: "pointer" }}
         >
-          View all
+          View All
         </Typography>
       </TextHeader>
 
