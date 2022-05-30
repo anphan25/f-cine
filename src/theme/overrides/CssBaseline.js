@@ -19,6 +19,7 @@ export default function CssBaseline() {
           height: '100%',
         },
         '#root': {
+          fontSize: 16,
           width: '100%',
           height: '100%',
         },
@@ -38,6 +39,10 @@ export default function CssBaseline() {
         img: {
           display: 'block',
           maxWidth: '100%',
+        },
+        a: {
+          textDecoration: 'none',
+          color: 'inherit',
         },
       },
     },

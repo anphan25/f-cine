@@ -3,7 +3,7 @@ export const SIDEBAR = {
   COLLAPSE_WIDTH: 88,
 };
 export const NAVBAR = {
-  BASE_HEIGHT: 70,
+  BASE_HEIGHT: 90,
 };
 
 export const FOOTER = {

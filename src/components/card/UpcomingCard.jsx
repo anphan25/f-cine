@@ -1,14 +1,4 @@
-import {
-  CardContent,
-  CardActions,
-  Card,
-  Typography,
-  Button,
-  CardMedia,
-} from "@mui/material";
-
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import { Card, CardMedia } from '@mui/material';
 
 const UpcomingCard = () => {
   return (
@@ -16,9 +6,9 @@ const UpcomingCard = () => {
       <Card
         sx={{
           maxWidth: 345,
-          borderRadius: "10px",
-          border: "1px solid #e3e3e3",
-          cursor: "pointer",
+          borderRadius: '10px',
+          border: '1px solid #e3e3e3',
+          cursor: 'pointer',
         }}
       >
         <CardMedia

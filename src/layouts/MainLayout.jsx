@@ -1,14 +1,14 @@
-import { NavBar } from "components";
-import Footer from "../components/footer/Footer";
-import React from "react";
-import { Outlet } from "react-router-dom";
-import { styled, Container } from "@mui/material";
-import { Background } from "../components/index";
+import { NavBar } from 'components';
+import Footer from '../components/footer/Footer';
+import React from 'react';
+import { Outlet } from 'react-router-dom';
+import { styled, Container } from '@mui/material';
+import { Background } from '../components/index';
 
-const ContentStyle = styled("div")(({ theme }) => ({
-  borderRadius: "8px",
-  margin: "100px 0 30px",
-  width: "100%",
+const ContentStyle = styled('div')(({ theme }) => ({
+  borderRadius: '8px',
+  margin: '100px 0 30px',
+  width: '100%',
 }));
 
 export const MainLayout = () => {
@@ -19,9 +19,9 @@ export const MainLayout = () => {
         <Container
           className="container"
           sx={{
-            display: "flex",
-            flexDirection: "column",
-            width: "calc(100% - 120px)",
+            display: 'flex',
+            flexDirection: 'column',
+            width: 'calc(100% - 120px)',
           }}
         >
           <ContentStyle className="content">
