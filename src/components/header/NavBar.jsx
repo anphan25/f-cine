@@ -2,7 +2,7 @@ import { AppBar, styled, Button, Typography } from "@mui/material";
 import React from "react";
 import { SIDEBAR, NAVBAR } from "../../utils/constants";
 import PropTypes from "prop-types";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import { Logo } from "../index";
 import "./NavBar.css";
 
@@ -41,30 +41,13 @@ const HomeStyle = styled(AppBar)(({ theme }) => ({
 const NavItemStyle = styled("div")(({ theme }) => ({
   "& ul": { listStyle: "none", display: "flex" },
   "& ul li": { marginLeft: "20px", marginRight: "20px", cursor: "pointer" },
-  // "& .nav-bar_text": { position: "relative" },
-  // "& .nav-bar-text::before": {
-  //   content: '""',
-  //   position: "absolute",
-  //   bottom: "0",
-  //   left: "0",
-  //   right: "0",
-  //   height: "2px",
-  //   backgroundColor: theme.palette.primary["dark"],
-  //   transformOrigin: "bottom right",
-  //   transform: "scaleX(0)",
-  //   transition: "transform 0.5s ease",
-  // },
-
-  // "& .nav-bar-text:hover::before": {
-  //   transformOrigin: "bottom left",
-  //   transform: "scaleX(1)",
-  // },
 }));
 
 const NavBar = ({ isCollapse = false }) => {
   const { pathname } = useLocation();
 
   const isDashboard = pathname === "/dashboard";
+
   return !isDashboard ? (
     <HomeStyle className="HomeStyle">
       <Logo></Logo>
@@ -81,9 +64,12 @@ const NavBar = ({ isCollapse = false }) => {
           </li>
         </ul>
       </NavItemStyle>
-      <Button variant="contained" sx={{ width: 100, borderRadius: 10 }}>
-        Sign In
-      </Button>
+
+      <Link to="/login">
+        <Button variant="contained" sx={{ width: 100, borderRadius: 10 }}>
+          Sign In
+        </Button>
+      </Link>
     </HomeStyle>
   ) : (
     <DashboardStyle isCollapse={isCollapse}>NavBar</DashboardStyle>

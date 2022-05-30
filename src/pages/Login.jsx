@@ -2,6 +2,9 @@ import React from "react";
 import { styled } from "@mui/material";
 import { amico, gg } from "assets/images";
 import { Logo } from "../components/index";
+import { auth } from "../config/firebase";
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import axios from "axios";
 
 const RightDiv = styled("div")(({ theme }) => ({
   width: "50%",
@@ -74,8 +77,18 @@ const MainDiv = styled("div")(({ theme }) => ({
 }));
 
 const Login = () => {
-  const loginGoogleHandler = () => {
-    console.log("test");
+  const loginGoogleHandler = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      const res = await signInWithPopup(auth, provider);
+      let user = res.user;
+
+      await axios.post("https://fcinema.tk/api/auth/google-sign-in", {
+        idToken: res._tokenResponse.idToken,
+      });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
