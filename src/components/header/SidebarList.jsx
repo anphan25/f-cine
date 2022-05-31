@@ -11,7 +11,10 @@ import {
 export const SidebarList = () => {
   return (
     <>
-      <Box direction="column" sx={{ marginTop: "15px" }}>
+      <Box
+        direction="column"
+        sx={{ marginTop: "15px", backgroundColor: "neutral.0" }}
+      >
         <List>
           <ListItem sx={{ padding: "0" }}>
             <ListItemButton
