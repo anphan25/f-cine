@@ -5,18 +5,18 @@ export default function Button(theme) {
     MuiButton: {
       styleOverrides: {
         root: {
-          boxShadow: 'none',
-          textTransform: 'capitalize',
-          fontSize: 20,
-          fontWeight: 600,
+          boxShadow: "none",
+          textTransform: "capitalize",
+          fontSize: 15,
+          // fontWeight: 300,
         },
         sizeLarge: {
           height: 48,
         },
         containedInherit: {
-          textTransform: 'capitalize',
-          '&:hover': {
-            boxShadow: 'none',
+          textTransform: "capitalize",
+          "&:hover": {
+            boxShadow: "none",
           },
         },
         // containedPrimary: {
@@ -39,12 +39,12 @@ export default function Button(theme) {
         // },
         outlinedInherit: {
           border: `1px solid ${theme.palette.grey[500_32]}`,
-          '&:hover': {
+          "&:hover": {
             backgroundColor: theme.palette.action.hover,
           },
         },
         textInherit: {
-          '&:hover': {
+          "&:hover": {
             backgroundColor: theme.palette.action.hover,
           },
         },

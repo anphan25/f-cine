@@ -4,6 +4,7 @@ import { amico, gg } from "assets/images";
 import { Logo } from "../components/index";
 import { auth } from "../config/firebase";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { Link } from "react-router-dom";
 import axios from "axios";
 
 const RightDiv = styled("div")(({ theme }) => ({
@@ -20,21 +21,26 @@ const RightDiv = styled("div")(({ theme }) => ({
     display: "flex",
     justifyContent: "center",
     flexDirection: "column",
+
+    "& h1": {
+      fontSize: "40px",
+    },
   },
   "& .content .gmail": {
-    backgroundColor: theme.palette.neutral[900],
-    color: theme.palette.neutral[0],
+    backgroundColor: theme.palette.neutral[200],
+    color: theme.palette.neutral[800],
     fontWeight: "500",
     padding: "8px",
     borderRadius: "10px",
     display: "flex",
     justifyContent: "center",
     cursor: "pointer",
-    marginTop: "5px",
+    marginTop: "15px",
+    border: `1.5px solid ${theme.palette.border[0]}`,
   },
 
   "& .content .gmail:hover": {
-    backgroundColor: theme.palette.neutral[800],
+    backgroundColor: theme.palette.neutral[400],
     transition: "0.2s linear",
   },
 
@@ -54,19 +60,23 @@ const RightDiv = styled("div")(({ theme }) => ({
   },
   "& .content .f-cine-logo": {
     paddingLeft: "50px",
-    marginBottom: "10px",
+    marginBottom: "15px",
   },
 }));
 const LeftDiv = styled("div")(({ theme }) => ({
   height: "100%",
   position: "relative",
   width: "50%",
-  "& img": {
-    height: "585px",
+  "& .amicoImg": {
+    height: "650px",
     width: "auto",
     position: "absolute",
     right: "-15%",
-    top: "10%",
+    top: "7%",
+  },
+
+  "& .logoDiv": {
+    padding: "10px",
   },
 }));
 const MainDiv = styled("div")(({ theme }) => ({
@@ -95,13 +105,15 @@ const Login = () => {
     <>
       <MainDiv>
         <LeftDiv>
-          <img src={amico}></img>
+          <Link to="/">
+            <div className="logoDiv">
+              <Logo></Logo>
+            </div>
+          </Link>
+          <img className="amicoImg" src={amico}></img>
         </LeftDiv>
         <RightDiv>
           <div className="content">
-            <div className="f-cine-logo">
-              <Logo></Logo>
-            </div>
             <h1>Welcome Back!</h1>
             <div className="gmail" onClick={loginGoogleHandler}>
               <div>
