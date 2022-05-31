@@ -111,6 +111,10 @@ const Slider = () => {
                       width: "120px",
                       border: "1.5px solid",
                       borderRadius: "50px",
+                      "&:hover": {
+                        backgroundColor: "primary.main",
+                        color: "neutral.0",
+                      },
                     }}
                   >
                     View Detail

@@ -14,3 +14,13 @@
   width: 70px;
   margin-right: 60px;
 }
+
+.swiper-button-next:hover {
+  background-color: rgba(255, 255, 255, 0.8);
+  transition: 0.3s;
+}
+
+.swiper-button-prev:hover {
+  background-color: rgba(255, 255, 255, 0.8);
+  transition: 0.3s;
+}
