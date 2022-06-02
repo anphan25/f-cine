@@ -4,19 +4,25 @@ import { SIDEBAR, NAVBAR } from 'utils/constants';
 import PropTypes from 'prop-types';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import { Logo } from 'components';
-import { useSelector } from 'react-redux';
 import { NavBarAccount } from './NavBarAccount';
+import { SearchBar } from './SearchBar';
 
 const DashboardStyle = styled(AppBar, {
   shouldForwardProp: (prop) => prop !== 'isCollapse',
 })(({ isCollapse, theme }) => ({
-  boxShadow: '0px 4px 20px rgba(102, 102, 102, 0.1)',
+  padding: '24px 40px',
+  boxShadow: 'inset 1px 0px 0px #F4F4F4',
   height: NAVBAR.BASE_HEIGHT,
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'space-between',
   width: `calc(100% - ${SIDEBAR.BASE_WIDTH}px)`,
   zIndex: theme.zIndex.appBar + 1,
+  color: theme.palette.neutral[700],
   transition: theme.transitions.create(['width', 'height'], {
     duration: theme.transitions.duration.shorter,
   }),
+  backgroundColor: theme.palette.neutral[0],
   [theme.breakpoints.up('lg')]: {
     ...(isCollapse && {
       width: `calc(100% - ${SIDEBAR.COLLAPSE_WIDTH}px)`,
@@ -80,9 +86,8 @@ const NavBar = ({ isCollapse = false }) => {
   const { pathname } = useLocation();
   const [active, setActive] = useState(pathname);
   const navigate = useNavigate();
-  const userInfo = useSelector((state) => state.auth?.auth?.user);
 
-  const isDashboard = pathname === '/dashboard';
+  const isDashboard = pathname.includes('/dashboard');
 
   return !isDashboard ? (
     <HomeStyle>
@@ -99,23 +104,22 @@ const NavBar = ({ isCollapse = false }) => {
           </LinkStyle>
         ))}
       </Stack>
-      {userInfo ? (
-        <NavBarAccount />
-      ) : (
-        <Button
-          onClick={() => navigate('login')}
-          variant="contained"
-          sx={{
-            borderRadius: '50px',
-            p: '8px 26px',
-          }}
-        >
-          Sign In
-        </Button>
-      )}
+      <Button
+        onClick={() => navigate('login')}
+        variant="contained"
+        sx={{
+          borderRadius: '50px',
+          p: '8px 26px',
+        }}
+      >
+        Sign In
+      </Button>
     </HomeStyle>
   ) : (
-    <DashboardStyle isCollapse={isCollapse}>NavBar</DashboardStyle>
+    <DashboardStyle isCollapse={isCollapse}>
+      <SearchBar />
+      <NavBarAccount />
+    </DashboardStyle>
   );
 };
 

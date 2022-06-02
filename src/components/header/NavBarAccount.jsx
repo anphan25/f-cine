@@ -4,6 +4,7 @@ import { BiChevronDown, BiChevronUp, BiUser } from 'react-icons/bi';
 import {
   Avatar,
   Divider,
+  ListItem,
   ListItemIcon,
   MenuItem,
   Popover,
@@ -26,6 +27,13 @@ const MenuItemContainer = styled(MenuItem)(({ theme }) => ({
   },
   width: 280,
 }));
+
+// const ListItemContainer = styled(ListItem)(({ theme }) => ({
+//   padding: '12px',
+//   borderRadius: '1rem',
+//   color: theme.palette.neutral[700],
+//   width: 280,
+// }));
 
 export const NavBarAccount = () => {
   const { open, handleClick, handleClose, anchorEl } = useClick();
@@ -79,6 +87,34 @@ export const NavBarAccount = () => {
           top: '7% !important',
         }}
       >
+        <Stack
+          direction="column"
+          sx={{ padding: '12px', width: 280 }}
+          spacing="4px"
+        >
+          <Typography
+            whiteSpace="normal"
+            color="neutral.900"
+            fontWeight="700"
+            fontSize={18}
+          >
+            {userInfo?.Name}
+          </Typography>
+          <Typography
+            whiteSpace="normal"
+            color="neutral.800"
+            fontWeight="500"
+            fontSize={14}
+          >
+            {userInfo?.Email}
+          </Typography>
+        </Stack>
+        <Divider
+          sx={{
+            borderColor: 'border.0',
+            mb: '8px',
+          }}
+        />
         {links.map((link) => (
           <MenuItemContainer key={link.label} to={link.linkTo} component={Link}>
             <ListItemIcon sx={{ color: 'inherit' }}>{link.icon}</ListItemIcon>

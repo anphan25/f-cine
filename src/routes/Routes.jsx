@@ -25,34 +25,27 @@ export default function Router() {
         { element: <Home />, index: true },
         { path: 'movies/:type', element: <MovieList /> },
         { path: 'movie/:id', element: <MovieDetails /> },
-        {
-          path: 'profile',
-          element: (
-            <ProtectedRoutes roles={['user']}>
-              <Profile />
-            </ProtectedRoutes>
-          ),
-        },
-        {
-          path: 'payment',
-          element: (
-            <ProtectedRoutes roles={['Customer']}>
-              <Payment />
-            </ProtectedRoutes>
-          ),
-        },
       ],
     },
     {
       path: '/dashboard',
       element: (
-        <ProtectedRoutes roles={['admin', 'manager']}>
+        <ProtectedRoutes>
           <DashboardLayout />
         </ProtectedRoutes>
       ),
       children: [
         { element: <Dashboard />, index: true },
-        { path: 'movies', element: <MovieList /> },
+        { path: 'movies/:type', element: <MovieList /> },
+        { path: 'movie/:id', element: <MovieDetails /> },
+        {
+          path: 'profile',
+          element: <Profile />,
+        },
+        {
+          path: 'payment',
+          element: <Payment />,
+        },
       ],
     },
     {

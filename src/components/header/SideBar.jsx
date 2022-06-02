@@ -14,35 +14,58 @@ const RootStyle = styled('div')(({ isCollapse, theme }) => ({
   left: 0,
   top: 0,
   bottom: 0,
-  width: SIDEBAR.BASE_WIDTH,
-  padding: '24px',
+  width: isCollapse ? SIDEBAR.COLLAPSE_WIDTH : SIDEBAR.BASE_WIDTH,
+  padding: '20px',
   display: 'flex',
   flexDirection: 'column',
   zIndex: 1,
   transition: theme.transitions.create(['width', 'height'], {
     duration: theme.transitions.duration.shorter,
   }),
-  [theme.breakpoints.up('lg')]: {
-    ...(isCollapse
-      ? {
-          width: SIDEBAR.COLLAPSE_WIDTH,
-        }
-      : { width: SIDEBAR.BASE_WIDTH }),
-  },
+  backgroundColor: theme.palette.neutral[0],
+  //borderRight: `1px solid ${theme.palette.border[0]}`,
+  // [theme.breakpoints.up('lg')]: {
+  //   ...(isCollapse
+  //     ? {
+  //         width: SIDEBAR.COLLAPSE_WIDTH,
+  //       }
+  //     : { width: SIDEBAR.BASE_WIDTH }),
+  // },
 }));
 
 const SideBar = () => {
-  const { collapseClick, onToggleCollapse, onHoverEnter, onHoverLeave } =
-    useCollapseDrawer();
+  const {
+    collapseClick,
+    onToggleCollapse,
+    onHoverEnter,
+    onHoverLeave,
+    isCollapse,
+  } = useCollapseDrawer();
 
   return (
-    <RootStyle onMouseEnter={onHoverEnter} onMouseLeave={onHoverLeave}>
-      <Stack direction="row" justifyContent="space-between" alignItems="center">
-        <Logo />
+    <RootStyle
+      onMouseEnter={onHoverEnter}
+      onMouseLeave={onHoverLeave}
+      isCollapse={isCollapse}
+    >
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        sx={{ height: '48px', width: '100%' }}
+      >
+        <Logo logoOnly={true} />
 
         <IconButton
           onClick={() => {
             onToggleCollapse();
+          }}
+          sx={{
+            display: !isCollapse ? 'flex' : 'none',
+            height: 48,
+            width: 48,
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
           {!collapseClick ? (
@@ -52,7 +75,7 @@ const SideBar = () => {
           )}
         </IconButton>
       </Stack>
-      <SidebarList />
+      <SidebarList isCollapse={isCollapse} />
     </RootStyle>
   );
 };

@@ -1,12 +1,12 @@
 import React from 'react';
-import { styled } from '@mui/material';
+import { Alert, Button, Stack, styled, Typography } from '@mui/material';
 import { amico, gg } from 'assets/images';
 import { Logo } from 'components';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth } from 'config/firebase';
 import { postIdToken } from 'services/AuthService';
-import { useDispatch } from 'react-redux';
-import { loginSuccess } from 'redux/auth/AuthSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { authPending, loginFail, loginSuccess } from 'redux/auth/AuthSlice';
 import jwtDecode from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 
@@ -14,64 +14,41 @@ const RightDiv = styled('div')(({ theme }) => ({
   width: '40%',
   height: '100%',
   backgroundColor: theme.palette.neutral[0],
-  borderRadius: '30px 0 0 30px',
   color: '#414141',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   flexDirection: 'column',
+}));
 
-  '& .content': {
-    display: 'flex',
-    justifyContent: 'center',
-    flexDirection: 'column',
+const ButtonStyle = styled(Button)(({ theme }) => ({
+  padding: '16px 28px',
+  width: '303px',
+  borderRadius: 12,
+  border: `2px solid ${theme.palette.neutral[300]}`,
+  fontSize: 20,
+  fontWeight: 600,
+  backgroundColor: theme.palette.neutral[200],
+  color: theme.palette.neutral[900],
+  '& img': {
+    height: '30px',
+    width: '30px',
   },
-  '& .content .gmail': {
-    backgroundColor: theme.palette.neutral[900],
-    color: theme.palette.neutral[0],
-    fontWeight: 500,
-    padding: '8px',
-    borderRadius: '10px',
-    display: 'flex',
-    justifyContent: 'center',
-    cursor: 'pointer',
-    marginTop: '5px',
-  },
-
-  '& .content .gmail:hover': {
-    backgroundColor: theme.palette.neutral[800],
-    transition: '0.2s linear',
-  },
-
-  '& .content .gmail img': {
-    height: '40px',
-    width: 'auto',
-  },
-  '& .content h1': {
-    color: '#414141',
-    textAlign: 'center',
-    verticalAlign: 'middle',
-  },
-
-  '& .loginText': {
-    marginTop: '8px',
-    marginLeft: '5px',
-  },
-  '& .content .f-cine-logo': {
-    paddingLeft: '50px',
-    marginBottom: '10px',
+  ':hover': {
+    borderWidth: '2px',
   },
 }));
+
 const LeftDiv = styled('div')(({ theme }) => ({
   height: '100%',
   position: 'relative',
   width: '60%',
-  '& img': {
-    height: '80%',
-    width: '100%',
+  padding: '24px',
+  '& .illustration': {
     position: 'absolute',
-    right: '-15%',
-    top: '10%',
+    transform: 'scale(0.75)',
+    right: '64px',
+    top: '-20px',
   },
 }));
 const MainDiv = styled('div')(({ theme }) => ({
@@ -79,13 +56,16 @@ const MainDiv = styled('div')(({ theme }) => ({
   display: 'flex',
   backgroundColor: theme.palette.info['lighter'],
   alignItems: 'center',
+  overflow: 'hidden',
 }));
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { error, isLoading } = useSelector((state) => state.auth);
 
   const loginGoogle = async () => {
+    dispatch(authPending());
     const provider = new GoogleAuthProvider();
     await signInWithPopup(auth, provider)
       .then((result) => {
@@ -105,30 +85,38 @@ const Login = () => {
               refreshToken: res.refreshToken,
             })
           );
-          navigate('/');
+          navigate('/dashboard');
         });
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.log(error);
+        dispatch(loginFail(error.message));
+      });
   };
 
   return (
     <MainDiv>
       <LeftDiv>
-        <img src={amico} alt=""></img>
+        <Logo />
+        <img src={amico} alt="" className="illustration"></img>
       </LeftDiv>
       <RightDiv>
-        <div className="content">
-          <div className="f-cine-logo">
-            <Logo></Logo>
-          </div>
-          <h1>Welcome Back!</h1>
-          <div className="gmail" onClick={loginGoogle}>
-            <div>
-              <img src={gg} alt=""></img>
-            </div>
-            <div className="loginText">Sign in with Google</div>
-          </div>
-        </div>
+        <Stack
+          alignItems="center"
+          spacing="24px"
+          sx={{ width: '570px', textAlign: 'center' }}
+        >
+          <Typography variant="h2">Welcome Back!</Typography>
+          <ButtonStyle
+            variant="outlined"
+            startIcon={<img src={gg} alt="" />}
+            onClick={loginGoogle}
+            disabled={isLoading}
+          >
+            Sign in with Google
+          </ButtonStyle>
+          {error && <Alert severity="error">{error}</Alert>}
+        </Stack>
       </RightDiv>
     </MainDiv>
   );
