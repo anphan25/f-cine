@@ -1,20 +1,25 @@
 import { PosterCard } from "../index";
 import { styled, Stack } from "@mui/material";
+import React, { useState } from "react";
 
-const PosterList = styled("div")(({ theme }) => ({
-  display: "flex",
-}));
-
-const PosterCardList = () => {
+const PosterCardList = (props) => {
   return (
-    <>
-      <Stack direction="row" spacing={2}>
-        <PosterCard></PosterCard>
-        <PosterCard></PosterCard>
-        <PosterCard></PosterCard>
-        <PosterCard></PosterCard>
-      </Stack>
-    </>
+    <Stack
+      direction="row"
+      // justifyContent="space-between"
+      flexWrap="wrap"
+      sx={{ gap: 1.9 }}
+    >
+      {props.movieList.map((movie, index) => {
+        return (
+          <PosterCard
+            movie={movie}
+            key={index}
+            // sx={{ width: "24%" }}
+          ></PosterCard>
+        );
+      })}
+    </Stack>
   );
 };
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -59,7 +59,9 @@ const sliderList = [
   "https://nocodebuilding.com/wp-content/uploads/2021/07/avengers-endgame.jpg",
 ];
 
-const Slider = () => {
+const Slider = (props) => {
+  const [movies, setMovies] = useState([]);
+
   return (
     <SliderStyle>
       <Swiper
@@ -76,50 +78,53 @@ const Slider = () => {
         modules={[Navigation, Autoplay]}
         className="mySwiper"
       >
-        {sliderList.map((slider, index) => (
-          <SwiperSlide key={index}>
-            <Box
-              sx={{
-                backgroundImage: `url(${slider})`,
-                backgroundRepeat: "no-repeat",
-                backgroundSize: "cover",
-                height: "100%",
-                width: "100%",
-                borderRadius: "14px",
-              }}
-            >
-              <OverlayStyle>
-                <SlideDescriptionStyle>
-                  <Typography
-                    // component="div"
-                    sx={{
-                      color: "#ffff",
-                      fontWeight: 600,
-                      fontSize: "40px",
-                      lineHeight: "72px",
-                      letterSpacing: "0.005em",
-                      fontFamily: "Poppins",
-                      fontStyle: "normal",
-                    }}
-                  >
-                    End game
-                  </Typography>
-                  <Button
-                    variant="outlined"
-                    sx={{
-                      height: "40px",
-                      width: "120px",
-                      border: "1.5px solid",
-                      borderRadius: "50px",
-                    }}
-                  >
-                    View Detail
-                  </Button>
-                </SlideDescriptionStyle>
-              </OverlayStyle>
-            </Box>
-          </SwiperSlide>
-        ))}
+        {!props.moviePosterList
+          ? ""
+          : props.moviePosterList.map((slider, index) => (
+              <SwiperSlide>
+                <Box
+                  key={index}
+                  movie-id={slider.movieId}
+                  sx={{
+                    backgroundImage: `url(${slider.coverImgURL})`,
+                    backgroundRepeat: "no-repeat",
+                    backgroundSize: "cover",
+                    height: "100%",
+                    width: "100%",
+                    borderRadius: "14px",
+                  }}
+                >
+                  <OverlayStyle>
+                    <SlideDescriptionStyle>
+                      <Typography
+                        sx={{
+                          color: "#ffff",
+                          fontWeight: 600,
+                          fontSize: "40px",
+                          lineHeight: "72px",
+                          letterSpacing: "0.005em",
+                          fontFamily: "Poppins",
+                          fontStyle: "normal",
+                        }}
+                      >
+                        {slider.title}
+                      </Typography>
+                      <Button
+                        variant="outlined"
+                        sx={{
+                          height: "40px",
+                          width: "120px",
+                          border: "1.5px solid",
+                          borderRadius: "50px",
+                        }}
+                      >
+                        View Detail
+                      </Button>
+                    </SlideDescriptionStyle>
+                  </OverlayStyle>
+                </Box>
+              </SwiperSlide>
+            ))}
       </Swiper>
     </SliderStyle>
   );

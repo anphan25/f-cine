@@ -1,4 +1,4 @@
-import { Typography, styled, Box } from "@mui/material";
+import { Typography, styled, Box, Dialog } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { Slider, PosterCardList, UpcomingCardList } from "../components/index";
 import axios from "axios";
@@ -9,13 +9,41 @@ const TextHeader = styled("div")(({ theme }) => ({
   alignItems: "center",
   padding: "0 20px 10px",
   borderBottom: `1px solid ${theme.palette.neutral[300]}`,
-  margin: "80px 0 20px",
+  margin: "60px 0 20px",
 }));
 
 const Home = () => {
+  const [movies, setMovies] = useState([]);
+  const [posters, setPosters] = useState([]);
+  const [incomingMovies, setIncomingMovies] = useState([]);
+
+  const getMovieListForHomePage = async () => {
+    const res = await axios.get(
+      "https://www.fcinema.tk/api/movie/get-movies-for-homepage"
+    );
+
+    let moviesList = res.data.movieList.slice(0, 4);
+
+    setMovies(moviesList);
+    setPosters(res.data.movieList);
+  };
+
+  const getIncomingMovieListForHomePage = async () => {
+    const res = await axios.get(
+      "https://www.fcinema.tk/api/movie/get-incoming-movies-for-homepage"
+    );
+
+    setIncomingMovies(res.data.losslessMovieList);
+  };
+
+  useEffect(() => {
+    getMovieListForHomePage();
+    getIncomingMovieListForHomePage();
+  }, []);
+
   return (
     <>
-      <Slider></Slider>
+      {/* <Slider moviePosterList={posters}></Slider> */}
       <Box sx={{ mt: "700px" }}>
         <TextHeader>
           <Typography align="left" variant="h4" color=" .800">
@@ -31,7 +59,7 @@ const Home = () => {
           </Typography>
         </TextHeader>
 
-        <PosterCardList></PosterCardList>
+        <PosterCardList movieList={movies}></PosterCardList>
 
         <TextHeader>
           <Typography align="left" variant="h4" color="neutral.800">
@@ -47,7 +75,7 @@ const Home = () => {
           </Typography>
         </TextHeader>
 
-        <UpcomingCardList></UpcomingCardList>
+        <UpcomingCardList incomingMovies={incomingMovies}></UpcomingCardList>
       </Box>
     </>
   );
