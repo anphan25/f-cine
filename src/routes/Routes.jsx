@@ -1,11 +1,6 @@
 import { Suspense, lazy } from 'react';
 import { Navigate, useRoutes } from 'react-router-dom';
-import {
-  MainLayout,
-  AuthLayout,
-  DashboardLayout,
-  MessageLayout,
-} from 'layouts';
+import { MainLayout, DashboardLayout, MessageLayout } from 'layouts';
 import LoadingPage from '../components/loading/LoadingPage';
 import ProtectedRoutes from './ProtectedRoutes';
 
@@ -22,13 +17,6 @@ export default function Router() {
     {
       path: '/login',
       element: <Login />,
-      // children: [
-      //   {
-      //     path: 'login',
-      //     element: <Login />,
-      //   },
-      //   { element: <Navigate to="login" replace />, index: true },
-      // ],
     },
     {
       path: '/',
@@ -48,7 +36,7 @@ export default function Router() {
         {
           path: 'payment',
           element: (
-            <ProtectedRoutes roles={['user']}>
+            <ProtectedRoutes roles={['Customer']}>
               <Payment />
             </ProtectedRoutes>
           ),
