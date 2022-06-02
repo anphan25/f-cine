@@ -1,11 +1,14 @@
 // ----------------------------------------------------------------------
 
+import { alpha } from '@mui/material';
+
 export default function Popover(theme) {
   return {
     MuiPopover: {
       styleOverrides: {
         paper: {
-          borderRadius: Number(theme.shape.borderRadius) * 1.5,
+          borderRadius: '1rem',
+          padding: '16px',
         },
       },
     },

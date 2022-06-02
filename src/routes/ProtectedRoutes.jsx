@@ -1,16 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Navigate } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
+import { useSelector } from 'react-redux';
 
 const ProtectedRoutes = ({ roles, children }) => {
-  const { isAuthenticated, role } = useAuth();
+  let { auth } = useSelector((state) => state.auth);
 
-  if (!isAuthenticated) {
-    return <Navigate to="/auth/login" />;
+  if (!auth) {
+    console.log(auth);
+    return <Navigate to="/login" />;
   }
 
-  if (!roles.includes(role)) {
+  if (!roles.includes(auth?.user.role)) {
     return <Navigate to="/permission-denied" />;
   }
 
