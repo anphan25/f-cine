@@ -1,17 +1,18 @@
 import {
   CardContent,
-  CardActions,
   Card,
   Typography,
   Button,
   CardMedia,
   styled,
+  Box,
 } from "@mui/material";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import React, { useState } from "react";
 
 const ImgStyle = styled("div")(({ theme }) => ({
-  padding: "18px 18px 0",
+  padding: "15px 15px 0",
 }));
 
 const RestrictLabel = styled("div")(({ theme }) => ({
@@ -25,64 +26,96 @@ const RestrictLabel = styled("div")(({ theme }) => ({
   color: theme.palette.error.main,
 }));
 
+const CardActions = styled("div")(({ theme }) => ({
+  padding: "0",
+  marginBottom: "5px",
+  // marginTop: "auto",
+  flexWrap: "wrap",
+  // "& Button": { marginLeft: "0px" },
+}));
+
 const RatingDiv = styled("div")(({ theme }) => ({
   display: "flex",
   alignContent: "center",
 }));
 
-const PosterCard = () => {
+const PosterCard = (props) => {
+  const [movie, setMovie] = useState(props.movie);
+
   return (
-    <>
-      <Card
+    <Card
+      movie-id={props.movie.movieId}
+      sx={{
+        maxWidth: 345,
+        borderRadius: "10px",
+        border: "1px solid #e3e3e3",
+        width: "24%",
+        display: "flex",
+        flexDirection: "column",
+        marginBottom: "20px",
+      }}
+    >
+      <ImgStyle>
+        <CardMedia
+          component="img"
+          height="180"
+          image={movie.posterImgURL}
+          alt="green iguana"
+          sx={{ cursor: "pointer", borderRadius: "10px" }}
+        />
+      </ImgStyle>
+      <CardContent
         sx={{
-          maxWidth: 345,
-          borderRadius: "10px",
-          border: "1px solid #e3e3e3",
+          padding: "15px",
+          flex: "1",
+          display: "flex",
+          flexDirection: "column",
         }}
       >
-        <ImgStyle>
-          <CardMedia
-            component="img"
-            height="180"
-            image="https://nocodebuilding.com/wp-content/uploads/2021/07/avengers-endgame.jpg"
-            alt="green iguana"
-            sx={{ cursor: "pointer", borderRadius: "10px" }}
-          />
-        </ImgStyle>
-        <CardContent sx={{ padding: "18px" }}>
+        <Box
+          className="card-top"
+          sx={{ display: "flex", flexDirection: "column", flex: 1 }}
+        >
           <Typography
             gutterBottom
             component="div"
             variant="h6"
             sx={{
-              lineHeight: "33px",
               fontWeight: "600",
               color: "neutral.800",
               cursor: "pointer",
+              // height: "60px",
+              margin: "0px",
+              // display: "flex",
+              // flex: "1",
             }}
           >
-            Avengers: End game
+            {movie.title}
           </Typography>
 
-          <CardActions
-            sx={{ padding: "0", marginBottom: "5px", marginTop: "10px" }}
-          >
-            <Button
-              size="small"
-              variant="outlined"
-              sx={{ border: "1px solid" }}
-            >
-              Sci-fi
-            </Button>
-            <Button
-              size="small"
-              variant="outlined"
-              sx={{ border: "1px solid" }}
-            >
-              Action
-            </Button>
+          <CardActions>
+            {movie.categories.map((cate, index) => {
+              return (
+                <Button
+                  size="small"
+                  variant="outlined"
+                  sx={{
+                    margin: "5px 5px 0px 0px",
+                    border: "1px solid",
+                    // marginTop: "5px",
+                    fontSize: "12px",
+                  }}
+                  key={index}
+                  cate-id={cate.cateId}
+                >
+                  {cate.cateName}
+                </Button>
+              );
+            })}
           </CardActions>
+        </Box>
 
+        <Box className="card-bottom" sx={{ marginTop: "auto", flexShrink: 0 }}>
           <Typography
             variant="body2"
             color="text.secondary"
@@ -118,18 +151,22 @@ const PosterCard = () => {
                 </Typography>
               </Typography>
             </RatingDiv> */}
-            <RestrictLabel>C18</RestrictLabel>
+            <RestrictLabel>{movie.ageRestrict}</RestrictLabel>
           </Typography>
 
           <Typography
             variant="body2"
             color="text.secondary"
-            sx={{ display: "flex", alignItems: "center", marginBottom: "6px" }}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              marginBottom: "6px",
+            }}
           >
             <AccessTimeIcon
               sx={{ color: "neutral.600", marginRight: "6px" }}
             ></AccessTimeIcon>
-            Running times: 120 minutes
+            Running times: {movie.duration}
           </Typography>
 
           <Typography
@@ -141,11 +178,11 @@ const PosterCard = () => {
             <CalendarMonthIcon
               sx={{ color: "neutral.600", marginRight: "5px" }}
             ></CalendarMonthIcon>
-            Release Date: May 04, 2022
+            Release Date: {movie.releaseDate}
           </Typography>
-        </CardContent>
-      </Card>
-    </>
+        </Box>
+      </CardContent>
+    </Card>
   );
 };
 
