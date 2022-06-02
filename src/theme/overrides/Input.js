@@ -1,29 +1,36 @@
-// ----------------------------------------------------------------------
-
 export default function Input(theme) {
   return {
     MuiInputBase: {
       styleOverrides: {
         root: {
+          backgroundColor: theme.palette.background[0],
+          padding: '12px',
+          fontWeight: 600,
+          borderRadius: '12px',
+          border: `2px solid transparent`,
           '&.Mui-disabled': {
-            '& svg': { color: theme.palette.text.disabled },
+            '& svg': { color: theme.palette.neutral[700] },
+          },
+          '&.Mui-focused': {
+            border: `2px solid ${theme.palette.primary.main}`,
+            backgroundColor: theme.palette.neutral[0],
           },
         },
+
         input: {
           '&::placeholder': {
             opacity: 1,
-            color: theme.palette.text.disabled,
+            color: theme.palette.neutral[700],
           },
         },
       },
     },
     MuiInput: {
       styleOverrides: {
-        underline: {
-          '&:before': {
-            borderBottomColor: theme.palette.grey[500_56],
-          },
+        root: {
+          backgroundColor: theme.palette.background[0],
         },
+        underline: {},
       },
     },
     MuiFilledInput: {

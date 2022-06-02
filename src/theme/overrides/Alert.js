@@ -30,6 +30,9 @@ export default function Alert(theme) {
       },
 
       styleOverrides: {
+        root: {
+          borderRadius: 12,
+        },
         message: {
           fontWeight: 500,
           '& .MuiAlertTitle-root': {

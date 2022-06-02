@@ -1,7 +1,3 @@
-// ----------------------------------------------------------------------
-
-import { alpha } from '@mui/material';
-
 export default function Popover(theme) {
   return {
     MuiPopover: {

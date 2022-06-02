@@ -1,6 +1,6 @@
 export const SIDEBAR = {
-  BASE_WIDTH: 270,
-  COLLAPSE_WIDTH: 88,
+  BASE_WIDTH: 256,
+  COLLAPSE_WIDTH: 96,
 };
 export const NAVBAR = {
   BASE_HEIGHT: 90,
