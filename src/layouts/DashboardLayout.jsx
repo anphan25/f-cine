@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Box, styled, Typography } from '@mui/material';
 import { Link, Outlet } from 'react-router-dom';
 import { SideBar, NavBar } from '../components';
@@ -23,7 +23,7 @@ const RootStyle = styled('div', {
 const MainStyle = styled('div')(({ theme }) => ({
   width: '100%',
   marginTop: NAVBAR.BASE_HEIGHT,
-  backgroundColor: theme.palette.neutral[200],
+  backgroundColor: theme.palette.background[0],
   zIndex: -1,
 }));
 
@@ -45,7 +45,7 @@ export const DashboardLayout = () => {
         <MainStyle>
           <Outlet />
           <Typography variant="caption" component="p">
-            © 2020 - All rights reserved
+            © 2022 - All rights reserved
             <br /> made by &nbsp;
             <Link to="/">F-Cine</Link>
           </Typography>
