@@ -1,15 +1,13 @@
-
 import { Typography, styled, Box, Dialog } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { Slider, PosterCardList, UpcomingCardList } from "../components/index";
 import axios from "axios";
 
-
-const TextHeader = styled('div')(({ theme }) => ({
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  padding: '0 20px 10px',
+const TextHeader = styled("div")(({ theme }) => ({
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  padding: "0 20px 10px",
   borderBottom: `1px solid ${theme.palette.neutral[300]}`,
   margin: "60px 0 20px",
 }));
@@ -41,43 +39,46 @@ const Home = () => {
   useEffect(() => {
     getMovieListForHomePage();
     getIncomingMovieListForHomePage();
-    getRoomById(1);
+    // getRoomById(1);
+  }, []);
 
-      {/* <Slider moviePosterList={posters}></Slider> */}
-      <Box sx={{ mt: "700px" }}>
-        <TextHeader>
-          <Typography align="left" variant="h4" color=" .800">
-            Now Showing
-          </Typography>
-          <Typography
-            align="right"
-            fontWeight="600"
-            color="primary.main"
-            sx={{ cursor: 'pointer' }}
-          >
-            View All
-          </Typography>
-        </TextHeader>
+  {
+    /* <Slider moviePosterList={posters}></Slider> */
+  }
+  return (
+    <Box sx={{ mt: "700px" }}>
+      <TextHeader>
+        <Typography align="left" variant="h4" color=" .800">
+          Now Showing
+        </Typography>
+        <Typography
+          align="right"
+          fontWeight="600"
+          color="primary.main"
+          sx={{ cursor: "pointer" }}
+        >
+          View All
+        </Typography>
+      </TextHeader>
 
-        <PosterCardList movieList={movies}></PosterCardList>
+      <PosterCardList movieList={movies}></PosterCardList>
 
-        <TextHeader>
-          <Typography align="left" variant="h4" color="neutral.800">
-            Upcoming Soon
-          </Typography>
-          <Typography
-            align="right"
-            fontWeight="600"
-            color="primary.main"
-            sx={{ cursor: 'pointer' }}
-          >
-            View All
-          </Typography>
-        </TextHeader>
+      <TextHeader>
+        <Typography align="left" variant="h4" color="neutral.800">
+          Upcoming Soon
+        </Typography>
+        <Typography
+          align="right"
+          fontWeight="600"
+          color="primary.main"
+          sx={{ cursor: "pointer" }}
+        >
+          View All
+        </Typography>
+      </TextHeader>
 
-        <UpcomingCardList incomingMovies={incomingMovies}></UpcomingCardList>
-      </Box>
-    </>
+      <UpcomingCardList incomingMovies={incomingMovies}></UpcomingCardList>
+    </Box>
   );
 };
 
