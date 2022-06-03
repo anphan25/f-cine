@@ -197,6 +197,7 @@ const MovieList = () => {
           value={type}
           exclusive
           onChange={handleButtonChange}
+          sx={{ backgroundColor: "#FBFBFB" }}
         >
           <ToggleButton
             value="now"
