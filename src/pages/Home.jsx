@@ -1,6 +1,7 @@
 import { Typography, styled, Box, Dialog } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { Slider, PosterCardList, UpcomingCardList } from "../components/index";
+import { getMoviesForHomePage, getIncomingMovie } from "services/MovieService";
 import axios from "axios";
 
 const TextHeader = styled("div")(({ theme }) => ({
@@ -18,22 +19,20 @@ const Home = () => {
   const [incomingMovies, setIncomingMovies] = useState([]);
 
   const getMovieListForHomePage = async () => {
-    const res = await axios.get(
-      "https://www.fcinema.tk/api/movie/get-movies-for-homepage"
-    );
+    const res = await getMoviesForHomePage();
 
-    let moviesList = res.data.movieList.slice(0, 4);
+    console.log("latest: " + res);
+    let moviesList = res.movieList.slice(0, 4);
 
     setMovies(moviesList);
-    setPosters(res.data.movieList);
+    setPosters(res.movieList);
   };
 
   const getIncomingMovieListForHomePage = async () => {
-    const res = await axios.get(
-      "https://www.fcinema.tk/api/movie/get-incoming-movies-for-homepage"
-    );
+    const res = await getIncomingMovie();
+    console.log("incoming: " + res);
 
-    setIncomingMovies(res.data.losslessMovieList);
+    setIncomingMovies(res.losslessMovieList);
   };
 
   useEffect(() => {
