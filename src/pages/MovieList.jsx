@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   Button,
   styled,
@@ -12,6 +12,7 @@ import {
   Slide,
   ToggleButton,
   ToggleButtonGroup,
+  Container,
 } from "@mui/material";
 import { PosterCard, PosterCardList } from "../components/index";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
@@ -176,6 +177,8 @@ const MovieList = () => {
 
   const handleButtonChange = (e, anotherType) => {
     setType(anotherType);
+
+    e.target.classList.toggle("Mui-selected");
   };
 
   const applyFilter = () => {};
@@ -217,7 +220,6 @@ const MovieList = () => {
             sx={{
               borderRadius: "10px",
             }}
-            // className="btn btn-"
           >
             Upcoming Soon
           </ToggleButton>
