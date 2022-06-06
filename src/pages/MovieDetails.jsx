@@ -38,6 +38,7 @@ const RestrictLabel = styled("div")(({ theme }) => ({
   width: "50px",
   textAlign: "center",
   paddingTop: "8px",
+  marginRight: "15px",
   borderRadius: "5px",
   verticalAlign: "middle",
   backgroundColor: theme.palette.error.light,
@@ -175,37 +176,48 @@ const MovieDetails = () => {
             >
               <RestrictLabel>C18</RestrictLabel>
 
-              <Typography
-                variant="body2"
-                color="text.secondary"
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginBottom: "6px",
-                  fontSize: "20px",
-                }}
-              >
-                <AccessTimeIcon
-                  sx={{ color: "neutral.600", marginRight: "6px" }}
-                ></AccessTimeIcon>{" "}
-                120
-              </Typography>
+              <Stack>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    fontSize: "20px",
+                  }}
+                >
+                  Running Time
+                </Typography>
 
-              <Typography
-                variant="body2"
-                color="text.secondary"
-                component="div"
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  fontSize: "20px",
-                }}
-              >
-                <CalendarMonthIcon
-                  sx={{ color: "neutral.600", marginRight: "5px" }}
-                ></CalendarMonthIcon>
-                04 May, 2022
-              </Typography>
+                <Typography sx={{ display: "flex", alignItems: "center" }}>
+                  <AccessTimeIcon
+                    sx={{ color: "neutral.600", marginRight: "6px" }}
+                  ></AccessTimeIcon>
+                  120 minutes
+                </Typography>
+              </Stack>
+
+              <Stack>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  component="div"
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    fontSize: "20px",
+                  }}
+                >
+                  Release Date
+                </Typography>
+
+                <Typography sx={{ display: "flex", alignItems: "center" }}>
+                  <CalendarMonthIcon
+                    sx={{ color: "neutral.600", marginRight: "5px" }}
+                  ></CalendarMonthIcon>
+                  04 May, 2022
+                </Typography>
+              </Stack>
             </Stack>
 
             <Stack
@@ -249,7 +261,7 @@ const MovieDetails = () => {
                 sx={{
                   borderRadius: "50px",
                   marginRight: "15px",
-                  fontSize: "20px",
+                  fontSize: "17px",
                 }}
                 startIcon={<ConfirmationNumberOutlinedIcon />}
               >
@@ -257,7 +269,7 @@ const MovieDetails = () => {
               </Button>
               <Button
                 variant="outlined"
-                sx={{ borderRadius: "50px", fontSize: "20px" }}
+                sx={{ borderRadius: "50px", fontSize: "17px" }}
                 startIcon={<SlideshowIcon />}
                 onClick={modalHandler}
               >

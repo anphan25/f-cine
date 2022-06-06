@@ -60,7 +60,9 @@ const sliderList = [
 ];
 
 const Slider = (props) => {
-  const [movies, setMovies] = useState([]);
+  // const [movies, setMovies] = useState(props.moviePosterList);
+
+  console.log("slider list: " + props.moviePosterList);
 
   return (
     <SliderStyle>
@@ -78,53 +80,51 @@ const Slider = (props) => {
         modules={[Navigation, Autoplay]}
         className="mySwiper"
       >
-        {!props.moviePosterList
-          ? ""
-          : props.moviePosterList.map((slider, index) => (
-              <SwiperSlide>
-                <Box
-                  key={index}
-                  movie-id={slider.movieId}
-                  sx={{
-                    backgroundImage: `url(${slider.coverImgURL})`,
-                    backgroundRepeat: "no-repeat",
-                    backgroundSize: "cover",
-                    height: "100%",
-                    width: "100%",
-                    borderRadius: "14px",
-                  }}
-                >
-                  <OverlayStyle>
-                    <SlideDescriptionStyle>
-                      <Typography
-                        sx={{
-                          color: "#ffff",
-                          fontWeight: 600,
-                          fontSize: "40px",
-                          lineHeight: "72px",
-                          letterSpacing: "0.005em",
-                          fontFamily: "Poppins",
-                          fontStyle: "normal",
-                        }}
-                      >
-                        {slider.title}
-                      </Typography>
-                      <Button
-                        variant="outlined"
-                        sx={{
-                          height: "40px",
-                          width: "120px",
-                          border: "1.5px solid",
-                          borderRadius: "50px",
-                        }}
-                      >
-                        View Detail
-                      </Button>
-                    </SlideDescriptionStyle>
-                  </OverlayStyle>
-                </Box>
-              </SwiperSlide>
-            ))}
+        {props.moviePosterList.map((slider, index) => (
+          <SwiperSlide virtualIndex={index}>
+            <Box
+              // key={index}
+              movie-id={slider.movieId}
+              sx={{
+                backgroundImage: `url(${slider.coverImgURL})`,
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "cover",
+                height: "100%",
+                width: "100%",
+                borderRadius: "14px",
+              }}
+            >
+              <OverlayStyle>
+                <SlideDescriptionStyle>
+                  <Typography
+                    sx={{
+                      color: "#ffff",
+                      fontWeight: 600,
+                      fontSize: "40px",
+                      lineHeight: "72px",
+                      letterSpacing: "0.005em",
+                      fontFamily: "Poppins",
+                      fontStyle: "normal",
+                    }}
+                  >
+                    {slider.title}
+                  </Typography>
+                  <Button
+                    variant="outlined"
+                    sx={{
+                      height: "40px",
+                      width: "120px",
+                      border: "1.5px solid",
+                      borderRadius: "50px",
+                    }}
+                  >
+                    View Detail
+                  </Button>
+                </SlideDescriptionStyle>
+              </OverlayStyle>
+            </Box>
+          </SwiperSlide>
+        ))}
       </Swiper>
     </SliderStyle>
   );
