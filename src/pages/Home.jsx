@@ -21,11 +21,17 @@ const Home = () => {
   const getMovieListForHomePage = async () => {
     const res = await getMoviesForHomePage();
 
-    console.log("latest: " + res);
+    let posterMovieList = res.movieList;
     let moviesList = res.movieList.slice(0, 4);
 
+    console.log("movies poster litssss: " + posterMovieList);
+
+    console.log("latest: " + res);
+
+    // console.log("movie list: " + moviesList);
+
     setMovies(moviesList);
-    setPosters(res.movieList);
+    setPosters(posterMovieList);
   };
 
   const getIncomingMovieListForHomePage = async () => {
@@ -41,43 +47,44 @@ const Home = () => {
     // getRoomById(1);
   }, []);
 
-  {
-    /* <Slider moviePosterList={posters}></Slider> */
-  }
   return (
-    <Box sx={{ mt: "700px" }}>
-      <TextHeader>
-        <Typography align="left" variant="h4" color=" .800">
-          Now Showing
-        </Typography>
-        <Typography
-          align="right"
-          fontWeight="600"
-          color="primary.main"
-          sx={{ cursor: "pointer" }}
-        >
-          View All
-        </Typography>
-      </TextHeader>
+    <>
+      {/* <Slider moviePosterList={posters}></Slider> */}
 
-      <PosterCardList movieList={movies}></PosterCardList>
+      <Box sx={{ mt: "700px" }}>
+        <TextHeader>
+          <Typography align="left" variant="h4" color=" .800">
+            Now Showing
+          </Typography>
+          <Typography
+            align="right"
+            fontWeight="600"
+            color="primary.main"
+            sx={{ cursor: "pointer" }}
+          >
+            View All
+          </Typography>
+        </TextHeader>
 
-      <TextHeader>
-        <Typography align="left" variant="h4" color="neutral.800">
-          Upcoming Soon
-        </Typography>
-        <Typography
-          align="right"
-          fontWeight="600"
-          color="primary.main"
-          sx={{ cursor: "pointer" }}
-        >
-          View All
-        </Typography>
-      </TextHeader>
+        <PosterCardList movieList={movies}></PosterCardList>
 
-      <UpcomingCardList incomingMovies={incomingMovies}></UpcomingCardList>
-    </Box>
+        <TextHeader>
+          <Typography align="left" variant="h4" color="neutral.800">
+            Upcoming Soon
+          </Typography>
+          <Typography
+            align="right"
+            fontWeight="600"
+            color="primary.main"
+            sx={{ cursor: "pointer" }}
+          >
+            View All
+          </Typography>
+        </TextHeader>
+
+        <UpcomingCardList incomingMovies={incomingMovies}></UpcomingCardList>
+      </Box>
+    </>
   );
 };
 
