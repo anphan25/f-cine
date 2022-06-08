@@ -3,17 +3,12 @@ import PropTypes from 'prop-types';
 import { Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-const ProtectedRoutes = ({ children }) => {
-  let { auth } = useSelector((state) => state.auth);
+const ProtectedRoutes = ({ children, roles }) => {
+  let { Role } = useSelector((state) => state.auth.auth.user);
 
-  if (!auth) {
-    console.log(auth);
-    return <Navigate to="/login" />;
+  if (!roles.includes(Role)) {
+    return <Navigate to="/permission-denied" />;
   }
-
-  // if (!roles.includes(auth?.user.Role)) {
-  //   return <Navigate to="/permission-denied" />;
-  // }
 
   return children;
 };

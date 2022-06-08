@@ -1,4 +1,3 @@
-export { default as Home } from './Home';
 export { default as Login } from './Login';
 export { default as MovieList } from './MovieList';
 export { default as MovieDetails } from './MovieDetails';
@@ -7,3 +6,8 @@ export { default as NotFound } from './NotFound';
 export { default as Dashboard } from './Dashboard';
 export { default as PermissionDenied } from './PermissionDenied';
 export { default as Payment } from './Payment';
+export { default as UserList } from './UserList';
+export { default as ShowTimeList } from './ShowTimeList';
+export { default as RoomList } from './RoomList';
+export { default as Analytics } from './Analytics';
+export { default as TheaterList } from './TheaterList';

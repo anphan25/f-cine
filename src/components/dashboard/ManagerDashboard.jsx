@@ -1,94 +1,94 @@
-import React, { useState, useEffect } from "react";
-import { Typography, styled, Box, Paper, Stack } from "@mui/material";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { imgTab1, imgTab2, imgTab3 } from "../assets/images";
-import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
-import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import React from 'react';
+import { Typography, Box, Paper, Stack } from '@mui/material';
+import { DataGrid } from '@mui/x-data-grid';
+import { imgTab1, imgTab2, imgTab3 } from 'assets/images';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
 const tabStyle = {
-  padding: "20px",
-  width: "30%",
-  borderRadius: "10px",
+  padding: '20px',
+  width: '30%',
+  borderRadius: '10px',
 
-  "& .info-tab_left": {
-    marginRight: "40px",
+  '& .info-tab_left': {
+    marginRight: '40px',
   },
-  "& .info-tab_number": { marginBottom: "10px", marginTop: "10px" },
-  "& .info-tab_percentage": {
-    display: "flex",
-    alignItems: "center",
-  },
-
-  "& .info-tab_percentage_number": {
-    display: "flex",
-    alignItems: "center",
-
-    marginRight: "5px",
+  '& .info-tab_number': { marginBottom: '10px', marginTop: '10px' },
+  '& .info-tab_percentage': {
+    display: 'flex',
+    alignItems: 'center',
   },
 
-  "& .info-tab_right img": {
-    width: "130px",
+  '& .info-tab_percentage_number': {
+    display: 'flex',
+    alignItems: 'center',
+    fontWeight: 600,
+    marginRight: '5px',
   },
-  "& .info-tab_desc": { color: "neutral.700", marginBottom: "5px" },
 
-  "& .up-style": { color: "success.main" },
-  "& .down-style": { color: "error.main" },
+  '& .info-tab_right img': {
+    width: '130px',
+  },
+  '& .info-tab_desc': { color: 'neutral.700', marginBottom: '5px' },
+
+  '& .up-style': { color: 'success.main' },
+  '& .down-style': { color: 'error.main' },
 };
 
 const transactionStyle = {
-  width: "100%",
-  height: "650px",
-  marginTop: "30px",
-  padding: "20px",
-  borderRadius: "10px",
+  width: '100%',
+  height: '650px',
+  marginTop: '30px',
+  padding: '20px',
+  borderRadius: '10px',
 
-  "& .dataGrid-transaction": {
-    height: "550px",
+  '& .dataGrid-transaction': {
+    height: '550px',
   },
 
-  "& .MuiDataGrid-columnHeaders": {
-    backgroundColor: "#F4F6F8",
-    color: "#6A7079",
-    borderTopLeftRadius: "10px",
-    borderTopRightRadius: "10px",
+  '& .MuiDataGrid-columnHeaders': {
+    backgroundColor: '#F4F6F8',
+    color: '#6A7079',
+    borderTopLeftRadius: '10px',
+    borderTopRightRadius: '10px',
   },
 };
 
 const ManagerDashboard = () => {
   const columns = [
     {
-      headerName: "ID",
-      field: "id",
+      headerName: 'ID',
+      field: 'id',
       width: 80,
     },
     {
-      headerName: "Movie",
-      field: "title",
+      headerName: 'Movie',
+      field: 'title',
       width: 270,
     },
     {
-      headerName: "Date",
-      field: "date",
+      headerName: 'Date',
+      field: 'date',
       width: 140,
     },
     {
-      headerName: "Showtime",
-      field: "showtime",
+      headerName: 'Showtime',
+      field: 'showtime',
       width: 140,
     },
     {
-      headerName: "Theater",
-      field: "theater",
+      headerName: 'Theater',
+      field: 'theater',
       width: 200,
     },
     {
-      headerName: "Total Ticket",
-      field: "totalTicket",
+      headerName: 'Total Ticket',
+      field: 'totalTicket',
       width: 140,
     },
     {
-      headerName: "Earning",
-      field: "total",
+      headerName: 'Earning',
+      field: 'total',
       width: 140,
     },
   ];
@@ -97,13 +97,13 @@ const ManagerDashboard = () => {
 
   return (
     <>
-      <Typography variant="h4" sx={{ marginBottom: "20px" }}>
+      <Typography variant="h4" sx={{ marginBottom: '20px' }}>
         Dashboard
       </Typography>
       <Stack
         className="statistical-section"
         direction="row"
-        sx={{ width: "100%", justifyContent: "space-between" }}
+        sx={{ width: '100%', justifyContent: 'space-between' }}
       >
         <Paper elevation={2} sx={tabStyle}>
           <Stack direction="row" sx={{}}>
@@ -111,12 +111,14 @@ const ManagerDashboard = () => {
               <Typography variant="h3" className="info-tab_number">
                 714K
               </Typography>
-              <Typography className="info-tab_desc">Total show time</Typography>
+              <Typography className="info-tab_desc">
+                Weekly show time
+              </Typography>
               <Box className="info-tab_percentage">
                 <Box className="info-tab_percentage_number up-style">
                   <ArrowUpwardIcon /> 31%
                 </Box>
-                <Typography fontWeight="600" sx={{ color: "neutral.700" }}>
+                <Typography fontWeight="600" sx={{ color: 'neutral.700' }}>
                   this week
                 </Typography>
               </Box>
@@ -133,12 +135,14 @@ const ManagerDashboard = () => {
               <Typography variant="h3" className="info-tab_number">
                 714K
               </Typography>
-              <Typography className="info-tab_desc">Total show time</Typography>
+              <Typography className="info-tab_desc">
+                Weekly tickets sold
+              </Typography>
               <Box className="info-tab_percentage">
                 <Box className="info-tab_percentage_number up-style">
                   <ArrowUpwardIcon /> 31%
                 </Box>
-                <Typography fontWeight="600" sx={{ color: "neutral.700" }}>
+                <Typography fontWeight="600" sx={{ color: 'neutral.700' }}>
                   this week
                 </Typography>
               </Box>
@@ -155,12 +159,12 @@ const ManagerDashboard = () => {
               <Typography variant="h3" className="info-tab_number">
                 714K
               </Typography>
-              <Typography className="info-tab_desc">Total show time</Typography>
+              <Typography className="info-tab_desc">Weekly income</Typography>
               <Box className="info-tab_percentage">
                 <Box className="info-tab_percentage_number down-style">
                   <ArrowDownwardIcon /> 50%
                 </Box>
-                <Typography fontWeight="600" sx={{ color: "neutral.700" }}>
+                <Typography fontWeight="600" sx={{ color: 'neutral.700' }}>
                   this week
                 </Typography>
               </Box>
@@ -177,7 +181,7 @@ const ManagerDashboard = () => {
         className="transaction-section"
         sx={transactionStyle}
       >
-        <Typography variant="h4" sx={{ marginBottom: "20px" }}>
+        <Typography variant="h4" sx={{ marginBottom: '20px' }}>
           Transactions
         </Typography>
         <DataGrid
