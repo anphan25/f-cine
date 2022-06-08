@@ -7,8 +7,8 @@ export default function Button(theme) {
         root: {
           boxShadow: "none",
           textTransform: "capitalize",
-          fontSize: 15,
-          // fontWeight: 300,
+          fontSize: 16,
+          borderRadius: 8,
         },
         sizeLarge: {
           height: 48,
@@ -37,17 +37,17 @@ export default function Button(theme) {
         // containedError: {
         //   boxShadow: theme.customShadows.error,
         // },
-        outlinedInherit: {
-          border: `1px solid ${theme.palette.grey[500_32]}`,
-          "&:hover": {
-            backgroundColor: theme.palette.action.hover,
-          },
-        },
-        textInherit: {
-          "&:hover": {
-            backgroundColor: theme.palette.action.hover,
-          },
-        },
+        // outlinedInherit: {
+        //   border: `1px solid ${theme.palette.primary.main}`,
+        //   "&:hover": {
+        //     backgroundColor: theme.palette.action.hover,
+        //   },
+        // },
+        // textInherit: {
+        //   "&:hover": {
+        //     backgroundColor: theme.palette.action.hover,
+        //   },
+        // },
       },
     },
   };

@@ -1,9 +1,9 @@
-import { Suspense, lazy } from 'react';
-import { Navigate, Outlet, useRoutes } from 'react-router-dom';
-import { DashboardLayout, MessageLayout } from 'layouts';
-import LoadingPage from 'components/loading/LoadingPage';
-import ProtectedRoutes from './ProtectedRoutes';
-import AuthRoutes from './AuthRoutes';
+import { Suspense, lazy } from "react";
+import { Navigate, Outlet, useRoutes } from "react-router-dom";
+import { DashboardLayout, MessageLayout } from "layouts";
+import LoadingPage from "components/loading/LoadingPage";
+import ProtectedRoutes from "./ProtectedRoutes";
+import AuthRoutes from "./AuthRoutes";
 
 const Loading = (Component) => (props) => {
   return (
@@ -16,11 +16,11 @@ const Loading = (Component) => (props) => {
 export default function Router() {
   return useRoutes([
     {
-      path: '/login',
+      path: "/login",
       element: <Login />,
     },
     {
-      path: '/',
+      path: "/",
       element: (
         <AuthRoutes>
           <DashboardLayout />
@@ -29,7 +29,7 @@ export default function Router() {
       children: [
         {
           element: (
-            <ProtectedRoutes roles={['Manager']}>
+            <ProtectedRoutes roles={["Manager"]}>
               <Outlet />
             </ProtectedRoutes>
           ),
@@ -39,26 +39,35 @@ export default function Router() {
               index: true,
             },
             {
-              path: 'profile',
+              path: "profile",
               element: <Profile />,
             },
             {
-              path: 'show-time',
-              element: <ShowTimeList />,
+              path: "show-time",
+              children: [
+                {
+                  index: true,
+                  element: <ShowTimeList />,
+                },
+                {
+                  path: "add",
+                  element: <AddShowTime />,
+                },
+              ],
             },
             {
-              path: 'rooms',
+              path: "rooms",
               element: <RoomList />,
             },
             {
-              path: 'analytics',
+              path: "analytics",
               element: <Analytics />,
             },
           ],
         },
         {
           element: (
-            <ProtectedRoutes roles={['Admin']}>
+            <ProtectedRoutes roles={["Admin"]}>
               <Outlet />
             </ProtectedRoutes>
           ),
@@ -68,31 +77,31 @@ export default function Router() {
               index: true,
             },
             {
-              path: 'profile',
+              path: "profile",
               element: <Profile />,
             },
             {
-              path: 'users',
+              path: "users",
               element: <UserList />,
             },
             {
-              path: 'rooms',
+              path: "rooms",
               element: <RoomList />,
             },
             {
-              path: 'analytics',
+              path: "analytics",
               element: <Analytics />,
             },
             {
-              path: 'movies',
+              path: "movies",
               element: <MovieList />,
             },
             {
-              path: 'movie/:id',
+              path: "movie/:id",
               element: <MovieDetails />,
             },
             {
-              path: 'theaters',
+              path: "theaters",
               element: <TheaterList />,
             },
           ],
@@ -100,26 +109,29 @@ export default function Router() {
       ],
     },
     {
-      path: '*',
+      path: "*",
       element: <MessageLayout />,
       children: [
-        { path: 'not-found', element: <NotFound /> },
-        { path: 'permission-denied', element: <PermissionDenied /> },
-        { path: '*', element: <Navigate to="/not-found" replace /> },
+        { path: "not-found", element: <NotFound /> },
+        { path: "permission-denied", element: <PermissionDenied /> },
+        { path: "*", element: <Navigate to="/not-found" replace /> },
       ],
     },
   ]);
 }
 
-const Login = Loading(lazy(() => import('pages/Login')));
-const MovieList = Loading(lazy(() => import('../pages/MovieList')));
-const MovieDetails = Loading(lazy(() => import('../pages/MovieDetails')));
-const Profile = Loading(lazy(() => import('pages/Profile')));
-const UserList = Loading(lazy(() => import('pages/UserList')));
-const NotFound = Loading(lazy(() => import('pages/NotFound')));
-const PermissionDenied = Loading(lazy(() => import('pages/PermissionDenied')));
-const Dashboard = Loading(lazy(() => import('pages/Dashboard')));
-const RoomList = Loading(lazy(() => import('pages/RoomList')));
-const ShowTimeList = Loading(lazy(() => import('pages/ShowTimeList')));
-const Analytics = Loading(lazy(() => import('pages/Analytics')));
-const TheaterList = Loading(lazy(() => import('pages/TheaterList')));
+const Login = Loading(lazy(() => import("pages/Login")));
+const MovieList = Loading(lazy(() => import("../pages/MovieList")));
+const MovieDetails = Loading(lazy(() => import("../pages/MovieDetails")));
+const Profile = Loading(lazy(() => import("pages/Profile")));
+const UserList = Loading(lazy(() => import("pages/UserList")));
+const NotFound = Loading(lazy(() => import("pages/NotFound")));
+const PermissionDenied = Loading(lazy(() => import("pages/PermissionDenied")));
+const Dashboard = Loading(lazy(() => import("pages/Dashboard")));
+const RoomList = Loading(lazy(() => import("pages/RoomList")));
+
+const ShowTimeList = Loading(lazy(() => import("pages/ShowTimeList")));
+const AddShowTime = Loading(lazy(() => import("pages/AddShowTime")));
+
+const Analytics = Loading(lazy(() => import("pages/Analytics")));
+const TheaterList = Loading(lazy(() => import("pages/TheaterList")));
