@@ -42,17 +42,6 @@ const transactionStyle = {
   marginTop: "30px",
   padding: "20px",
   borderRadius: "10px",
-
-  "& .dataGrid-transaction": {
-    height: "550px",
-  },
-
-  "& .MuiDataGrid-columnHeaders": {
-    backgroundColor: "#F4F6F8",
-    color: "#6A7079",
-    borderTopLeftRadius: "10px",
-    borderTopRightRadius: "10px",
-  },
 };
 
 const ManagerDashboard = () => {
