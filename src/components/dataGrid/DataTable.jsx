@@ -2,15 +2,16 @@ import React from "react";
 import { Box, styled } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 
-const dataGridStyle = {
+const containerDataGrid = {
+  height: "500px",
+  width: "100%",
+
   "& .MuiDataGrid-columnHeaders": {
     backgroundColor: "#F4F6F8",
     color: "#6A7079",
     borderTopLeftRadius: "10px",
     borderTopRightRadius: "10px",
   },
-
-  "& .MuiDataGrid-menu": { border: "1px solid #E4E4E4" },
 };
 
 const StyledGridOverlay = styled("div")(({ theme }) => ({
@@ -79,37 +80,32 @@ function CustomNoRowsOverlay() {
           </g>
         </g>
       </svg>
-      <Box sx={{ mt: 1 }}>No Rows</Box>
+      <Box sx={{ mt: 1 }}>No Result</Box>
     </StyledGridOverlay>
   );
 }
 
 const DataTable = (props) => {
-  console.log(props);
-
-  console.log("data: " + props.gridOptions);
-
   return (
-    <DataGrid
-      sx={{ dataGridStyle }}
-      className="gridStyle"
-      height="500px"
-      autoHeight
-      columns={props.gridOptions.columns}
-      rows={props.gridOptions.pageState.data}
-      rowCount={props.gridOptions.pageState.total}
-      loading={props.gridOptions.pageState.isLoading}
-      pagination
-      page={props.gridOptions.pageState.page - 1}
-      pageSize={props.gridOptions.pageState.pageSize}
-      paginationMode="server"
-      rowsPerPageOptions={[5, 10, 20]}
-      onPageChange={props.onPageChange}
-      onPageSizeChange={props.onPageSizeChange}
-      components={{
-        NoRowsOverlay: CustomNoRowsOverlay,
-      }}
-    ></DataGrid>
+    <Box sx={containerDataGrid}>
+      <DataGrid
+        className="gridStyle"
+        columns={props.gridOptions.columns}
+        rows={props.gridOptions.pageState.data}
+        rowCount={props.gridOptions.pageState.total}
+        loading={props.gridOptions.pageState.isLoading}
+        pagination
+        page={props.gridOptions.pageState.page - 1}
+        pageSize={props.gridOptions.pageState.pageSize}
+        paginationMode="server"
+        rowsPerPageOptions={[5, 10, 20]}
+        onPageChange={props.onPageChange}
+        onPageSizeChange={props.onPageSizeChange}
+        components={{
+          NoResultsOverlay: CustomNoRowsOverlay,
+        }}
+      ></DataGrid>
+    </Box>
   );
 };
 
