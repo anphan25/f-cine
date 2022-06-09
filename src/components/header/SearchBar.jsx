@@ -1,6 +1,6 @@
-import { InputAdornment, Input } from '@mui/material';
-import React from 'react';
-import { FiSearch } from 'react-icons/fi';
+import { InputAdornment, Input } from "@mui/material";
+import React from "react";
+import { FiSearch } from "react-icons/fi";
 
 export const SearchBar = () => {
   return (
