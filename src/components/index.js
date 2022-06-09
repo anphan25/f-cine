@@ -10,3 +10,4 @@ export { default as UpcomingCardList } from "./card/UpcomingCardList";
 export { default as ManagerDashboard } from "./dashboard/ManagerDashboard";
 export { default as AdminDashboard } from "./dashboard/AdminDashboard";
 export { default as HeaderBreadcrumbs } from "./header/HeaderBreadcrumbs";
+export { default as DataTable } from "./dataGrid/DataTable";
