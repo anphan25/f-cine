@@ -29,43 +29,64 @@ export default function Router() {
       children: [
         {
           element: (
+            <ProtectedRoutes roles={["Manager", "Admin"]}>
+              <Dashboard />
+            </ProtectedRoutes>
+          ),
+          index: true,
+        },
+        {
+          path: "profile",
+          element: (
+            <ProtectedRoutes roles={["Manager", "Admin"]}>
+              <Profile />
+            </ProtectedRoutes>
+          ),
+        },
+        {
+          path: "showtimes",
+          element: (
             <ProtectedRoutes roles={["Manager"]}>
               <Outlet />
             </ProtectedRoutes>
           ),
           children: [
             {
-              element: <Dashboard />,
               index: true,
+              element: <ShowTimeList />,
             },
             {
-              path: "profile",
-              element: <Profile />,
-            },
-            {
-              path: "show-time",
-              children: [
-                {
-                  index: true,
-                  element: <ShowTimeList />,
-                },
-                {
-                  path: "add",
-                  element: <AddShowTime />,
-                },
-              ],
-            },
-            {
-              path: "rooms",
-              element: <RoomList />,
-            },
-            {
-              path: "analytics",
-              element: <Analytics />,
+              path: "add",
+              element: <AddShowTime />,
             },
           ],
         },
         {
+          path: "rooms",
+          element: (
+            <ProtectedRoutes roles={["Manager"]}>
+              <RoomList />
+            </ProtectedRoutes>
+          ),
+        },
+        {
+          path: "analytics",
+          element: (
+            <ProtectedRoutes roles={["Manager", "Admin"]}>
+              <Analytics />
+            </ProtectedRoutes>
+          ),
+        },
+        {
+          path: "users",
+          element: (
+            <ProtectedRoutes roles={["Admin"]}>
+              <UserList />
+            </ProtectedRoutes>
+          ),
+        },
+        {
+          path: "movies",
           element: (
             <ProtectedRoutes roles={["Admin"]}>
               <Outlet />
@@ -73,38 +94,26 @@ export default function Router() {
           ),
           children: [
             {
-              element: <Dashboard />,
               index: true,
-            },
-            {
-              path: "profile",
-              element: <Profile />,
-            },
-            {
-              path: "users",
-              element: <UserList />,
-            },
-            {
-              path: "rooms",
-              element: <RoomList />,
-            },
-            {
-              path: "analytics",
-              element: <Analytics />,
-            },
-            {
-              path: "movies",
               element: <MovieList />,
             },
             {
-              path: "movie/:id",
+              path: ":id",
               element: <MovieDetails />,
             },
             {
-              path: "theaters",
-              element: <TheaterList />,
+              path: "add",
+              element: <AddMovie />,
             },
           ],
+        },
+        {
+          path: "theaters",
+          element: (
+            <ProtectedRoutes roles={["Admin"]}>
+              <TheaterList />
+            </ProtectedRoutes>
+          ),
         },
       ],
     },
@@ -121,8 +130,11 @@ export default function Router() {
 }
 
 const Login = Loading(lazy(() => import("pages/Login")));
-const MovieList = Loading(lazy(() => import("../pages/MovieList")));
-const MovieDetails = Loading(lazy(() => import("../pages/MovieDetails")));
+
+const MovieList = Loading(lazy(() => import("pages/MovieList")));
+const MovieDetails = Loading(lazy(() => import("pages/MovieDetails")));
+const AddMovie = Loading(lazy(() => import("pages/AddMovie")));
+
 const Profile = Loading(lazy(() => import("pages/Profile")));
 const UserList = Loading(lazy(() => import("pages/UserList")));
 const NotFound = Loading(lazy(() => import("pages/NotFound")));

@@ -5,7 +5,7 @@ import { FiSearch } from "react-icons/fi";
 export const SearchBar = (props) => {
   return (
     <Input
-      disableUnderline
+      //disableUnderline
       startAdornment={
         <InputAdornment position="start">
           <FiSearch

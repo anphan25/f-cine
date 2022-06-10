@@ -39,7 +39,7 @@ const linksManager = [
   },
   {
     id: 2,
-    to: "/show-time",
+    to: "/showtimes",
     icon: <RiSlideshow2Line fontSize="24" />,
     text: "Show Time",
   },
