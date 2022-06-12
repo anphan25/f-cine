@@ -1,21 +1,7 @@
-import React, { useState, useRef } from "react";
-import {
-  Button,
-  styled,
-  Box,
-  Pagination,
-  Stack,
-  Dialog,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
-  Slide,
-  ToggleButton,
-  ToggleButtonGroup,
-  Container,
-} from "@mui/material";
+import React, { useState, useRef, useEffect } from "react";
+import { styled, Box, Pagination, Stack, Typography } from "@mui/material";
 import { PosterCard, PosterCardList } from "../components/index";
-import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
+import { getMovieList } from "../services/MovieService";
 
 const PagingDiv = styled("div")(({ theme }) => ({
   "& .MuiPagination-ul .Mui-selected": {
@@ -32,157 +18,32 @@ const PagingDiv = styled("div")(({ theme }) => ({
   },
 }));
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
-
 const MovieList = () => {
-  const [page, setPage] = useState(1);
-  const [isOpen, setIsOpen] = useState(false);
-  const [type, setType] = useState("now");
+  const [movies, setMovies] = useState([]);
+  const [page, setPage] = useState({
+    currentPage: 1,
+    pageSize: 12,
+    totalPages: 0,
+  });
 
-  const movieList = [
-    {
-      movieId: 4905,
-      title: "The Strait Guys",
-      categories: [
-        {
-          cateId: 99,
-          cateName: "Documentary",
-        },
-      ],
-      ageRestrict: 0,
-      duration: 0,
-      releaseDate: "Jun 02,2022",
-      coverImgURL:
-        "https://image.tmdb.org/t/p/w500/w0Uk5XV7tkPR4SZOizLd0FoyffM.jpg",
-      posterImgURL:
-        "https://image.tmdb.org/t/p/w500/27k9m3swHIl3DcEP1gjem2gN9ib.jpg",
-    },
-    {
-      movieId: 4905,
-      title: "The Strait Guys",
-      categories: [
-        {
-          cateId: 99,
-          cateName: "Documentary",
-        },
-      ],
-      ageRestrict: 0,
-      duration: 0,
-      releaseDate: "Jun 02,2022",
-      coverImgURL:
-        "https://image.tmdb.org/t/p/w500/w0Uk5XV7tkPR4SZOizLd0FoyffM.jpg",
-      posterImgURL:
-        "https://image.tmdb.org/t/p/w500/27k9m3swHIl3DcEP1gjem2gN9ib.jpg",
-    },
-    {
-      movieId: 4905,
-      title: "The Strait Guys",
-      categories: [
-        {
-          cateId: 99,
-          cateName: "Documentary",
-        },
-      ],
-      ageRestrict: 0,
-      duration: 0,
-      releaseDate: "Jun 02,2022",
-      coverImgURL:
-        "https://image.tmdb.org/t/p/w500/w0Uk5XV7tkPR4SZOizLd0FoyffM.jpg",
-      posterImgURL:
-        "https://image.tmdb.org/t/p/w500/27k9m3swHIl3DcEP1gjem2gN9ib.jpg",
-    },
-    {
-      movieId: 4905,
-      title: "The Strait Guys",
-      categories: [
-        {
-          cateId: 99,
-          cateName: "Documentary",
-        },
-      ],
-      ageRestrict: 0,
-      duration: 0,
-      releaseDate: "Jun 02,2022",
-      coverImgURL:
-        "https://image.tmdb.org/t/p/w500/w0Uk5XV7tkPR4SZOizLd0FoyffM.jpg",
-      posterImgURL:
-        "https://image.tmdb.org/t/p/w500/27k9m3swHIl3DcEP1gjem2gN9ib.jpg",
-    },
-    {
-      movieId: 4905,
-      title: "The Strait Guys",
-      categories: [
-        {
-          cateId: 99,
-          cateName: "Documentary",
-        },
-      ],
-      ageRestrict: 0,
-      duration: 0,
-      releaseDate: "Jun 02,2022",
-      coverImgURL:
-        "https://image.tmdb.org/t/p/w500/w0Uk5XV7tkPR4SZOizLd0FoyffM.jpg",
-      posterImgURL:
-        "https://image.tmdb.org/t/p/w500/27k9m3swHIl3DcEP1gjem2gN9ib.jpg",
-    },
-    {
-      movieId: 4905,
-      title: "The Strait Guys",
-      categories: [
-        {
-          cateId: 99,
-          cateName: "Documentary",
-        },
-      ],
-      ageRestrict: 0,
-      duration: 0,
-      releaseDate: "Jun 02,2022",
-      coverImgURL:
-        "https://image.tmdb.org/t/p/w500/w0Uk5XV7tkPR4SZOizLd0FoyffM.jpg",
-      posterImgURL:
-        "https://image.tmdb.org/t/p/w500/27k9m3swHIl3DcEP1gjem2gN9ib.jpg",
-    },
-    {
-      movieId: 4905,
-      title: "The Strait Guys",
-      categories: [
-        {
-          cateId: 99,
-          cateName: "Documentary",
-        },
-      ],
-      ageRestrict: 0,
-      duration: 0,
-      releaseDate: "Jun 02,2022",
-      coverImgURL:
-        "https://image.tmdb.org/t/p/w500/w0Uk5XV7tkPR4SZOizLd0FoyffM.jpg",
-      posterImgURL:
-        "https://image.tmdb.org/t/p/w500/27k9m3swHIl3DcEP1gjem2gN9ib.jpg",
-    },
-  ];
+  const getMovies = async () => {
+    let res = await getMovieList(page);
 
-  const clickFilterIcon = () => {
-    setIsOpen(true);
+    setPage((pre) => ({
+      ...pre,
+      totalPages: res.totalPages,
+    }));
+    setMovies(res.movieList);
   };
+
+  useEffect(() => {
+    getMovies();
+  }, [page.currentPage]);
 
   const clickPageHandler = (e, value) => {
-    setPage(value);
+    setPage((pre) => ({ ...pre, currentPage: value }));
   };
 
-  const handleClose = () => {
-    setIsOpen(false);
-  };
-
-  const handleButtonChange = (e, anotherType) => {
-    setType(anotherType);
-
-    e.target.classList.toggle("Mui-selected");
-  };
-
-  const applyFilter = () => {};
-  const closeDialog = () => {};
   return (
     <>
       <Box
@@ -195,57 +56,11 @@ const MovieList = () => {
           marginTop: "30px",
         }}
       >
-        <ToggleButtonGroup
-          color="primary"
-          value={type}
-          exclusive
-          onChange={handleButtonChange}
-          sx={{ backgroundColor: "#FBFBFB" }}
-        >
-          <ToggleButton
-            value="now"
-            variant="contained"
-            sx={{
-              borderRadius: "10px",
-              marginRight: "10px",
-              // backgroundColor: "primary.main",
-              // color: "neutral.0",
-            }}
-          >
-            Now Showing
-          </ToggleButton>
-          <ToggleButton
-            value="upcoming"
-            variant="contained"
-            sx={{
-              borderRadius: "10px",
-            }}
-          >
-            Upcoming Soon
-          </ToggleButton>
-        </ToggleButtonGroup>
-
-        {/* <FilterAltOutlinedIcon
-          onClick={clickFilterIcon}
-          sx={{
-            width: "32px",
-            height: "32px",
-            borderRadius: "8px",
-            padding: "2px",
-            border: "1.75px solid",
-            color: "neutral.700",
-            "&:hover": {
-              backgroundColor: "primary.main",
-              color: "neutral.0",
-              border: "2px solid #6346FA",
-              transition: "0.3s",
-            },
-          }}
-        /> */}
+        <Typography variant="h3">Movies List</Typography>
       </Box>
 
       <Box>
-        <PosterCardList movieList={movieList}></PosterCardList>
+        <PosterCardList movieList={movies}></PosterCardList>
       </Box>
 
       <Box
@@ -258,26 +73,14 @@ const MovieList = () => {
       >
         <Stack spacing={2}>
           <PagingDiv>
-            <Pagination count={10} page={page} onChange={clickPageHandler} />
+            <Pagination
+              count={page.totalPages}
+              page={page.currentPage}
+              onChange={clickPageHandler}
+            />
           </PagingDiv>
         </Stack>
       </Box>
-
-      {/* Filter Dialog */}
-      <Dialog
-        open={isOpen}
-        TransitionComponent={Transition}
-        keepMounted
-        onClose={handleClose}
-        aria-describedby="alert-dialog-slide-description"
-      >
-        <DialogTitle>{"Use Google's location service?"}</DialogTitle>
-        <DialogContent></DialogContent>
-        <DialogActions>
-          <Button onClick={closeDialog}>Close</Button>
-          <Button onClick={applyFilter}>Apply</Button>
-        </DialogActions>
-      </Dialog>
     </>
   );
 };

@@ -1,11 +1,16 @@
-import { axiosPublic } from 'utils/axiosConfig';
+import { axiosPublic } from "utils/axiosConfig";
 
-const apiPath = '/movies';
+const apiPath = "/movies";
 
 export const getMovieList = async (params) => {
-  return await axiosPublic.get(apiPath, {
-    params,
-  });
+  return await axiosPublic.get(
+    `${apiPath}?Action=page&PageSize=${params.pageSize}&PageIndex=${params.currentPage}`
+  );
+
+};
+
+export const getMovieDetail = async (id) => {
+  return await axiosPublic.get(`${apiPath}?Action=detail&MovieId=${id}`);
 };
 
 export const postMovieList = async (params) => {
@@ -13,11 +18,3 @@ export const postMovieList = async (params) => {
     params,
   });
 };
-
-// export const getMoviesForHomePage = async () => {
-//   return await axiosPublic.get(`${apiPath}?Action=latest`);
-// };
-
-// export const getIncomingMovie = async () => {
-//   return await axiosPublic.get(`${apiPath}?Action=incoming`);
-// };

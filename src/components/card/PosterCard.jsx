@@ -10,6 +10,7 @@ import {
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 const ImgStyle = styled("div")(({ theme }) => ({
   padding: "15px 15px 0",
@@ -44,7 +45,7 @@ const PosterCard = (props) => {
 
   return (
     <Card
-      movie-id={props.movie.movieId}
+      movie-id={movie.movieId}
       sx={{
         maxWidth: 345,
         borderRadius: "10px",
@@ -56,13 +57,15 @@ const PosterCard = (props) => {
       }}
     >
       <ImgStyle>
-        <CardMedia
-          component="img"
-          height="180"
-          image={movie.posterImgURL}
-          alt="green iguana"
-          sx={{ cursor: "pointer", borderRadius: "10px" }}
-        />
+        <Link to={`/movies/${movie.movieId}`}>
+          <CardMedia
+            component="img"
+            height="180"
+            image={movie.posterImgURL}
+            alt="green iguana"
+            sx={{ cursor: "pointer", borderRadius: "10px" }}
+          />
+        </Link>
       </ImgStyle>
       <CardContent
         sx={{
@@ -76,25 +79,27 @@ const PosterCard = (props) => {
           className="card-top"
           sx={{ display: "flex", flexDirection: "column", flex: 1 }}
         >
-          <Typography
-            gutterBottom
-            component="div"
-            variant="h6"
-            sx={{
-              fontWeight: "600",
-              color: "neutral.800",
-              cursor: "pointer",
-              // height: "60px",
-              margin: "0px",
-              // display: "flex",
-              // flex: "1",
-            }}
-          >
-            {movie.title}
-          </Typography>
+          <Link to={`/movies/${movie.movieId}`}>
+            <Typography
+              gutterBottom
+              component="div"
+              variant="h6"
+              sx={{
+                fontWeight: "600",
+                color: "neutral.800",
+                cursor: "pointer",
+                // height: "60px",
+                margin: "0px",
+                // display: "flex",
+                // flex: "1",
+              }}
+            >
+              {movie.title}
+            </Typography>
+          </Link>
 
           <CardActions>
-            {movie.categories.map((cate, index) => {
+            {movie.categories?.map((cate, index) => {
               return (
                 <Button
                   size="small"
@@ -102,7 +107,6 @@ const PosterCard = (props) => {
                   sx={{
                     margin: "5px 5px 0px 0px",
                     border: "1px solid",
-                    // marginTop: "5px",
                     fontSize: "12px",
                   }}
                   key={index}
@@ -128,29 +132,6 @@ const PosterCard = (props) => {
               marginTop: "10px",
             }}
           >
-            {/* <RatingDiv>
-              <GradeIcon
-                sx={{
-                  color: 'warning.light',
-                  marginBottom: '3px',
-                  marginRight: '5px',
-                }}
-              ></GradeIcon>
-              <Typography
-                sx={{ fontSize: '12px', paddingTop: '5px', fontWeight: '500' }}
-              >
-                4.9{' '}
-                <Typography
-                  sx={{
-                    color: 'neutral.600',
-                    display: 'inline',
-                    fontSize: '12px',
-                  }}
-                >
-                  (129)
-                </Typography>
-              </Typography>
-            </RatingDiv> */}
             <RestrictLabel>{movie.ageRestrict}</RestrictLabel>
           </Typography>
 

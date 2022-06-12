@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { Button, styled, Box, Stack, Typography, Modal } from "@mui/material";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import SlideshowIcon from "@mui/icons-material/Slideshow";
-import ConfirmationNumberOutlinedIcon from "@mui/icons-material/ConfirmationNumberOutlined";
-import { PosterCardList } from "../components/index";
-import { width } from "@mui/system";
+import { getMovieDetail } from "../services/MovieService";
 
 const ImgBox = styled("div")(({ theme }) => ({
   height: "280px",
@@ -27,8 +26,6 @@ const CoverBox = styled("div")(({ theme }) => ({
   width: "100%",
   position: "absolute",
   left: "0",
-  backgroundImage:
-    "url('https://assets.htv.com.vn/Images/TAP%20CHI%20HTV/HAU%20TRUONG%20TRUYEN%20HINH/DUONG%202/RALPH%202/1%20k%E1%BA%BF%20nhi%E1%BB%87m.jpg')",
   backgroundRepeat: "no-repeat",
   backgroundSize: "cover",
 }));
@@ -43,6 +40,15 @@ const RestrictLabel = styled("div")(({ theme }) => ({
   verticalAlign: "middle",
   backgroundColor: theme.palette.error.light,
   color: theme.palette.error.main,
+  "& .restrict": {
+    backgroundColor: theme.palette.error.light,
+    color: theme.palette.error.main,
+  },
+
+  "& .noRestrict": {
+    backgroundColor: theme.palette.success.light,
+    color: theme.palette.success.main,
+  },
 }));
 
 const OverlayStyle = styled("div")(({ theme }) => ({
@@ -66,97 +72,46 @@ const modalStyle = {
   borderRadius: "18px",
 };
 
-const movieList = [
-  {
-    movieId: 4905,
-    title: "The Strait Guys",
-    categories: [
-      {
-        cateId: 99,
-        cateName: "Documentary",
-      },
-    ],
-    ageRestrict: 0,
-    duration: 0,
-    releaseDate: "Jun 02,2022",
-    coverImgURL:
-      "https://image.tmdb.org/t/p/w500/w0Uk5XV7tkPR4SZOizLd0FoyffM.jpg",
-    posterImgURL:
-      "https://image.tmdb.org/t/p/w500/27k9m3swHIl3DcEP1gjem2gN9ib.jpg",
-  },
-  {
-    movieId: 4905,
-    title: "The Strait Guys",
-    categories: [
-      {
-        cateId: 99,
-        cateName: "Documentary",
-      },
-    ],
-    ageRestrict: 0,
-    duration: 0,
-    releaseDate: "Jun 02,2022",
-    coverImgURL:
-      "https://image.tmdb.org/t/p/w500/w0Uk5XV7tkPR4SZOizLd0FoyffM.jpg",
-    posterImgURL:
-      "https://image.tmdb.org/t/p/w500/27k9m3swHIl3DcEP1gjem2gN9ib.jpg",
-  },
-  {
-    movieId: 4905,
-    title: "The Strait Guys",
-    categories: [
-      {
-        cateId: 99,
-        cateName: "Documentary",
-      },
-    ],
-    ageRestrict: 0,
-    duration: 0,
-    releaseDate: "Jun 02,2022",
-    coverImgURL:
-      "https://image.tmdb.org/t/p/w500/w0Uk5XV7tkPR4SZOizLd0FoyffM.jpg",
-    posterImgURL:
-      "https://image.tmdb.org/t/p/w500/27k9m3swHIl3DcEP1gjem2gN9ib.jpg",
-  },
-  {
-    movieId: 4905,
-    title: "The Strait Guys",
-    categories: [
-      {
-        cateId: 99,
-        cateName: "Documentary",
-      },
-    ],
-    ageRestrict: 0,
-    duration: 0,
-    releaseDate: "Jun 02,2022",
-    coverImgURL:
-      "https://image.tmdb.org/t/p/w500/w0Uk5XV7tkPR4SZOizLd0FoyffM.jpg",
-    posterImgURL:
-      "https://image.tmdb.org/t/p/w500/27k9m3swHIl3DcEP1gjem2gN9ib.jpg",
-  },
-];
-
 const MovieDetails = () => {
+  let { id } = useParams();
   const [open, setOpen] = useState(false);
   const modalHandler = () => {
     open ? setOpen(false) : setOpen(true);
   };
+  const [detail, setDetail] = useState({});
+
+  const convertToEmbedUrl = (url) => {
+    return url?.replace("watch?v=", "embed/");
+  };
+
+  const getMovieDetails = async () => {
+    let res = await getMovieDetail(id);
+    setDetail(res.movieDetail);
+  };
+
+  useEffect(() => {
+    console.log("Hi");
+    getMovieDetails();
+  }, []);
 
   return (
     <>
-      <CoverBox className="cover-img">
+      <CoverBox
+        className="cover-img"
+        sx={{
+          backgroundImage: `url(${
+            detail.coverImageUrl ||
+            "https://storage.googleapis.com/ff-storage-p01/festivals/cover_photos/000/041/450/original/cover_photo.jpg?1514473357"
+          })`,
+        }}
+      >
         <OverlayStyle></OverlayStyle>
       </CoverBox>
 
       <Box className="movie-detail" sx={{ marginTop: "500px" }}>
         <Stack className="movie-detail_content" direction="row">
           <ImgBox className="movie-detail_content_poster">
-            <img
-              src="https://ss-images.saostar.vn/wp700/2018/11/18/4081353/wir2_poster2.jpg"
-              alt="poster-movie"
-              sx={{}}
-            ></img>
+            <img src={detail.posterImageUrl} alt="poster-movie" sx={{}}></img>
           </ImgBox>
 
           <Box
@@ -164,7 +119,7 @@ const MovieDetails = () => {
             sx={{ marginTop: "40px", width: "60%" }}
           >
             <Typography variant="h3" sx={{ width: "100% " }}>
-              Ralph Breaks The Internet
+              {detail.title}
             </Typography>
 
             <Stack
@@ -174,7 +129,7 @@ const MovieDetails = () => {
               spacing={3}
               sx={{ marginTop: "25px" }}
             >
-              <RestrictLabel>C18</RestrictLabel>
+              <RestrictLabel>{detail.restrictedAge}</RestrictLabel>
 
               <Stack>
                 <Typography
@@ -193,7 +148,7 @@ const MovieDetails = () => {
                   <AccessTimeIcon
                     sx={{ color: "neutral.600", marginRight: "6px" }}
                   ></AccessTimeIcon>
-                  120 minutes
+                  {detail.duration} minutes
                 </Typography>
               </Stack>
 
@@ -215,7 +170,7 @@ const MovieDetails = () => {
                   <CalendarMonthIcon
                     sx={{ color: "neutral.600", marginRight: "5px" }}
                   ></CalendarMonthIcon>
-                  04 May, 2022
+                  {detail.releaseDate}
                 </Typography>
               </Stack>
             </Stack>
@@ -225,30 +180,24 @@ const MovieDetails = () => {
               direction="row"
               sx={{ marginTop: "25px" }}
             >
-              <Button
-                size="large"
-                variant="outlined"
-                sx={{
-                  marginRight: "10px",
-                  border: "1.5px solid",
-                  fontSize: "15px",
-                  padding: "10px ",
-                }}
-              >
-                Action
-              </Button>
-              <Button
-                size="large"
-                variant="outlined"
-                sx={{
-                  marginRight: "10px",
-                  border: "1px solid",
-                  fontSize: "15px",
-                  padding: "10px ",
-                }}
-              >
-                Cartoon
-              </Button>
+              {detail?.movieTypes?.map((cate, index) => {
+                return (
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    sx={{
+                      marginRight: "10px",
+                      border: "1.5px solid",
+                      fontSize: "15px",
+                      padding: "10px ",
+                    }}
+                    key={index}
+                    cate-id={cate.cateId}
+                  >
+                    {cate.cateName}
+                  </Button>
+                );
+              })}
             </Stack>
 
             <Stack
@@ -258,17 +207,6 @@ const MovieDetails = () => {
             >
               <Button
                 variant="contained"
-                sx={{
-                  borderRadius: "50px",
-                  marginRight: "15px",
-                  fontSize: "17px",
-                }}
-                startIcon={<ConfirmationNumberOutlinedIcon />}
-              >
-                Buy now
-              </Button>
-              <Button
-                variant="outlined"
                 sx={{ borderRadius: "50px", fontSize: "17px" }}
                 startIcon={<SlideshowIcon />}
                 onClick={modalHandler}
@@ -288,7 +226,7 @@ const MovieDetails = () => {
               <span className="sub-title" style={{ fontWeight: "bold" }}>
                 Director:{" "}
               </span>
-              An Phan
+              {detail.director}
             </Typography>
           </Box>
 
@@ -302,7 +240,7 @@ const MovieDetails = () => {
               <span className="sub-title" style={{ fontWeight: "bold" }}>
                 Actors/Actresses:{" "}
               </span>
-              Tran Duc Bo, Le Bong, Ngoc Trinh, Thuy Lieu, Son Tung, Jack
+              {detail.actors?.join(", ")}
             </Typography>
           </Box>
 
@@ -316,28 +254,11 @@ const MovieDetails = () => {
               <span className="sub-title" style={{ fontWeight: "bold" }}>
                 Description: <br />
               </span>
-              Six years after saving the arcade from the Cy-Bugs attack and from
-              Turbo's revenge, the story leaves Litwak's video arcade behind,
-              venturing into the uncharted, expansive and thrilling world of the
-              internet - which may or may not survive Ralph's wrecking.
+              {detail.description || "This movie does not have description"}
             </Typography>
           </Box>
         </Box>
       </Box>
-
-      {/* Recommend movie */}
-      <Stack
-        sx={{
-          marginTop: "30px",
-          borderTop: "1.5px solid #E4E4E4",
-          paddingTop: "20px",
-        }}
-      >
-        <Typography variant="h5" sx={{ marginBottom: "20px" }}>
-          Recommended Movies
-        </Typography>
-        <PosterCardList movieList={movieList}></PosterCardList>
-      </Stack>
 
       {/* Modal */}
       <Modal
@@ -354,12 +275,12 @@ const MovieDetails = () => {
             component="h2"
             sx={{ textAlign: "center" }}
           >
-            Ralph Breaks the Internet
+            {detail.title}
           </Typography>
           <Box sx={{ width: "100%", height: "80vh", marginTop: "10px" }}>
             <embed
               style={{ height: "100%", width: "100%" }}
-              src="https://www.youtube.com/embed/_BcYBFC6zfY"
+              src={convertToEmbedUrl(detail?.trailerUrl)}
             ></embed>
           </Box>
         </Box>
