@@ -3,7 +3,6 @@ import React from "react";
 import { SIDEBAR, NAVBAR } from "utils/constants";
 import PropTypes from "prop-types";
 import { NavBarAccount } from "./NavBarAccount";
-import { SearchBar } from "./SearchBar";
 
 const DashboardStyle = styled(AppBar, {
   shouldForwardProp: (prop) => prop !== "isCollapse",
@@ -13,7 +12,8 @@ const DashboardStyle = styled(AppBar, {
   height: NAVBAR.BASE_HEIGHT,
   flexDirection: "row",
   alignItems: "center",
-  justifyContent: "space-between",
+
+  justifyContent: "flex-end",
   width: `calc(100% - ${SIDEBAR.BASE_WIDTH}px)`,
   zIndex: theme.zIndex.appBar + 1,
   color: theme.palette.neutral[700],
@@ -31,7 +31,7 @@ const DashboardStyle = styled(AppBar, {
 const NavBar = ({ isCollapse = false }) => {
   return (
     <DashboardStyle isCollapse={isCollapse}>
-      <SearchBar />
+      {/* <SearchBar /> */}
       <NavBarAccount />
     </DashboardStyle>
   );

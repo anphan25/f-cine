@@ -47,25 +47,31 @@ export default function Router() {
           path: "showtimes",
           element: (
             <ProtectedRoutes roles={["Manager"]}>
-              <Outlet />
+              <ShowTimeList />
             </ProtectedRoutes>
           ),
-          children: [
-            {
-              index: true,
-              element: <ShowTimeList />,
-            },
-            {
-              path: "add",
-              element: <AddShowTime />,
-            },
-          ],
+        },
+        {
+          path: "tickets",
+          element: (
+            <ProtectedRoutes roles={["Manager"]}>
+              <TicketList />
+            </ProtectedRoutes>
+          ),
         },
         {
           path: "rooms",
           element: (
             <ProtectedRoutes roles={["Manager"]}>
               <RoomList />
+            </ProtectedRoutes>
+          ),
+        },
+        {
+          path: "payments",
+          element: (
+            <ProtectedRoutes roles={["Manager", "Admin"]}>
+              <PaymentList />
             </ProtectedRoutes>
           ),
         },
@@ -143,7 +149,8 @@ const Dashboard = Loading(lazy(() => import("pages/Dashboard")));
 const RoomList = Loading(lazy(() => import("pages/RoomList")));
 
 const ShowTimeList = Loading(lazy(() => import("pages/ShowTimeList")));
-const AddShowTime = Loading(lazy(() => import("pages/AddShowTime")));
+const TicketList = Loading(lazy(() => import("pages/TicketList")));
 
 const Analytics = Loading(lazy(() => import("pages/Analytics")));
 const TheaterList = Loading(lazy(() => import("pages/TheaterList")));
+const PaymentList = Loading(lazy(() => import("pages/PaymentList")));

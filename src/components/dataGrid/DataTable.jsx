@@ -1,6 +1,12 @@
 import React from "react";
-import { Box, styled } from "@mui/material";
+import { Box, Paper, styled } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
+
+const tableContainerStyle = {
+  width: "100%",
+  padding: "50px 20px 20px",
+  borderRadius: "10px",
+};
 
 const containerDataGrid = {
   height: "500px",
@@ -87,25 +93,31 @@ function CustomNoRowsOverlay() {
 
 const DataTable = (props) => {
   return (
-    <Box sx={containerDataGrid}>
-      <DataGrid
-        className="gridStyle"
-        columns={props.gridOptions.columns}
-        rows={props.gridOptions.pageState.data}
-        rowCount={props.gridOptions.pageState.total}
-        loading={props.gridOptions.pageState.isLoading}
-        pagination
-        page={props.gridOptions.pageState.page - 1}
-        pageSize={props.gridOptions.pageState.pageSize}
-        paginationMode="server"
-        rowsPerPageOptions={[5, 10, 20]}
-        onPageChange={props.onPageChange}
-        onPageSizeChange={props.onPageSizeChange}
-        components={{
-          NoResultsOverlay: CustomNoRowsOverlay,
-        }}
-      ></DataGrid>
-    </Box>
+    <Paper
+      elevation={2}
+      className="transaction-section"
+      sx={tableContainerStyle}
+    >
+      <Box sx={containerDataGrid}>
+        <DataGrid
+          className="gridStyle"
+          columns={props.gridOptions.columns}
+          rows={props.gridOptions.pageState.data}
+          rowCount={props.gridOptions.pageState.total}
+          loading={props.gridOptions.pageState.isLoading}
+          pagination
+          page={props.gridOptions.pageState.page - 1}
+          pageSize={props.gridOptions.pageState.pageSize}
+          paginationMode="server"
+          rowsPerPageOptions={[5, 10, 20]}
+          onPageChange={props.onPageChange}
+          onPageSizeChange={props.onPageSizeChange}
+          components={{
+            NoResultsOverlay: CustomNoRowsOverlay,
+          }}
+        ></DataGrid>
+      </Box>
+    </Paper>
   );
 };
 

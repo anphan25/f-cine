@@ -1,39 +1,37 @@
-import React from 'react';
-import { RiLogoutCircleLine } from 'react-icons/ri';
-import { BiChevronDown, BiChevronUp, BiUser } from 'react-icons/bi';
+import React, { useEffect } from "react";
+import { RiLogoutCircleLine } from "react-icons/ri";
+import { BiChevronDown, BiChevronUp, BiUser } from "react-icons/bi";
 import {
   Avatar,
   Divider,
-  ListItem,
   ListItemIcon,
   MenuItem,
   Popover,
   Stack,
   styled,
   Typography,
-} from '@mui/material';
-import { useClick } from 'hooks/useClick';
-import { useDispatch, useSelector } from 'react-redux';
-import { defaultAvatar } from 'assets/images';
-import { Link, useNavigate } from 'react-router-dom';
-import { logoutSuccess } from 'redux/auth/AuthSlice';
+} from "@mui/material";
+import { useClick } from "hooks/useClick";
+import { useDispatch, useSelector } from "react-redux";
+import { defaultAvatar } from "assets/images";
+import { Link, useNavigate } from "react-router-dom";
+import { logoutSuccess } from "redux/auth/AuthSlice";
+import { getCompanyDetail } from "services/CompanyService";
+import {
+  companyError,
+  companyPending,
+  setCompany,
+} from "redux/company/CompanySlice";
 
 const MenuItemContainer = styled(MenuItem)(({ theme }) => ({
-  padding: '12px',
-  borderRadius: '1rem',
+  padding: "12px",
+  borderRadius: "1rem",
   color: theme.palette.neutral[700],
-  ':hover': {
+  ":hover": {
     color: theme.palette.neutral[800],
   },
   width: 280,
 }));
-
-// const ListItemContainer = styled(ListItem)(({ theme }) => ({
-//   padding: '12px',
-//   borderRadius: '1rem',
-//   color: theme.palette.neutral[700],
-//   width: 280,
-// }));
 
 export const NavBarAccount = () => {
   const { open, handleClick, handleClose, anchorEl } = useClick();
@@ -42,16 +40,35 @@ export const NavBarAccount = () => {
   const navigate = useNavigate();
   const logout = () => {
     dispatch(logoutSuccess());
-    navigate('/login');
+    navigate("/login");
   };
 
   const links = [
     {
-      label: 'Profile',
+      label: "Profile",
       linkTo: `profile/${userInfo?.uid}`,
       icon: <BiUser fontSize="24px" />,
     },
   ];
+
+  const handleGetCompany = () => {
+    dispatch(companyPending());
+    getCompanyDetail()
+      .then((response) => {
+        console.log(response);
+        dispatch(setCompany(response.company));
+      })
+      .catch((err) => {
+        console.log(err);
+        dispatch(companyError());
+      });
+  };
+
+  useEffect(() => {
+    if (userInfo?.Role === "Manager") {
+      handleGetCompany();
+    }
+  }, [userInfo]);
 
   return (
     <>
@@ -61,7 +78,7 @@ export const NavBarAccount = () => {
         spacing={2}
         onClick={handleClick}
         sx={{
-          cursor: 'pointer',
+          cursor: "pointer",
         }}
       >
         <Avatar
@@ -84,12 +101,12 @@ export const NavBarAccount = () => {
         onClose={handleClose}
         onClick={handleClose}
         sx={{
-          top: '7% !important',
+          top: "7% !important",
         }}
       >
         <Stack
           direction="column"
-          sx={{ padding: '12px', width: 280 }}
+          sx={{ padding: "12px", width: 280 }}
           spacing="4px"
         >
           <Typography
@@ -111,23 +128,23 @@ export const NavBarAccount = () => {
         </Stack>
         <Divider
           sx={{
-            borderColor: 'border.0',
-            mb: '8px',
+            borderColor: "border.0",
+            mb: "8px",
           }}
         />
         {links.map((link) => (
           <MenuItemContainer key={link.label} to={link.linkTo} component={Link}>
-            <ListItemIcon sx={{ color: 'inherit' }}>{link.icon}</ListItemIcon>
+            <ListItemIcon sx={{ color: "inherit" }}>{link.icon}</ListItemIcon>
             <Typography variant="subtitle1SemiBold">{link.label}</Typography>
           </MenuItemContainer>
         ))}
         <Divider
           sx={{
-            borderColor: 'border.0',
+            borderColor: "border.0",
           }}
         />
         <MenuItemContainer onClick={logout}>
-          <ListItemIcon sx={{ color: 'inherit' }}>
+          <ListItemIcon sx={{ color: "inherit" }}>
             <RiLogoutCircleLine fontSize="24px" />
           </ListItemIcon>
           <Typography variant="subtitle1SemiBold">Log out</Typography>
