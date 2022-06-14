@@ -1,9 +1,9 @@
-import { createSlice } from '@reduxjs/toolkit';
-import jwtDecode from 'jwt-decode';
+import { createSlice } from "@reduxjs/toolkit";
+import jwtDecode from "jwt-decode";
 
 const getAuthState = () => {
-  const authTokens = localStorage.getItem('authTokens')
-    ? JSON.parse(localStorage.getItem('authTokens'))
+  const authTokens = localStorage.getItem("authTokens")
+    ? JSON.parse(localStorage.getItem("authTokens"))
     : null;
   if (authTokens)
     return {
@@ -15,12 +15,12 @@ const getAuthState = () => {
 
 const initialState = {
   isLoading: false,
-  error: '',
+  error: "",
   auth: getAuthState(),
 };
 
 export const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {
     authPending: (state) => {
@@ -36,11 +36,11 @@ export const authSlice = createSlice({
     },
     logoutSuccess: (state) => {
       state.auth = null;
-      localStorage.removeItem('authTokens');
+      localStorage.removeItem("authTokens");
     },
     setToken: (state, action) => {
       state.auth.accessToken = action.payload;
-      localStorage.setItem('authTokens', {
+      localStorage.setItem("authTokens", {
         accessToken: state.auth.accessToken,
         refreshToken: state.auth.refreshToken,
       });
@@ -51,7 +51,7 @@ export const authSlice = createSlice({
     refreshFail: (state, action) => {
       state.error = action.payload;
       state.auth = null;
-      localStorage.removeItem('authTokens');
+      localStorage.removeItem("authTokens");
     },
   },
 });

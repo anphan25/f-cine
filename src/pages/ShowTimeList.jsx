@@ -1,6 +1,5 @@
 import {
   Button,
-  Paper,
   Stack,
   Autocomplete,
   FormLabel,
@@ -9,28 +8,19 @@ import {
   DialogContent,
   DialogTitle,
   Dialog,
-  Typography,
+  Divider,
 } from "@mui/material";
 import HeaderBreadcrumbs from "components/header/HeaderBreadcrumbs";
 import React, { useState, useEffect } from "react";
 import { MdAdd } from "react-icons/md";
-import DatePicker from "react-datepicker";
-
-import { DataTable } from "../components/index";
-
-const pageStyle = {
-  width: "100%",
-  padding: "20px",
-  borderRadius: "10px",
-};
+import { CustomDatePicker, DataTable } from "components";
 
 const ShowTimeList = () => {
-  const [startDate, setStartDate] = useState(new Date());
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [data, setData] = useState({
-    movieId: 0,
-    roomId: 0,
-    theaterId: 0,
+    movieId: null,
+    roomId: null,
+    theaterId: null,
     startTime: null,
   });
   const [pageState, setPageState] = useState({
@@ -209,7 +199,16 @@ const ShowTimeList = () => {
     isDialogOpen ? setIsDialogOpen(false) : setIsDialogOpen(true);
   };
 
-  const submitShowTime = () => {};
+  const handleDateChange = (value) => {
+    setData({
+      ...data,
+      startTime: value,
+    });
+  };
+
+  const submitShowTime = () => {
+    console.log(data);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -243,13 +242,12 @@ const ShowTimeList = () => {
           New Show Time
         </Button>
       </Stack>
-      <Paper elevation={2} sx={pageStyle}>
-        <DataTable
-          gridOptions={gridOptions}
-          // onPageChange={pageChangeHandler}
-          // onPageSizeChange={pageSizeChangeHandler}
-        ></DataTable>
-      </Paper>
+
+      <DataTable
+        gridOptions={gridOptions}
+        // onPageChange={pageChangeHandler}
+        // onPageSizeChange={pageSizeChangeHandler}
+      ></DataTable>
 
       {/* Add ShowTime Dialog */}
       <Dialog
@@ -259,10 +257,9 @@ const ShowTimeList = () => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">
-          <Typography variant="h4">Add Show Time</Typography>
-        </DialogTitle>
-        <DialogContent sx={{ marginTop: "20px" }}>
+        <DialogTitle id="alert-dialog-title">Add Show Time</DialogTitle>
+        <Divider sx={{ mt: "20px" }} />
+        <DialogContent>
           <Stack>
             <Stack direction="column" spacing={1} mb={3}>
               <FormLabel
@@ -329,7 +326,7 @@ const ShowTimeList = () => {
             </Stack>
             <Stack direction="column" spacing={1} mb={3}>
               <FormLabel
-                // htmlFor="roomId"
+                htmlFor="startTime"
                 sx={{
                   fontWeight: "600",
                   color: "neutral.800",
@@ -337,14 +334,9 @@ const ShowTimeList = () => {
               >
                 Start Time
               </FormLabel>
-              <DatePicker
-                selected={startDate}
-                onChange={(date) => setStartDate(date)}
-                showTimeSelect
-                timeFormat="HH:mm"
-                timeIntervals={15}
-                timeCaption="time"
-                dateFormat="dd/MM/yyyy h:mm aa"
+              <CustomDatePicker
+                id="startTime"
+                onDateChange={handleDateChange}
               />
             </Stack>
           </Stack>

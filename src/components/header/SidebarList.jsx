@@ -7,8 +7,9 @@ import {
   styled,
   Typography,
 } from "@mui/material";
-import { MdDashboard } from "react-icons/md";
+import { MdOutlineDashboard, MdPayment } from "react-icons/md";
 import { BiMoviePlay, BiBuildings, BiDoorOpen } from "react-icons/bi";
+import { HiOutlineTicket } from "react-icons/hi";
 import { RiSlideshow2Line } from "react-icons/ri";
 import { FiActivity, FiUsers } from "react-icons/fi";
 import { Link, useLocation } from "react-router-dom";
@@ -34,7 +35,7 @@ const linksManager = [
   {
     id: 1,
     to: "/",
-    icon: <MdDashboard fontSize="24" />,
+    icon: <MdOutlineDashboard fontSize="24" />,
     text: "Dashboard",
   },
   {
@@ -45,12 +46,24 @@ const linksManager = [
   },
   {
     id: 3,
+    to: "/tickets",
+    icon: <HiOutlineTicket fontSize="24" />,
+    text: "Tickets",
+  },
+  {
+    id: 4,
     to: "/rooms",
     icon: <BiDoorOpen fontSize="24" />,
     text: "Rooms",
   },
   {
-    id: 4,
+    id: 5,
+    to: "/payments",
+    icon: <MdPayment fontSize="24" />,
+    text: "Payments",
+  },
+  {
+    id: 6,
     to: "/analytics",
     icon: <FiActivity fontSize="24" />,
     text: "Analytics",
@@ -61,7 +74,7 @@ const linksAdmin = [
   {
     id: 1,
     to: "/",
-    icon: <MdDashboard fontSize="24" />,
+    icon: <MdOutlineDashboard fontSize="24" />,
     text: "Dashboard",
   },
   {
