@@ -1,6 +1,6 @@
-import { axiosPrivate } from 'utils/axiosConfig';
+import { axiosPrivate } from "utils/axiosConfig";
 
-const apiPath = '/showtimes';
+const apiPath = "/showtimes";
 
 export const getShowTimeList = async (params) => {
   return await axiosPrivate.get(apiPath, {
@@ -10,7 +10,10 @@ export const getShowTimeList = async (params) => {
 
 export const postShowTime = async (params) => {
   return await axiosPrivate.post(apiPath, {
-    params,
+    movieId: params.movieId,
+    roomId: params.roomId,
+    theaterId: params.theaterId,
+    startTime: params.startTime,
   });
 };
 

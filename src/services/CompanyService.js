@@ -7,5 +7,5 @@ export const getCompanyList = async (params) => {
 };
 
 export const getCompanyDetail = async (params) => {
-  return await axiosPrivate.get(apiPath + "/detail", params && { params });
+  return await axiosPrivate.get(apiPath + "/detail", { id: params });
 };

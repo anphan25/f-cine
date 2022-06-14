@@ -69,6 +69,7 @@ const Login = () => {
     const provider = new GoogleAuthProvider();
     await signInWithPopup(auth, provider)
       .then((result) => {
+        console.log(result._tokenResponse.idToken);
         postIdToken(result._tokenResponse.idToken).then((res) => {
           console.log(res);
           dispatch(

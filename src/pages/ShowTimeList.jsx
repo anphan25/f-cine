@@ -13,10 +13,19 @@ import {
 import HeaderBreadcrumbs from "components/header/HeaderBreadcrumbs";
 import React, { useState, useEffect } from "react";
 import { MdAdd } from "react-icons/md";
-import { CustomDatePicker, DataTable } from "components";
+import { useDispatch, useSelector } from "react-redux";
+import { CustomDatePicker, DataTable } from "../components/index";
+import { postShowTime } from "../services/ShowTimeService";
+import { getMovieTitle } from "../services/MovieService";
+import { getTheatersByCompanyId } from "../services/TheaterService";
 
 const ShowTimeList = () => {
+  const [startDate, setStartDate] = useState(new Date());
+  const [movies, setMovies] = useState([]);
+  const [theaters, setTheaters] = useState({ results: [] });
+  const [rooms, setRooms] = useState([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const companyInfo = useSelector((state) => state.company.company);
   const [data, setData] = useState({
     movieId: null,
     roomId: null,
@@ -199,15 +208,9 @@ const ShowTimeList = () => {
     isDialogOpen ? setIsDialogOpen(false) : setIsDialogOpen(true);
   };
 
-  const handleDateChange = (value) => {
-    setData({
-      ...data,
-      startTime: value,
-    });
-  };
-
   const submitShowTime = () => {
     console.log(data);
+    //postShowTime
   };
 
   useEffect(() => {
@@ -225,6 +228,29 @@ const ShowTimeList = () => {
     };
     fetchData();
   }, [pageState.page, pageState.pageSize]);
+
+  useEffect(() => {
+    const fetchMovieData = async () => {
+      const movieTitleRes = await getMovieTitle();
+
+      movieTitleRes.movieTitles?.splice(10);
+      setMovies(movieTitleRes?.movieTitles);
+    };
+
+    const fetchTheaterData = async () => {
+      console.log("id" + companyInfo);
+      const theaterRes = await getTheatersByCompanyId(companyInfo.id);
+
+      console.log(theaterRes);
+
+      setTheaters((pre) => ({
+        ...pre,
+        results: theaterRes?.theaters?.results,
+      }));
+    };
+    fetchMovieData();
+    fetchTheaterData();
+  }, []);
 
   return (
     <>
@@ -275,8 +301,12 @@ const ShowTimeList = () => {
                 freeSolo
                 name="movieId"
                 id="movieId"
-                options={top100Films}
-                value={data.movieId}
+                options={movies || []}
+                value={data?.movieId}
+                getOptionLabel={(option) => option.title}
+                onChange={(value) => {
+                  setData((pre) => ({ ...pre, movieId: value?.movieId }));
+                }}
                 renderInput={(params) => (
                   <TextField {...params} placeholder="Movie" />
                 )}
@@ -296,8 +326,12 @@ const ShowTimeList = () => {
                 freeSolo
                 name="theaterId"
                 id="theaterId"
-                options={top100Films}
-                value={data.theaterId}
+                options={theaters.results || []}
+                value={data?.theaterId}
+                getOptionLabel={(option) => option.name}
+                onChange={(value) => {
+                  setData((pre) => ({ ...pre, theaterId: value?.id }));
+                }}
                 renderInput={(params) => (
                   <TextField {...params} placeholder="Theater" />
                 )}
@@ -314,11 +348,15 @@ const ShowTimeList = () => {
                 Room
               </FormLabel>
               <Autocomplete
+                disabled={theaters && true}
                 freeSolo
                 name="roomId"
                 id="roomId"
                 options={top100Films}
                 value={data.roomId}
+                onChange={(value) => {
+                  setData((pre) => ({ ...pre, roomId: value }));
+                }}
                 renderInput={(params) => (
                   <TextField {...params} placeholder="Room" />
                 )}
@@ -335,8 +373,14 @@ const ShowTimeList = () => {
                 Start Time
               </FormLabel>
               <CustomDatePicker
+                disabled={rooms && true}
                 id="startTime"
-                onDateChange={handleDateChange}
+                onDateChange={(value) => {
+                  setData((pre) => ({
+                    ...pre,
+                    startTime: value,
+                  }));
+                }}
               />
             </Stack>
           </Stack>
