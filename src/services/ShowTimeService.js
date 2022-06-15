@@ -10,10 +10,7 @@ export const getShowTimeList = async (params) => {
 
 export const postShowTime = async (params) => {
   return await axiosPrivate.post(apiPath, {
-    movieId: params.movieId,
-    roomId: params.roomId,
-    theaterId: params.theaterId,
-    startTime: params.startTime,
+    params,
   });
 };
 
