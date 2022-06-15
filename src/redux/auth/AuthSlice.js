@@ -29,6 +29,7 @@ export const authSlice = createSlice({
     loginSuccess: (state, action) => {
       state.auth = action.payload;
       state.isLoading = false;
+      state.error = "";
     },
     loginFail: (state, action) => {
       state.isLoading = false;
@@ -40,10 +41,14 @@ export const authSlice = createSlice({
     },
     setToken: (state, action) => {
       state.auth.accessToken = action.payload;
-      localStorage.setItem("authTokens", {
-        accessToken: state.auth.accessToken,
-        refreshToken: state.auth.refreshToken,
-      });
+      localStorage.setItem(
+        "authTokens",
+        JSON.stringify({
+          accessToken: state.auth.accessToken,
+          refreshToken: state.auth.refreshToken,
+        })
+      );
+      state.error = "";
     },
     setUserInfo: (state, action) => {
       state.auth.user = action.payload;
