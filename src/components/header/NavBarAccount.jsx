@@ -21,9 +21,9 @@ import { getCompanyDetail } from "services/CompanyService";
 import {
   companyError,
   companyPending,
+  removeCompany,
   setCompany,
 } from "redux/company/CompanySlice";
-import { border } from "@mui/system";
 
 const MenuItemContainer = styled(MenuItem)(({ theme }) => ({
   padding: "12px",
@@ -43,6 +43,7 @@ export const NavBarAccount = () => {
   const navigate = useNavigate();
   const logout = () => {
     dispatch(logoutSuccess());
+    dispatch(removeCompany());
     navigate("/login");
   };
 
@@ -88,7 +89,7 @@ export const NavBarAccount = () => {
         }}
       >
         <Box sx={{ height: "40px", width: "40px" }}>
-          <img src={companyInfo?.logoUrl} />
+          <img src={companyInfo?.logoUrl} alt="" />
         </Box>
         <Avatar
           alt={userInfo?.Name}

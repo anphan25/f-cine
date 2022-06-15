@@ -68,7 +68,8 @@ const CustomDatePicker = ({ id, onDateChange, ...props }) => {
         selected={startDate}
         onChange={(date) => {
           setStartDate(date);
-          onDateChange(date);
+          console.log(date);
+          onDateChange(date.toISOString());
         }}
         showTimeSelect
         timeFormat="HH:mm"
