@@ -10,6 +10,7 @@ import {
   Stack,
   styled,
   Typography,
+  Box,
 } from "@mui/material";
 import { useClick } from "hooks/useClick";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,6 +23,7 @@ import {
   companyPending,
   setCompany,
 } from "redux/company/CompanySlice";
+import { border } from "@mui/system";
 
 const MenuItemContainer = styled(MenuItem)(({ theme }) => ({
   padding: "12px",
@@ -36,6 +38,7 @@ const MenuItemContainer = styled(MenuItem)(({ theme }) => ({
 export const NavBarAccount = () => {
   const { open, handleClick, handleClose, anchorEl } = useClick();
   const userInfo = useSelector((state) => state.auth.auth?.user);
+  const companyInfo = useSelector((state) => state.company.company);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const logout = () => {
@@ -79,8 +82,14 @@ export const NavBarAccount = () => {
         onClick={handleClick}
         sx={{
           cursor: "pointer",
+          borderRadius: "10px",
+          padding: "10px",
+          border: "1.5px solid #EEF1F3",
         }}
       >
+        <Box sx={{ height: "40px", width: "40px" }}>
+          <img src={companyInfo?.logoUrl} />
+        </Box>
         <Avatar
           alt={userInfo?.Name}
           src={userInfo?.Picture ? userInfo.Picture : defaultAvatar}

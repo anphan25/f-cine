@@ -114,10 +114,6 @@ const ShowTimeList = () => {
     };
 
     const fetchTheaterData = async () => {
-      // const theaterRes = await getTheatersByCompanyId({
-      //   CompanyId: companyInfo?.id,
-      // });
-
       setTheaters(theatersInfo);
     };
     fetchMovieData();
