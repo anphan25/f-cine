@@ -1,7 +1,7 @@
-import { axiosPrivate } from 'utils/axiosConfig';
+import { axiosPrivate } from "utils/axiosConfig";
 
-const apiPath = '/room';
+const apiPath = "/rooms";
 
-export const getRoomById = async (roomId) => {
-  return await axiosPrivate.get(apiPath + `/get-room/${roomId}`);
+export const getRoomsByTheaterId = async (roomId) => {
+  return await axiosPrivate.get(apiPath + `/lossless/${roomId}`);
 };
