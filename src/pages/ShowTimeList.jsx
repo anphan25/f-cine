@@ -13,26 +13,25 @@ import {
 import HeaderBreadcrumbs from "components/header/HeaderBreadcrumbs";
 import React, { useState, useEffect } from "react";
 import { MdAdd } from "react-icons/md";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { CustomDatePicker, DataTable } from "../components/index";
-import { postShowTime } from "../services/ShowTimeService";
+import { getShowTimeList, postShowTime } from "../services/ShowTimeService";
 import { getMovieTitle } from "../services/MovieService";
-import { getTheatersByCompanyId } from "../services/TheaterService";
 import { getRoomsByTheaterId } from "../services/RoomService";
+import { useNavigate } from "react-router-dom";
 
 const ShowTimeList = () => {
-  // const [startDate, setStartDate] = useState(new Date());
+  const navigate = useNavigate();
   const [movies, setMovies] = useState([]);
-  const [theaters, setTheaters] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [rooms, setRooms] = useState([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const companyInfo = useSelector((state) => state.company.company);
-  const theatersInfo = useSelector((state) => state.company.company?.theaters);
   const [data, setData] = useState({
-    movieId: null,
-    roomId: null,
-    theaterId: null,
-    startTime: null,
+    // movieId: null,
+    // roomId: null,
+    // theaterId: null,
+    startTime: new Date().toISOString(),
   });
   const [pageState, setPageState] = useState({
     isLoading: false,
@@ -82,26 +81,38 @@ const ShowTimeList = () => {
     isDialogOpen ? setIsDialogOpen(false) : setIsDialogOpen(true);
   };
 
-  const submitShowTime = () => {
+  const handleSubmit = async () => {
+    setLoading(true);
     console.log(data);
     postShowTime(data)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+      .then((res) => {
+        console.log(res);
+        setLoading(false);
+        navigate("/");
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+      });
+    //toast.error("Create failed");
   };
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = () => {
+      getShowTimeList()
+        .then((res) => {
+          console.log(res);
+          setPageState((old) => ({
+            ...old,
+            isLoading: false,
+            data: res,
+            total: 1,
+          }));
+        })
+        .catch((err) => {});
       // setPageState((old) => ({ ...old, isLoading: true }));
-
-      // const res = await getDataGrid();
-
-      setPageState((old) => ({
-        ...old,
-        isLoading: false,
-        data: [],
-        total: 1,
-      }));
     };
+    console.log(pageState);
     fetchData();
   }, [pageState.page, pageState.pageSize]);
 
@@ -112,24 +123,17 @@ const ShowTimeList = () => {
       movieTitleRes.movieTitles?.splice(10);
       setMovies(movieTitleRes?.movieTitles);
     };
-
-    const fetchTheaterData = async () => {
-      setTheaters(theatersInfo);
-    };
     fetchMovieData();
-    fetchTheaterData();
   }, [companyInfo]);
 
-  useEffect(() => {
-    const fetchRoomData = async () => {
-      const roomRes = await getRoomsByTheaterId(data.theaterId);
-
-      console.log(roomRes.roomNumbers);
-      setRooms(roomRes.roomNumbers);
-    };
-
-    fetchRoomData();
-  }, [data.theaterId]);
+  const fetchRoomData = (id) => {
+    getRoomsByTheaterId(id)
+      .then((res) => {
+        console.log(res);
+        setRooms(res.roomNumbers);
+      })
+      .catch((err) => console.log(err));
+  };
 
   return (
     <>
@@ -149,6 +153,7 @@ const ShowTimeList = () => {
       </Stack>
 
       <DataTable
+        data={pageState.data}
         gridOptions={gridOptions}
         // onPageChange={pageChangeHandler}
         // onPageSizeChange={pageSizeChangeHandler}
@@ -180,11 +185,11 @@ const ShowTimeList = () => {
                 freeSolo
                 name="movieId"
                 id="movieId"
-                options={movies || []}
-                value={data?.movieId || null}
+                options={movies}
+                value={data?.movieId}
                 getOptionLabel={(option) => option.title || ""}
                 onChange={(e, value) => {
-                  setData((pre) => ({ ...pre, movieId: value?.movieId }));
+                  setData({ ...data, movieId: value?.movieId });
                 }}
                 renderInput={(params) => (
                   <TextField {...params} placeholder="Movie" />
@@ -205,12 +210,13 @@ const ShowTimeList = () => {
                 freeSolo
                 name="theaterId"
                 id="theaterId"
-                options={theaters || []}
-                value={data?.theaterId || null}
+                options={companyInfo?.theaters}
+                value={data?.theaterId}
                 getOptionLabel={(option) => option.name || ""}
                 onChange={(e, value) => {
-                  console.log("value" + value);
-                  setData((pre) => ({ ...pre, theaterId: value?.id }));
+                  setData({ ...data, theaterId: value?.id });
+                  console.log(value);
+                  fetchRoomData(value?.id);
                 }}
                 renderInput={(params) => (
                   <TextField {...params} placeholder="Theater" />
@@ -232,12 +238,11 @@ const ShowTimeList = () => {
                 freeSolo
                 name="roomId"
                 id="roomId"
-                options={rooms || []}
-                value={data?.roomId || null}
+                options={rooms || ["There is no room of this theater"]}
+                value={data?.roomId}
                 getOptionLabel={(option) => option.roomNumber?.toString() || ""}
                 onChange={(e, value) => {
-                  console.log("room value: " + value.roomID);
-                  setData((pre) => ({ ...pre, roomId: value?.roomID }));
+                  setData({ ...data, roomId: value?.roomID });
                 }}
                 renderInput={(params) => (
                   <TextField {...params} placeholder="Room" />
@@ -258,11 +263,11 @@ const ShowTimeList = () => {
                 // disabled={data.roomId ? false : true}
                 id="startTime"
                 onDateChange={(value) => {
-                  console.log("startTime value:" + value);
-                  setData((pre) => ({
-                    ...pre,
+                  console.log(value);
+                  setData({
+                    ...data,
                     startTime: value,
-                  }));
+                  });
                 }}
               />
             </Stack>
@@ -270,8 +275,16 @@ const ShowTimeList = () => {
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={handleDialog}>Cancel</Button>
-          <Button onClick={submitShowTime} variant="contained" autoFocus>
+          <Button disabled={loading} onClick={handleDialog}>
+            Cancel
+          </Button>
+          <Button
+            onClick={handleSubmit}
+            disabled={loading}
+            type="submit"
+            variant="contained"
+            autoFocus
+          >
             Add Show Time
           </Button>
         </DialogActions>

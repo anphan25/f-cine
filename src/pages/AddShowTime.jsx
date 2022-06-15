@@ -203,7 +203,7 @@ const AddShowTime = () => {
           { name: "New Show Time" },
         ]}
       />
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={8}>
             <Card sx={{ p: 3 }}>

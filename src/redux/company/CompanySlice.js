@@ -17,6 +17,9 @@ export const companySlice = createSlice({
       state.isLoading = false;
       state.company = action.payload;
     },
+    removeCompany: (state) => {
+      state.company = null;
+    },
     companyError: (state) => {
       state.isLoading = false;
       state.error = "Can't get company";
@@ -24,7 +27,7 @@ export const companySlice = createSlice({
   },
 });
 
-export const { companyPending, setCompany, companyError } =
+export const { companyPending, setCompany, companyError, removeCompany } =
   companySlice.actions;
 
 export default companySlice.reducer;
