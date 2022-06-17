@@ -6,3 +6,6 @@ export { default as defaultAvatar } from "./images/default-avatar.png";
 export { default as imgTab1 } from "./images/rafiki.svg";
 export { default as imgTab2 } from "./images/pana.svg";
 export { default as imgTab3 } from "./images/cuate.svg";
+export { default as seatImg } from "./images/seat.svg";
+export { default as seatSelected } from "./images/seat-selected.svg";
+export { default as seatVip } from "./images/seat-vip.svg";

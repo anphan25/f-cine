@@ -11,5 +11,5 @@ export const postShowTime = async (params) => {
 };
 
 export const getShowTimeById = async (id) => {
-  return await axiosPrivate.patch(`${apiPath}/${id}`);
+  return await axiosPrivate.get(`${apiPath}/${id}`);
 };

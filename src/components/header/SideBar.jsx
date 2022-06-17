@@ -9,7 +9,9 @@ import {
 import useCollapseDrawer from "hooks/useCollapseDrawer";
 import { SidebarList } from "./SidebarList";
 
-const RootStyle = styled("div")(({ isCollapse, theme }) => ({
+const RootStyle = styled("div", {
+  shouldForwardProp: (prop) => prop !== "isCollapse",
+})(({ isCollapse, theme }) => ({
   position: "fixed",
   borderRight: "1px solid #E4E4E4",
   left: 0,
@@ -24,14 +26,6 @@ const RootStyle = styled("div")(({ isCollapse, theme }) => ({
     duration: theme.transitions.duration.shorter,
   }),
   backgroundColor: theme.palette.neutral[0],
-  //borderRight: `1px solid ${theme.palette.border[0]}`,
-  // [theme.breakpoints.up('lg')]: {
-  //   ...(isCollapse
-  //     ? {
-  //         width: SIDEBAR.COLLAPSE_WIDTH,
-  //       }
-  //     : { width: SIDEBAR.BASE_WIDTH }),
-  // },
 }));
 
 const SideBar = () => {

@@ -88,7 +88,7 @@ const ShowTimeList = () => {
       .then((res) => {
         console.log(res);
         setLoading(false);
-        navigate("/");
+        navigate(`${res.createdShowtimeId}/tickets`);
       })
       .catch((err) => {
         console.log(err);
@@ -112,7 +112,7 @@ const ShowTimeList = () => {
         .catch((err) => {});
       // setPageState((old) => ({ ...old, isLoading: true }));
     };
-    console.log(pageState);
+    // console.log(pageState);
     fetchData();
   }, [pageState.page, pageState.pageSize]);
 
