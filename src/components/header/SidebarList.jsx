@@ -7,9 +7,12 @@ import {
   styled,
   Typography,
 } from "@mui/material";
-import { MdOutlineDashboard, MdPayment } from "react-icons/md";
-import { BiMoviePlay, BiBuildings, BiDoorOpen } from "react-icons/bi";
-import { HiOutlineTicket } from "react-icons/hi";
+import {
+  MdOutlineDashboard,
+  MdPayment,
+  MdOutlineTheaters,
+} from "react-icons/md";
+import { BiMoviePlay, BiBuildings } from "react-icons/bi";
 import { RiSlideshow2Line } from "react-icons/ri";
 import { FiActivity, FiUsers } from "react-icons/fi";
 import { Link, useLocation } from "react-router-dom";
@@ -44,26 +47,26 @@ const linksManager = [
     icon: <RiSlideshow2Line fontSize="24" />,
     text: "Show Time",
   },
+  // {
+  //   id: 3,
+  //   to: "/tickets",
+  //   icon: <HiOutlineTicket fontSize="24" />,
+  //   text: "Tickets",
+  // },
   {
     id: 3,
-    to: "/tickets",
-    icon: <HiOutlineTicket fontSize="24" />,
-    text: "Tickets",
+    to: "/theaters",
+    icon: <MdOutlineTheaters fontSize="24" />,
+    text: "Theaters",
   },
   {
     id: 4,
-    to: "/rooms",
-    icon: <BiDoorOpen fontSize="24" />,
-    text: "Rooms",
-  },
-  {
-    id: 5,
     to: "/payments",
     icon: <MdPayment fontSize="24" />,
     text: "Payments",
   },
   {
-    id: 6,
+    id: 5,
     to: "/analytics",
     icon: <FiActivity fontSize="24" />,
     text: "Analytics",
@@ -85,9 +88,9 @@ const linksAdmin = [
   },
   {
     id: 3,
-    to: "/theaters",
+    to: "/companies",
     icon: <BiBuildings fontSize="24" />,
-    text: "Theaters",
+    text: "Companies",
   },
   {
     id: 4,

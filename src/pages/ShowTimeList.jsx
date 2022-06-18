@@ -101,7 +101,7 @@ const ShowTimeList = () => {
     postShowTime(data)
       .then((res) => {
         setLoading(false);
-        // navigate("/");
+        navigate(`${res.createdShowtimeId}/tickets`);
       })
       .catch((err) => {
         console.log("loi oi`");
@@ -140,7 +140,6 @@ const ShowTimeList = () => {
         total: res.showtimes.total,
       }));
     };
-
     fetchData();
   }, [pageState.page, pageState.pageSize]);
 

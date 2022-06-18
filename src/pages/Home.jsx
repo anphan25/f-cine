@@ -1,6 +1,6 @@
 import { Typography, styled, Box, Dialog } from "@mui/material";
 import React, { useState, useEffect } from "react";
-import { Slider, PosterCardList, UpcomingCardList } from "../components/index";
+import { PosterCardList, UpcomingCardList } from "../components/index";
 import { getMoviesForHomePage, getIncomingMovie } from "services/MovieService";
 import { DataTable } from "../components/index";
 
