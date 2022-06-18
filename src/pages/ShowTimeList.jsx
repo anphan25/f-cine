@@ -14,11 +14,16 @@ import HeaderBreadcrumbs from "components/header/HeaderBreadcrumbs";
 import React, { useState, useEffect } from "react";
 import { MdAdd } from "react-icons/md";
 import { useSelector } from "react-redux";
-import { CustomDatePicker, DataTable } from "../components/index";
+import {
+  CustomDatePicker,
+  DataTable,
+  CustomSnackBar,
+} from "../components/index";
 import { getShowTimeList, postShowTime } from "../services/ShowTimeService";
 import { getMovieTitle } from "../services/MovieService";
 import { getRoomsByTheaterId } from "../services/RoomService";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
 
 const ShowTimeList = () => {
   const navigate = useNavigate();
@@ -27,6 +32,7 @@ const ShowTimeList = () => {
   const [rooms, setRooms] = useState([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const companyInfo = useSelector((state) => state.company.company);
+  const [alert, setAlert] = useState({});
   const [data, setData] = useState({
     // movieId: null,
     // roomId: null,
@@ -51,7 +57,7 @@ const ShowTimeList = () => {
       {
         headerName: "Movie",
         field: "title",
-        width: 300,
+        width: 350,
       },
       {
         headerName: "Date",
@@ -61,6 +67,7 @@ const ShowTimeList = () => {
       {
         headerName: "Start Time",
         field: "startTime",
+        type: "datetime",
         width: 150,
       },
       {
@@ -81,38 +88,59 @@ const ShowTimeList = () => {
     isDialogOpen ? setIsDialogOpen(false) : setIsDialogOpen(true);
   };
 
+  const pageChangeHandler = (newPage) => {
+    setPageState((old) => ({ ...old, page: newPage + 1 }));
+  };
+
+  const pageSizeChangeHandler = (newPageSize) => {
+    setPageState((old) => ({ ...old, pageSize: newPageSize }));
+  };
+
   const handleSubmit = async () => {
     setLoading(true);
-    console.log(data);
     postShowTime(data)
       .then((res) => {
-        console.log(res);
         setLoading(false);
-        navigate("/");
+        // navigate("/");
       })
       .catch((err) => {
+        console.log("loi oi`");
         console.log(err);
+        setAlert({
+          message: err.response.data?.errors?.StartTime[0],
+          status: false,
+        });
         setLoading(false);
       });
     //toast.error("Create failed");
   };
 
   useEffect(() => {
-    const fetchData = () => {
-      getShowTimeList()
-        .then((res) => {
-          console.log(res);
-          setPageState((old) => ({
-            ...old,
-            isLoading: false,
-            data: res,
-            total: 1,
-          }));
-        })
-        .catch((err) => {});
-      // setPageState((old) => ({ ...old, isLoading: true }));
+    const fetchData = async () => {
+      setPageState((old) => ({ ...old, isLoading: true, data: [] }));
+
+      const res = await getShowTimeList({
+        PageSize: pageState.pageSize,
+        Page: pageState.page,
+      });
+
+      const dataRow = res.showtimes.results.map((row) => ({
+        id: row.id,
+        title: row.movie.title,
+        date: moment(row.startTime).format("DD/MM/yyyy"),
+        startTime: moment(row.startTime).format("HH:mm"),
+        theater: row.theaterName,
+        room: row.room.no,
+      }));
+
+      setPageState((old) => ({
+        ...old,
+        isLoading: false,
+        data: dataRow,
+        total: res.showtimes.total,
+      }));
     };
-    console.log(pageState);
+
     fetchData();
   }, [pageState.page, pageState.pageSize]);
 
@@ -129,10 +157,14 @@ const ShowTimeList = () => {
   const fetchRoomData = (id) => {
     getRoomsByTheaterId(id)
       .then((res) => {
-        console.log(res);
+        if (!res.roomNumbers) {
+          console.log("loi ne: " + res.message);
+          setAlert({ message: res.message, status: false });
+          return;
+        }
         setRooms(res.roomNumbers);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {});
   };
 
   return (
@@ -151,12 +183,10 @@ const ShowTimeList = () => {
           New Show Time
         </Button>
       </Stack>
-
       <DataTable
-        data={pageState.data}
         gridOptions={gridOptions}
-        // onPageChange={pageChangeHandler}
-        // onPageSizeChange={pageSizeChangeHandler}
+        onPageChange={pageChangeHandler}
+        onPageSizeChange={pageSizeChangeHandler}
       ></DataTable>
 
       {/* Add ShowTime Dialog */}
@@ -215,7 +245,6 @@ const ShowTimeList = () => {
                 getOptionLabel={(option) => option.name || ""}
                 onChange={(e, value) => {
                   setData({ ...data, theaterId: value?.id });
-                  console.log(value);
                   fetchRoomData(value?.id);
                 }}
                 renderInput={(params) => (
@@ -263,7 +292,6 @@ const ShowTimeList = () => {
                 // disabled={data.roomId ? false : true}
                 id="startTime"
                 onDateChange={(value) => {
-                  console.log(value);
                   setData({
                     ...data,
                     startTime: value,
@@ -289,6 +317,11 @@ const ShowTimeList = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* Alert message */}
+      {alert && (
+        <CustomSnackBar message={alert.message} status={alert.status} />
+      )}
     </>
   );
 };

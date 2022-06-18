@@ -16,10 +16,7 @@ import {
 import { SearchBar } from "../components/header/SearchBar";
 import { GridActionsCellItem } from "@mui/x-data-grid";
 import { DataTable } from "../components/index";
-import {
-  getDataGrid,
-  getDataGridWithSearch,
-} from "../services/DataGridService";
+import { getUserList } from "../services/UserService";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -38,12 +35,25 @@ const AvtStyle = {
   height: 45,
 };
 
+const roleStyle = (role) => {
+  switch (role) {
+    case "Admin": {
+      return "#0068FF";
+    }
+    case "Manager": {
+      return "#FFC107";
+    }
+    case "Customer": {
+      return "#54D62C";
+    }
+  }
+};
+
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 const UserList = () => {
-  const [isSearch, setIsSearch] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [role, setRole] = useState("");
   const [companies, setCompanies] = useState([
@@ -60,6 +70,7 @@ const UserList = () => {
     page: 1,
     pageSize: 10,
   });
+  const [searchKey, setSearchKey] = useState("");
 
   const gridOptions = {
     columns: [
@@ -92,8 +103,8 @@ const UserList = () => {
         },
       },
       {
-        headerName: "Name",
-        field: "name",
+        headerName: "Full Name",
+        field: "fullName",
         width: 280,
       },
       {
@@ -111,7 +122,22 @@ const UserList = () => {
       {
         headerName: "Role",
         field: "role",
-        width: 80,
+        type: "string",
+        width: 120,
+        renderCell: (roleValue) => {
+          return (
+            <div
+              style={{
+                padding: "5px 10px",
+                color: "#FFFF",
+                borderRadius: "50px",
+                backgroundColor: roleStyle(roleValue.value),
+              }}
+            >
+              {roleValue.value}
+            </div>
+          );
+        },
       },
       {
         headerName: "Actions",
@@ -139,9 +165,8 @@ const UserList = () => {
     setPageState((old) => ({ ...old, pageSize: newPageSize }));
   };
 
-  const searchHandler = (e) => {
-    //Gọi api here
-    getDataGridWithSearch();
+  const searchHandler = (searchValue) => {
+    setPageState({ ...pageState, search: searchValue.searchTerm, page: 1 });
   };
 
   const handleCloseDialog = () => {
@@ -160,53 +185,61 @@ const UserList = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      // setPageState((old) => ({ ...old, isLoading: true }));
+      setPageState((old) => ({ ...old, isLoading: true, data: [] }));
 
-      // const res = await getDataGrid();
+      const res = await getUserList({
+        PageSize: pageState.pageSize,
+        Page: pageState.page,
+      });
+
+      const dataRow = res.users.results.map((data) => ({
+        id: data.id,
+        fullName: data.fullName,
+        email: data.email,
+        avatar: data.pictureUrl,
+        company: data.company?.name,
+        role: data.role.name,
+      }));
 
       setPageState((old) => ({
         ...old,
         isLoading: false,
-        data: [
-          {
-            id: 1,
-            avatar:
-              "https://cdn.popsww.com/blog/sites/2/2022/02/naruto-co-bao-nhieu-tap.jpg",
-            name: "Naruto",
-            email: "naruto@gmail.com",
-            company: null,
-            role: "Hokage",
-          },
-          {
-            id: 2,
-            avatar:
-              "https://cdn.popsww.com/blog/sites/2/2022/02/naruto-co-bao-nhieu-tap.jpg",
-            name: "Naruto",
-            email: "naruto@gmail.com",
-            company: "Lang La",
-            role: "Hokage",
-          },
-          {
-            id: 3,
-            avatar:
-              "https://cdn.popsww.com/blog/sites/2/2022/02/naruto-co-bao-nhieu-tap.jpg",
-            name: "Naruto",
-            email: "naruto@gmail.com",
-            company: "Lang La",
-            role: "Hokage",
-          },
-        ],
-        total: 1,
+        data: dataRow,
+        total: res.users.total,
       }));
     };
     fetchData();
   }, [pageState.page, pageState.pageSize]);
 
   useEffect(() => {
-    if (isSearch) {
-      getDataGridWithSearch("api/v2/users", 1, "searchValue");
-    }
-  }, [isSearch]);
+    const fetchData = async () => {
+      setPageState((old) => ({ ...old, isLoading: true, data: [] }));
+
+      const res = await getUserList({
+        PageSize: pageState.pageSize,
+        Page: pageState.page,
+        SearchKey: pageState.search,
+      });
+
+      const dataRow = res.users.results.map((data) => ({
+        id: data.id,
+        fullName: data.fullName,
+        email: data.email,
+        avatar: data.pictureUrl,
+        company: data.company?.name,
+        role: data.role.name,
+      }));
+
+      setPageState((old) => ({
+        ...old,
+        isLoading: false,
+        data: dataRow,
+        total: res.users.total,
+      }));
+    };
+
+    fetchData();
+  }, [pageState.search]);
 
   return (
     <>
@@ -214,15 +247,14 @@ const UserList = () => {
         <Typography variant="h4" sx={{ marginBottom: "20px" }}>
           User Management
         </Typography>
-        <SearchBar target="Email" />
+        <SearchBar placeholder="Enter email..." onSubmit={searchHandler} />
       </Stack>
-      <Paper elevation={2} sx={pageStyle}>
-        <DataTable
-          gridOptions={gridOptions}
-          onPageChange={pageChangeHandler}
-          onPageSizeChange={pageSizeChangeHandler}
-        ></DataTable>
-      </Paper>
+
+      <DataTable
+        gridOptions={gridOptions}
+        onPageChange={pageChangeHandler}
+        onPageSizeChange={pageSizeChangeHandler}
+      ></DataTable>
 
       {/* Edit Dialog */}
       <Dialog
@@ -264,7 +296,7 @@ const UserList = () => {
                 getOptionLabel={(company) => company.companyName}
                 value={companyValue}
                 renderInput={(params) => (
-                  <TextField {...params} placeholder="Theater" />
+                  <TextField {...params} placeholder="Company" />
                 )}
                 onChange={(e, newValue) => {
                   setCompanyValue(newValue);
