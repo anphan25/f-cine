@@ -3,7 +3,9 @@ import { axiosPrivate } from "utils/axiosConfig";
 const apiPath = "/showtimes";
 
 export const getShowTimeList = async (params) => {
-  return await axiosPrivate.get(apiPath, params);
+  return await axiosPrivate.get(
+    `${apiPath}?PageSize=${params.PageSize}&Page=${params.Page}`
+  );
 };
 
 export const postShowTime = async (params) => {

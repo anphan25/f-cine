@@ -1,13 +1,19 @@
-import { axiosPublic } from "utils/axiosConfig";
+import { axiosPrivate } from "utils/axiosConfig";
 
-const apiPath = "/user";
+const apiPath = "/users";
 
-export const getUserList = async (page, limit) => {
-  return await axiosPublic.get(`${apiPath}?page=${page}&limit=${limit}`);
-};
-
-export const searchUser = async (page, limit, searchValue) => {
-  return await axiosPublic.get(
-    `${apiPath}?page=${page}&limit=${limit}&searchValue=${searchValue}`
+export const getUserList = async (params) => {
+  return await axiosPrivate.get(
+    `${apiPath}?PageSize=${params.PageSize}&Page=${params.Page}`
   );
 };
+
+// export const getUserList = async (params) => {
+//   return await axiosPrivate.get(apiPath, params);
+// };
+
+// export const searchUser = async (page, limit, searchValue) => {
+//   return await axiosPublic.get(
+//     `${apiPath}?page=${page}&limit=${limit}&searchValue=${searchValue}`
+//   );
+// };

@@ -88,9 +88,14 @@ export const NavBarAccount = () => {
           border: "1.5px solid #EEF1F3",
         }}
       >
-        <Box sx={{ height: "40px", width: "40px" }}>
-          <img src={companyInfo?.logoUrl} alt="" />
-        </Box>
+        {companyInfo ? (
+          <Box sx={{ height: "40px", width: "40px" }}>
+            <img src={companyInfo?.logoUrl} alt="" />
+          </Box>
+        ) : (
+          ""
+        )}
+
         <Avatar
           alt={userInfo?.Name}
           src={userInfo?.Picture ? userInfo.Picture : defaultAvatar}

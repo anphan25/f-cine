@@ -4,7 +4,7 @@ import { DataGrid } from "@mui/x-data-grid";
 
 const tableContainerStyle = {
   width: "100%",
-  padding: "50px 20px 20px",
+  padding: "20px",
   borderRadius: "10px",
 };
 
@@ -109,7 +109,7 @@ const DataTable = (props) => {
           page={props.gridOptions.pageState.page - 1}
           pageSize={props.gridOptions.pageState.pageSize}
           paginationMode="server"
-          rowsPerPageOptions={[5, 10, 20]}
+          rowsPerPageOptions={[5, 10, 20, 50]}
           onPageChange={props.onPageChange}
           onPageSizeChange={props.onPageSizeChange}
           components={{
