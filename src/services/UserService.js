@@ -4,7 +4,9 @@ const apiPath = "/users";
 
 export const getUserList = async (params) => {
   return await axiosPrivate.get(
-    `${apiPath}?PageSize=${params.PageSize}&Page=${params.Page}`
+    `${apiPath}?PageSize=${params.PageSize}&Page=${params.Page}&Email=${
+      params.Email ? params.Email : ""
+    }`
   );
 };
 

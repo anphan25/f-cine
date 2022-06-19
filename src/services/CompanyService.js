@@ -9,3 +9,7 @@ export const getCompanyList = async (params) => {
 export const getCompanyDetail = async (params) => {
   return await axiosPrivate.get(apiPath + "/detail", params);
 };
+
+export const getCompanyListWithoutManger = async (params) => {
+  return await axiosPrivate.get(`${apiPath}?WithNoManager=true`);
+};
