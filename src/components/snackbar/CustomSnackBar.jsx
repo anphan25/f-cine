@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { forwardRef, useState } from "react";
 import { Snackbar } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
 
-const Alert = React.forwardRef(function Alert(props, ref) {
+const Alert = forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
@@ -28,7 +28,7 @@ const CustomSnackBar = (props) => {
       >
         <Alert
           onClose={handleOpenClose}
-          severity={props.status ? "success" : "error"}
+          severity={props.type}
           sx={{ width: "100%" }}
         >
           {props.message}

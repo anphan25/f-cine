@@ -14,14 +14,10 @@ import HeaderBreadcrumbs from "components/header/HeaderBreadcrumbs";
 import React, { useState, useEffect } from "react";
 import { MdAdd } from "react-icons/md";
 import { useSelector } from "react-redux";
-import {
-  CustomDatePicker,
-  DataTable,
-  CustomSnackBar,
-} from "../components/index";
-import { getShowTimeList, postShowTime } from "../services/ShowTimeService";
-import { getMovieTitle } from "../services/MovieService";
-import { getRoomsByTheaterId } from "../services/RoomService";
+import { CustomDatePicker, DataTable, CustomSnackBar } from "components";
+import { getShowTimeList, postShowTime } from "services/ShowTimeService";
+import { getMovieTitle } from "services/MovieService";
+import { getRoomsByTheaterId } from "services/RoomService";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 
@@ -32,11 +28,12 @@ const ShowTimeList = () => {
   const [rooms, setRooms] = useState([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const companyInfo = useSelector((state) => state.company.company);
-  const [alert, setAlert] = useState({});
+  const [alert, setAlert] = useState({
+    message: "",
+    status: false,
+    type: "success",
+  });
   const [data, setData] = useState({
-    // movieId: null,
-    // roomId: null,
-    // theaterId: null,
     startTime: new Date().toISOString(),
   });
   const [pageState, setPageState] = useState({
@@ -98,21 +95,37 @@ const ShowTimeList = () => {
 
   const handleSubmit = async () => {
     setLoading(true);
+    setAlert({});
     postShowTime(data)
       .then((res) => {
         setLoading(false);
-        navigate(`${res.createdShowtimeId}/tickets`);
+        console.log(res);
+        if (res.status === 400) {
+          setAlert({
+            message: res.data.errors?.StartTime[0],
+            status: true,
+            type: "error",
+          });
+          console.log(res.data.errors?.StartTime[0]);
+        }
+        if (res.status === 200) {
+          setAlert({
+            message: "Add showtime succesfully",
+            status: true,
+            type: "success",
+          });
+          navigate(`${res.createdShowtimeId}/tickets`);
+        }
       })
       .catch((err) => {
-        console.log("loi oi`");
         console.log(err);
+        setLoading(false);
         setAlert({
           message: err.response.data?.errors?.StartTime[0],
-          status: false,
+          status: true,
+          type: "error",
         });
-        setLoading(false);
       });
-    //toast.error("Create failed");
   };
 
   useEffect(() => {
@@ -154,16 +167,22 @@ const ShowTimeList = () => {
   }, [companyInfo]);
 
   const fetchRoomData = (id) => {
+    setAlert({});
     getRoomsByTheaterId(id)
       .then((res) => {
         if (!res.roomNumbers) {
           console.log("loi ne: " + res.message);
-          setAlert({ message: res.message, status: false });
-          return;
+          setAlert({ message: res.message, status: true, type: "error" });
         }
-        setRooms(res.roomNumbers);
+        setRooms(res?.roomNumbers);
       })
-      .catch((err) => {});
+      .catch((err) => {
+        setAlert({
+          message: "Can't get rooms of this theater!",
+          status: true,
+          type: "error",
+        });
+      });
   };
 
   return (
@@ -262,11 +281,11 @@ const ShowTimeList = () => {
                 Room
               </FormLabel>
               <Autocomplete
-                disabled={data.theaterId ? false : true}
+                disabled={data.theaterId && rooms?.length > 0 ? false : true}
                 freeSolo
                 name="roomId"
                 id="roomId"
-                options={rooms || ["There is no room of this theater"]}
+                options={rooms}
                 value={data?.roomId}
                 getOptionLabel={(option) => option.roomNumber?.toString() || ""}
                 onChange={(e, value) => {
@@ -318,8 +337,12 @@ const ShowTimeList = () => {
       </Dialog>
 
       {/* Alert message */}
-      {alert && (
-        <CustomSnackBar message={alert.message} status={alert.status} />
+      {alert?.status && (
+        <CustomSnackBar
+          message={alert.message}
+          status={alert.status}
+          type={alert.type}
+        />
       )}
     </>
   );

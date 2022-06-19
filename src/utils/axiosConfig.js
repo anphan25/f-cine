@@ -10,7 +10,6 @@ export const axiosPublic = axios.create({
 
 export const axiosPrivate = axios.create({
   baseURL: process.env.REACT_APP_BASE_API_URL,
-  timeout: 3000,
 });
 
 axiosPublic.interceptors.response.use((response) => response.data);
@@ -20,7 +19,6 @@ axiosPrivate.interceptors.request.use(
     config.headers["Authorization"] = `Bearer ${
       store.getState().auth.auth?.accessToken
     }`;
-
     return config;
   },
   (error) => {
@@ -48,7 +46,6 @@ axiosPrivate.interceptors.response.use(
           console.log(err);
         });
     }
-
     return Promise.reject(error);
   }
 );
