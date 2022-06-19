@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Paper, styled } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
+import LinearProgress from "@mui/material/LinearProgress";
 
 const tableContainerStyle = {
   width: "100%",

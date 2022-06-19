@@ -16,6 +16,7 @@ export const SearchBar = (props) => {
     if (typingTimeoutRef.current) {
       clearTimeout(typingTimeoutRef.current);
     }
+
     typingTimeoutRef.current = setTimeout(() => {
       const formValues = {
         searchTerm: value,
@@ -28,6 +29,7 @@ export const SearchBar = (props) => {
       <Input
         //disableUnderline
         onChange={handleSearchForm}
+        value={searchTerm}
         startAdornment={
           <InputAdornment position="start">
             <FiSearch

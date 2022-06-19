@@ -17,6 +17,7 @@ import { SearchBar } from "../components/header/SearchBar";
 import { GridActionsCellItem } from "@mui/x-data-grid";
 import { DataTable } from "../components/index";
 import { getUserList } from "../services/UserService";
+import { getCompanyListWithoutManger } from "../services/CompanyService";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -37,11 +38,8 @@ const AvtStyle = {
 
 const roleStyle = (role) => {
   switch (role) {
-    case "Admin": {
-      return "#0068FF";
-    }
     case "Manager": {
-      return "#FFC107";
+      return "#0068FF";
     }
     case "Customer": {
       return "#54D62C";
@@ -56,21 +54,18 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const UserList = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [role, setRole] = useState("");
-  const [companies, setCompanies] = useState([
-    { companyId: 1, companyName: "CGV" },
-    { companyId: 2, companyName: "Galaxy" },
-    { companyId: 3, companyName: "HBO" },
-    { companyId: 4, companyName: "Starlight" },
-  ]);
+  const [companies, setCompanies] = useState([]);
   const [companyValue, setCompanyValue] = useState(null);
   const [pageState, setPageState] = useState({
     isLoading: false,
     data: [],
     total: 0,
+    search: "",
     page: 1,
     pageSize: 10,
   });
-  const [searchKey, setSearchKey] = useState("");
+  const [editParam, setEditParam] = useState({});
+  // const [searchKey, setSearchKey] = useState("");
 
   const gridOptions = {
     columns: [
@@ -82,7 +77,7 @@ const UserList = () => {
       {
         headerName: "Avatar",
         field: "avatar",
-        width: 100,
+        width: 80,
         sortable: false,
         filterable: false,
         renderCell: (cellValue) => {
@@ -106,11 +101,22 @@ const UserList = () => {
         headerName: "Full Name",
         field: "fullName",
         width: 280,
+        renderCell: (nameValue) => {
+          return (
+            <div
+              style={{
+                fontWeight: "500",
+              }}
+            >
+              {nameValue.value}
+            </div>
+          );
+        },
       },
       {
         headerName: "Email",
         field: "email",
-        width: 250,
+        width: 300,
       },
       {
         headerName: "Company",
@@ -166,7 +172,11 @@ const UserList = () => {
   };
 
   const searchHandler = (searchValue) => {
-    setPageState({ ...pageState, search: searchValue.searchTerm, page: 1 });
+    setPageState((old) => ({
+      ...old,
+      search: searchValue.searchTerm,
+      page: 1,
+    }));
   };
 
   const handleCloseDialog = () => {
@@ -190,7 +200,12 @@ const UserList = () => {
       const res = await getUserList({
         PageSize: pageState.pageSize,
         Page: pageState.page,
+        Email: pageState.search,
       });
+
+      // if(!res.users.results){
+
+      // }
 
       const dataRow = res.users.results.map((data) => ({
         id: data.id,
@@ -209,37 +224,16 @@ const UserList = () => {
       }));
     };
     fetchData();
-  }, [pageState.page, pageState.pageSize]);
+  }, [pageState.page, pageState.pageSize, pageState.search]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      setPageState((old) => ({ ...old, isLoading: true, data: [] }));
+    const fetchCompaniesData = async () => {
+      const res = await getCompanyListWithoutManger();
 
-      const res = await getUserList({
-        PageSize: pageState.pageSize,
-        Page: pageState.page,
-        SearchKey: pageState.search,
-      });
-
-      const dataRow = res.users.results.map((data) => ({
-        id: data.id,
-        fullName: data.fullName,
-        email: data.email,
-        avatar: data.pictureUrl,
-        company: data.company?.name,
-        role: data.role.name,
-      }));
-
-      setPageState((old) => ({
-        ...old,
-        isLoading: false,
-        data: dataRow,
-        total: res.users.total,
-      }));
+      setCompanies(res.result);
     };
-
-    fetchData();
-  }, [pageState.search]);
+    fetchCompaniesData();
+  }, []);
 
   return (
     <>
@@ -293,8 +287,8 @@ const UserList = () => {
               <Autocomplete
                 freeSolo
                 options={companies}
-                getOptionLabel={(company) => company.companyName}
-                value={companyValue}
+                getOptionLabel={(company) => company.name || ""}
+                value={editParam?.companyId}
                 renderInput={(params) => (
                   <TextField {...params} placeholder="Company" />
                 )}
