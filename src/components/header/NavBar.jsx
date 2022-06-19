@@ -9,6 +9,7 @@ const DashboardStyle = styled(AppBar, {
 })(({ isCollapse, theme }) => ({
   padding: "24px 40px",
   boxShadow: "inset 1px 0px 0px #F4F4F4",
+  // boxShadow: " 0px 4px 20px rgba(102, 102, 102, 0.1)",
   height: NAVBAR.BASE_HEIGHT,
   flexDirection: "row",
   alignItems: "center",

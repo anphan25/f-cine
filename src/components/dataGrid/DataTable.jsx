@@ -116,6 +116,7 @@ const DataTable = (props) => {
           components={{
             NoResultsOverlay: CustomNoRowsOverlay,
           }}
+          // initialState={{ pinnedColumns: props.initialState }}
         ></DataGrid>
       </Box>
     </Paper>
