@@ -5,6 +5,7 @@ import { getShowTimeById } from "services/ShowTimeService";
 import SeatList from "components/seat/SeatList";
 import {
   Box,
+  Button,
   FormLabel,
   Input,
   Stack,
@@ -35,11 +36,6 @@ const AddTicket = () => {
 
     fetchShowTime();
   }, [id]);
-
-  const seats = Array.from(
-    { length: room.numberOfRow * room.numberOfColumn },
-    (_, i) => i
-  );
   const [selectedSeats, setSelectedSeats] = useState([]);
 
   return (
@@ -53,6 +49,27 @@ const AddTicket = () => {
         ]}
       />
       <Stack
+        direction="column"
+        gap="12px"
+        sx={{
+          backgroundColor: "neutral.0",
+          p: 2,
+          margin: "8px auto",
+          width: "50%",
+        }}
+      >
+        <FormLabel
+          htmlFor="movieId"
+          sx={{
+            fontWeight: "600",
+            color: "neutral.800",
+          }}
+        >
+          Price
+        </FormLabel>
+        <Input name="price" id="price" placeholder="Enter price" />
+      </Stack>
+      <Stack
         direction="row"
         justifyContent="space-evenly"
         bgcolor="neutral.0"
@@ -61,28 +78,35 @@ const AddTicket = () => {
           borderRadius: "12px",
         }}
       >
-        <Stack direction="column" gap="12px">
-          <FormLabel
-            htmlFor="movieId"
-            sx={{
-              fontWeight: "600",
-              color: "neutral.800",
-            }}
-          >
-            Price
-          </FormLabel>
-          <Input name="price" id="price" placeholder="Enter price" />
-        </Stack>
         <ShowCase />
         <SeatList
           numberOfRow={room.numberOfRow}
           numberOfColumn={room.numberOfColumn}
-          seatList={seats}
+          seatList={room?.seatDtos}
           selectedSeats={selectedSeats}
           onSelectedSeatsChange={(selectedSeats) =>
             setSelectedSeats(selectedSeats)
           }
         />
+      </Stack>
+      <Stack
+        direction="column"
+        gap="12px"
+        sx={{
+          backgroundColor: "neutral.0",
+          p: 2,
+          marginTop: "8px",
+        }}
+      >
+        <Button
+          // onClick={handleSubmit}
+          // disabled={loading}
+          type="submit"
+          variant="contained"
+          autoFocus
+        >
+          Add Ticket
+        </Button>
       </Stack>
     </>
   );
