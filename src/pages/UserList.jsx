@@ -195,11 +195,16 @@ const UserList = () => {
             icon={
               <ModeEditIcon
                 sx={{ color: "#623CE7" }}
-                onClick={openEditDialog}
+                //onClick={openConfirmBlockDialog}
               />
             }
+            onClick={() => {
+              console.log(params.row.role);
+              openConfirmBlockDialog(params.row.role);
+            }}
             label="Edit"
           />,
+
           // {params.row.role === "Manager"}
           <GridActionsCellItem
             icon={
@@ -243,7 +248,8 @@ const UserList = () => {
     isDialogOpen ? setIsDialogOpen(false) : setIsDialogOpen(true);
   };
 
-  const openConfirmBlockDialog = () => {
+  const openConfirmBlockDialog = (value) => {
+    console.log(value);
     isConfirmOpen ? setIsConfirmOpen(false) : setIsConfirmOpen(true);
   };
 
