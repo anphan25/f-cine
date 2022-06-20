@@ -6,7 +6,9 @@ import SeatList from "components/seat/SeatList";
 import {
   Box,
   Button,
+  Card,
   FormLabel,
+  Grid,
   Input,
   Stack,
   styled,
@@ -48,48 +50,66 @@ const AddTicket = () => {
           { name: "Add Show Time" },
         ]}
       />
-      <Stack
-        direction="column"
-        gap="12px"
-        sx={{
-          backgroundColor: "neutral.0",
-          p: 2,
-          margin: "8px auto",
-          width: "50%",
-        }}
-      >
-        <FormLabel
-          htmlFor="movieId"
-          sx={{
-            fontWeight: "600",
-            color: "neutral.800",
-          }}
-        >
-          Price
-        </FormLabel>
-        <Input name="price" id="price" placeholder="Enter price" />
-      </Stack>
-      <Stack
-        direction="row"
-        justifyContent="space-evenly"
-        bgcolor="neutral.0"
-        p={2}
-        sx={{
-          borderRadius: "12px",
-        }}
-      >
-        <ShowCase />
-        <SeatList
-          numberOfRow={room.numberOfRow}
-          numberOfColumn={room.numberOfColumn}
-          seatList={room?.seatDtos}
-          selectedSeats={selectedSeats}
-          onSelectedSeatsChange={(selectedSeats) =>
-            setSelectedSeats(selectedSeats)
-          }
-        />
-      </Stack>
-      <Stack
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={8}>
+          <Card sx={{ p: 3 }}>
+            <Stack
+              direction="row"
+              justifyContent="space-evenly"
+              bgcolor="neutral.0"
+              p={3}
+              sx={{
+                borderRadius: "12px",
+              }}
+            >
+              <ShowCase />
+              <SeatList
+                numberOfRow={room.numberOfRow}
+                numberOfColumn={room.numberOfColumn}
+                seatList={room?.seatDtos}
+                selectedSeats={selectedSeats}
+                onSelectedSeatsChange={(selectedSeats) =>
+                  setSelectedSeats(selectedSeats)
+                }
+              />
+            </Stack>
+          </Card>
+        </Grid>
+
+        <Grid item xs={12} md={4}>
+          <Stack spacing={3}>
+            <Card sx={{ p: 3 }}>
+              <Stack
+                direction="column"
+                gap="12px"
+                sx={{
+                  backgroundColor: "neutral.0",
+                  p: 2,
+                  margin: "8px auto",
+                }}
+              >
+                <FormLabel
+                  htmlFor="movieId"
+                  sx={{
+                    fontWeight: "600",
+                    color: "neutral.800",
+                  }}
+                >
+                  Price
+                </FormLabel>
+                <Input name="price" id="price" placeholder="Enter price" />
+              </Stack>
+            </Card>
+
+            <Button type="submit" variant="contained" size="large">
+              Add Ticket
+              {/* {!isEdit ? "Create Product" : "Save Changes"} */}
+            </Button>
+          </Stack>
+        </Grid>
+      </Grid>
+
+      {/* <Stack
         direction="column"
         gap="12px"
         sx={{
@@ -107,7 +127,7 @@ const AddTicket = () => {
         >
           Add Ticket
         </Button>
-      </Stack>
+      </Stack> */}
     </>
   );
 };

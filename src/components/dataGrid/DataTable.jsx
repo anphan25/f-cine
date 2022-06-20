@@ -93,6 +93,7 @@ function CustomNoRowsOverlay() {
 }
 
 const DataTable = (props) => {
+  const [select, setSelection] = React.useState([]);
   return (
     <Paper
       elevation={2}
@@ -116,7 +117,7 @@ const DataTable = (props) => {
           components={{
             NoResultsOverlay: CustomNoRowsOverlay,
           }}
-          // initialState={{ pinnedColumns: props.initialState }}
+          onRowClick={(rowData) => console.log(rowData)}
         ></DataGrid>
       </Box>
     </Paper>
