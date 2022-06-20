@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
 import {
   Typography,
-  styled,
   Box,
-  Paper,
   Stack,
   Button,
-  Select,
   FormControl,
   InputLabel,
   MenuItem,
@@ -27,15 +24,12 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
-import CheckIcon from "@mui/icons-material/Check";
-
-const AvtStyle = {
-  width: 45,
-  height: 45,
-  objectFit: "cover",
-  borderRadius: "50%",
-  border: "1.5px solid #E4E4E4",
-};
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import GroupRemoveIcon from "@mui/icons-material/GroupRemove";
+import GroupAddIcon from "@mui/icons-material/GroupAdd";
+import { updateRole } from "../services/RoleService";
+import HeaderBreadcrumbs from "components/header/HeaderBreadcrumbs";
+import { blockManager } from "../services/CompanyService";
 
 const statusStyle = (status) => {
   switch (status) {
@@ -48,13 +42,24 @@ const statusStyle = (status) => {
   }
 };
 
-const roleStyle = (role) => {
+const roleBackGroundStyle = (role) => {
   switch (role) {
     case "Manager": {
-      return "#0068FF";
+      return "#74CAFF";
     }
     case "Customer": {
-      return "#FFC107";
+      return "#FFE16A";
+    }
+  }
+};
+
+const roleTextStyle = (role) => {
+  switch (role) {
+    case "Manager": {
+      return "#04297A";
+    }
+    case "Customer": {
+      return "#7A4F01";
     }
   }
 };
@@ -66,9 +71,9 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const UserList = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
-  const [role, setRole] = useState("");
+  const [blockedAcc, setBlockedAcc] = useState("");
+  const [blockAccParam, setBlockAccParam] = useState({});
   const [companies, setCompanies] = useState([]);
-  const [companyValue, setCompanyValue] = useState(null);
   const [pageState, setPageState] = useState({
     isLoading: false,
     data: [],
@@ -78,7 +83,6 @@ const UserList = () => {
     pageSize: 10,
   });
   const [editParam, setEditParam] = useState({});
-  // const [searchKey, setSearchKey] = useState("");
 
   const gridOptions = {
     columns: [
@@ -95,15 +99,15 @@ const UserList = () => {
         filterable: false,
         renderCell: (cellValue) => {
           return (
-            <div style={AvtStyle}>
+            <div>
               <img
                 className="avatar-cell"
                 src={cellValue.value}
                 style={{
-                  width: "100%",
-                  height: "100%",
-                  borderRadius: "50px",
-                  // border: "1.5px solid #E4E4E4",
+                  width: "45px",
+                  height: "45px",
+                  borderRadius: "50%",
+                  objectFit: "cover",
                 }}
               ></img>
             </div>
@@ -145,20 +149,17 @@ const UserList = () => {
         width: 120,
         renderCell: (status) => {
           return (
-            <Stack
-              direction="row"
-              alignItems="center"
+            <Box
               sx={{
-                padding: "3px 8px",
-                color: statusStyle(status.value),
-                borderRadius: "50px",
-                border: ` 1px solid ${statusStyle(status.value)}`,
+                color: `${statusStyle(status.value)}`,
               }}
             >
-              {status === "Active" ? <CheckIcon /> : ""}
-              <CheckIcon />
-              <Typography>{status.value}</Typography>
-            </Stack>
+              {status.value === "Active" ? (
+                <CheckCircleOutlineIcon />
+              ) : (
+                <BlockIcon />
+              )}
+            </Box>
           );
         },
       },
@@ -171,10 +172,12 @@ const UserList = () => {
           return (
             <div
               style={{
-                padding: "5px 10px",
-                color: "#FFFF",
-                borderRadius: "50px",
-                backgroundColor: roleStyle(roleValue.value),
+                padding: "4px 8px",
+                fontSize: "12px",
+                fontWeight: "600",
+                color: roleTextStyle(roleValue.value),
+                borderRadius: "10px",
+                backgroundColor: roleBackGroundStyle(roleValue.value),
               }}
             >
               {roleValue.value}
@@ -184,7 +187,6 @@ const UserList = () => {
       },
 
       {
-        headerName: "Actions",
         field: "actions",
         type: "actions",
         width: 80,
@@ -192,28 +194,29 @@ const UserList = () => {
         filterable: false,
         getActions: (params) => [
           <GridActionsCellItem
-            icon={
-              <ModeEditIcon
-                sx={{ color: "#623CE7" }}
-                //onClick={openConfirmBlockDialog}
-              />
-            }
+            disabled={params.row.role === "Customer" ? false : true}
+            icon={<ModeEditIcon sx={{ color: "#623CE7" }} />}
             onClick={() => {
-              console.log(params.row.role);
-              openConfirmBlockDialog(params.row.role);
+              openEditDialog(params.row);
             }}
-            label="Edit"
+            label="Set to Manager"
+            showInMenu
           />,
 
-          // {params.row.role === "Manager"}
           <GridActionsCellItem
+            disabled={params.row.role === "Manager" ? false : true}
             icon={
-              <BlockIcon
-                sx={{ color: "#FF4842" }}
-                onClick={openConfirmBlockDialog}
-              />
+              params.row.status === "Active" ? (
+                <GroupRemoveIcon sx={{ color: "#FF4842" }} />
+              ) : (
+                <GroupAddIcon sx={{ color: "#54D62C" }} />
+              )
             }
-            label="Ban"
+            label="Block account"
+            onClick={() => {
+              openConfirmBlockDialog(params.row);
+            }}
+            showInMenu
           />,
         ],
       },
@@ -240,23 +243,44 @@ const UserList = () => {
   const handleCloseDialog = () => {
     setIsDialogOpen(false);
   };
+
   const handleCloseConfirmDialog = () => {
     setIsConfirmOpen(false);
   };
 
-  const openEditDialog = (id) => {
+  const openEditDialog = (value) => {
+    setEditParam({ ...editParam, userId: value.id });
     isDialogOpen ? setIsDialogOpen(false) : setIsDialogOpen(true);
   };
 
   const openConfirmBlockDialog = (value) => {
+    if (value.status) {
+      //call api for unban
+      return;
+    }
+
     console.log(value);
+    setBlockedAcc(value.fullName);
+    setBlockAccParam({
+      ...blockAccParam,
+      id: value.companyId,
+      isActive: false,
+    });
     isConfirmOpen ? setIsConfirmOpen(false) : setIsConfirmOpen(true);
   };
 
-  const handleUpdate = () => {};
+  const handleUpdate = async () => {
+    await updateRole(editParam);
 
-  const handleChangeRole = (e) => {
-    setRole(e.target.value);
+    setIsDialogOpen(false);
+    // setPageState((old) => ({ ...old, data: [] }));
+  };
+
+  const handleBanAndUnBan = async () => {
+    console.log("acc", blockAccParam);
+    // await blockManager(blockAccParam);
+
+    setIsDialogOpen(false);
   };
 
   useEffect(() => {
@@ -274,6 +298,7 @@ const UserList = () => {
         fullName: data.fullName,
         email: data.email,
         avatar: data.pictureUrl,
+        companyId: data.companyId,
         company: data.company?.name,
         role: data.role.name,
         status: data.statusName,
@@ -303,10 +328,11 @@ const UserList = () => {
   };
   return (
     <>
-      <Stack direction="row" justifyContent="space-between">
-        <Typography variant="h4" sx={{ marginBottom: "20px" }}>
-          User Management
-        </Typography>
+      <Stack direction="row" justifyContent="space-between" alignItems="center">
+        <HeaderBreadcrumbs
+          heading="User List"
+          links={[{ name: "Dashboard", to: "/" }, { name: "User List" }]}
+        />
         <SearchBar placeholder="Enter email..." onSubmit={searchHandler} />
       </Stack>
 
@@ -326,7 +352,7 @@ const UserList = () => {
         onClose={handleCloseDialog}
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle>Edit User</DialogTitle>
+        <DialogTitle>Set User to Manager</DialogTitle>
         <DialogContent>
           <Box
             sx={{
@@ -338,19 +364,7 @@ const UserList = () => {
               fullWidth
               sx={{ marginBottom: "15px", marginTop: "20px" }}
             >
-              <InputLabel id="demo-simple-select-label">Role</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={role}
-                placeholder="Role"
-                onChange={handleChangeRole}
-              >
-                <MenuItem value={2}>Manager</MenuItem>
-                <MenuItem value={3}>Users</MenuItem>
-              </Select>
-            </FormControl>
-            {role === 2 && (
+              <InputLabel id="demo-simple-select-label">Company</InputLabel>
               <Autocomplete
                 freeSolo
                 options={companies}
@@ -360,10 +374,11 @@ const UserList = () => {
                   <TextField {...params} placeholder="Company" />
                 )}
                 onChange={(e, newValue) => {
-                  setCompanyValue(newValue);
+                  console.log(newValue);
+                  setEditParam({ ...editParam, companyId: newValue.id });
                 }}
               />
-            )}
+            </FormControl>
           </Box>
         </DialogContent>
         <DialogActions>
@@ -386,14 +401,14 @@ const UserList = () => {
         <DialogTitle>Block User</DialogTitle>
         <DialogContent sx={{ marginTop: "20px" }}>
           <DialogContentText>
-            Are you sure you want to block this manager's account ?
+            Are you sure you want to block {blockedAcc}'s account ?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseConfirmDialog}>Cancel</Button>
           <Button
+            onClick={handleBanAndUnBan}
             variant="contained"
-            onClick={handleUpdate}
             sx={{
               backgroundColor: "#FF4842",
               "&:hover": { backgroundColor: "#B72136" },

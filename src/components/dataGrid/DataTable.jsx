@@ -10,7 +10,7 @@ const tableContainerStyle = {
 };
 
 const containerDataGrid = {
-  height: "500px",
+  height: "773px",
   width: "100%",
 
   "& .MuiDataGrid-columnHeaders": {
@@ -19,6 +19,10 @@ const containerDataGrid = {
     borderTopLeftRadius: "10px",
     borderTopRightRadius: "10px",
   },
+
+  "& .MuiInputBase-root": { padding: "4px" },
+
+  // "& .MuiDataGrid-row": { padding: "10px 0 10px" },
 };
 
 const StyledGridOverlay = styled("div")(({ theme }) => ({
@@ -102,6 +106,7 @@ const DataTable = (props) => {
     >
       <Box sx={containerDataGrid}>
         <DataGrid
+          rowHeight={65}
           className="gridStyle"
           columns={props.gridOptions.columns}
           rows={props.gridOptions.pageState.data}
