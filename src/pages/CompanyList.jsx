@@ -17,14 +17,6 @@ import { SearchBar } from "../components/header/SearchBar";
 import { DataTable } from "../components/index";
 import { getCompanyList } from "../services/CompanyService";
 
-const logoStyle = {
-  width: 45,
-  height: 45,
-  objectFit: "cover",
-  borderRadius: "50%",
-  border: "1.5px solid #E4E4E4",
-};
-
 const CompanyList = () => {
   const [pageState, setPageState] = useState({
     isLoading: false,
@@ -48,14 +40,16 @@ const CompanyList = () => {
         width: 100,
         renderCell: (cellValue) => {
           return (
-            <div style={logoStyle}>
+            <div>
               <img
                 className="avatar-cell"
                 src={cellValue.value}
                 style={{
-                  width: "100%",
-                  height: "100%",
+                  width: "45px",
+                  height: "45px",
                   borderRadius: "50%",
+                  objectFit: "cover",
+                  // border: "1.5px solid #E4E4E4",
                 }}
               ></img>
             </div>

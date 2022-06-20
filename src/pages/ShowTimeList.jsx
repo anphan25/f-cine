@@ -110,7 +110,7 @@ const ShowTimeList = () => {
         }
         if (res.message === "Success") {
           setAlert({
-            message: "Add showtime succesfully",
+            message: "Add showtime successfully",
             status: true,
             type: "success",
           });
