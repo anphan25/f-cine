@@ -73,9 +73,10 @@ const ShowTimeList = () => {
         width: 250,
       },
       {
-        headerName: "Room",
+        headerName: "Room No",
         field: "room",
         width: 100,
+        align: "right",
       },
     ],
     pageState: pageState,
@@ -171,7 +172,6 @@ const ShowTimeList = () => {
     getRoomsByTheaterId(id)
       .then((res) => {
         if (!res.roomNumbers) {
-          console.log("loi ne: " + res.message);
           setAlert({ message: res.message, status: true, type: "error" });
         }
         setRooms(res?.roomNumbers);

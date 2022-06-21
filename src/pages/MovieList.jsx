@@ -21,8 +21,8 @@ const PagingDiv = styled("div")(({ theme }) => ({
 const MovieList = () => {
   const [movies, setMovies] = useState([]);
   const [page, setPage] = useState({
-    currentPage: 1,
-    pageSize: 12,
+    PageIndex: 1,
+    PageSize: 12,
     totalPages: 1,
   });
 
@@ -31,18 +31,18 @@ const MovieList = () => {
       getMovieList(page).then((res) => {
         setPage({
           ...page,
-          currentPage: res.currentPage,
-          totalPages: res.totalPages,
+          PageIndex: res.movies.page,
+          totalPages: res.movies.total,
         });
-        setMovies(res.movieList);
-        console.log(res.movieList);
+        setMovies(res.movies.results);
+        console.log(res.movies.results);
       });
     };
     getMovies();
-  }, [page.currentPage]);
+  }, [page.PageIndex]);
 
   const clickPageHandler = (e, value) => {
-    setPage({ ...page, currentPage: value });
+    setPage({ ...page, PageIndex: value });
   };
 
   return (
@@ -63,7 +63,7 @@ const MovieList = () => {
       <Box>
         <Stack direction="row" flexWrap="wrap" sx={{ gap: 1.9 }}>
           {movies?.map((movie) => (
-            <PosterCard movie={movie} key={movie.movieId}></PosterCard>
+            <PosterCard movie={movie} key={movie.id}></PosterCard>
           ))}
         </Stack>
       </Box>
@@ -80,7 +80,7 @@ const MovieList = () => {
           <PagingDiv>
             <Pagination
               count={page.totalPages}
-              page={page.currentPage}
+              page={page.PageIndex}
               onChange={clickPageHandler}
             />
           </PagingDiv>

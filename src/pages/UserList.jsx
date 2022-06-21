@@ -226,7 +226,11 @@ const UserList = () => {
                 <GroupAddIcon sx={{ color: "#54D62C" }} />
               )
             }
-            label="Block account"
+            label={
+              params.row.status === "Active"
+                ? "Block account"
+                : "Unblock account"
+            }
             onClick={() => {
               openConfirmBlockDialog(params.row);
             }}
@@ -296,15 +300,8 @@ const UserList = () => {
   };
 
   const openConfirmBlockDialog = (value) => {
-    // console.log(value);
-
     //Unban account
     if (value.status === "Inactive") {
-      // console.log(blockAccParam);
-      // setBlockAccParam({
-      //   id: value.companyId,
-      //   isActive: true,
-      // });
       handleUnban({ id: value.companyId, isActive: true });
       // return;
     } else {

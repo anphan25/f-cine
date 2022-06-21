@@ -67,11 +67,17 @@ const CompanyList = () => {
         width: 200,
         valueGetter: ({ value }) => value || "-",
       },
-
       {
         headerName: "Manager's Email",
         field: "managerEmail",
         width: 350,
+        valueGetter: ({ value }) => value || "-",
+      },
+      {
+        headerName: "is Active",
+        type: "boolean",
+        field: "isActive",
+        width: 100,
         valueGetter: ({ value }) => value || "-",
       },
     ],
@@ -110,6 +116,7 @@ const CompanyList = () => {
         name: data.name,
         managerName: data.managerName,
         managerEmail: data.managerEmail,
+        isActive: data.isActive,
       }));
 
       setPageState((old) => ({
