@@ -11,6 +11,10 @@ import {
   TextField,
   IconButton,
   FormLabel,
+  Card,
+  Tabs,
+  Tab,
+  Divider,
 } from "@mui/material";
 import { SearchBar } from "../components/header/SearchBar";
 import { GridActionsCellItem } from "@mui/x-data-grid";
@@ -31,6 +35,7 @@ import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import { updateRole } from "../services/RoleService";
 import HeaderBreadcrumbs from "components/header/HeaderBreadcrumbs";
 import { blockManager } from "../services/CompanyService";
+import useTabs from "hooks/useTabs";
 
 const statusStyle = (status) => {
   switch (status) {
@@ -64,6 +69,8 @@ const roleTextStyle = (role) => {
     }
   }
 };
+
+const STATUS_OPTIONS = ["all", "active", "banned"];
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -377,6 +384,9 @@ const UserList = () => {
     fetchCompaniesData();
   }, []);
 
+  const { currentTab: filterStatus, onChangeTab: onChangeFilterStatus } =
+    useTabs("all");
+
   return (
     <>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
@@ -387,6 +397,22 @@ const UserList = () => {
         <SearchBar placeholder="Enter email..." onSubmit={searchHandler} />
       </Stack>
 
+      <Card>
+        <Tabs
+          allowScrollButtonsMobile
+          variant="scrollable"
+          scrollButtons="auto"
+          value={filterStatus}
+          onChange={onChangeFilterStatus}
+          sx={{ px: 2, bgcolor: "background.neutral" }}
+        >
+          {STATUS_OPTIONS.map((tab) => (
+            <Tab disableRipple key={tab} label={tab} value={tab} />
+          ))}
+        </Tabs>
+
+        <Divider />
+      </Card>
       <DataTable
         gridOptions={gridOptions}
         onPageChange={pageChangeHandler}

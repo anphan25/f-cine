@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { styled, Box, Pagination, Stack, Typography } from "@mui/material";
-import { PosterCard, PosterCardList } from "../components/index";
+import { PosterCard } from "../components/index";
 import { getMovieList } from "../services/MovieService";
 
 const PagingDiv = styled("div")(({ theme }) => ({
@@ -23,25 +23,26 @@ const MovieList = () => {
   const [page, setPage] = useState({
     currentPage: 1,
     pageSize: 12,
-    totalPages: 0,
+    totalPages: 1,
   });
 
-  const getMovies = async () => {
-    let res = await getMovieList(page);
-
-    setPage((pre) => ({
-      ...pre,
-      totalPages: res.totalPages,
-    }));
-    setMovies(res.movieList);
-  };
-
   useEffect(() => {
+    const getMovies = () => {
+      getMovieList(page).then((res) => {
+        setPage({
+          ...page,
+          currentPage: res.currentPage,
+          totalPages: res.totalPages,
+        });
+        setMovies(res.movieList);
+        console.log(res.movieList);
+      });
+    };
     getMovies();
   }, [page.currentPage]);
 
   const clickPageHandler = (e, value) => {
-    setPage((pre) => ({ ...pre, currentPage: value }));
+    setPage({ ...page, currentPage: value });
   };
 
   return (
@@ -60,7 +61,11 @@ const MovieList = () => {
       </Box>
 
       <Box>
-        <PosterCardList movieList={movies}></PosterCardList>
+        <Stack direction="row" flexWrap="wrap" sx={{ gap: 1.9 }}>
+          {movies?.map((movie) => (
+            <PosterCard movie={movie} key={movie.movieId}></PosterCard>
+          ))}
+        </Stack>
       </Box>
 
       <Box
