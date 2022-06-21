@@ -4,7 +4,7 @@ const apiPath = "/movies";
 
 export const getMovieList = async (params) => {
   return await axiosPublic.get(
-    `${apiPath}?Action=page&PageSize=${params.pageSize}&PageIndex=${params.currentPage}`
+    `${apiPath}?Action=page&PageSize=${params.PageSize}&PageIndex=${params.PageIndex}`
   );
 };
 

@@ -11,6 +11,7 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import moment from "moment";
 
 const ImgStyle = styled("div")(({ theme }) => ({
   padding: "15px 15px 0",
@@ -45,7 +46,7 @@ const PosterCard = (props) => {
 
   return (
     <Card
-      movie-id={movie.movieId}
+      movie-id={movie.id}
       sx={{
         maxWidth: 345,
         borderRadius: "10px",
@@ -57,12 +58,15 @@ const PosterCard = (props) => {
       }}
     >
       <ImgStyle>
-        <Link to={`/movies/${movie.movieId}`}>
+        <Link to={`/movies/${movie.id}`}>
           <CardMedia
             component="img"
             height="180"
-            image={movie.posterImgURL}
-            alt="green iguana"
+            image={
+              movie.posterImageUrl ||
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBCGH3ttKv97u7GnSxpSM4_ijDWF7yPb7GKmva3LU4_ZDJ-X2Jnfw2DVcwgsqmdome8Uo&usqp=CAU"
+            }
+            alt="No image found"
             sx={{ cursor: "pointer", borderRadius: "10px" }}
           />
         </Link>
@@ -79,7 +83,7 @@ const PosterCard = (props) => {
           className="card-top"
           sx={{ display: "flex", flexDirection: "column", flex: 1 }}
         >
-          <Link to={`/movies/${movie.movieId}`}>
+          <Link to={`/movies/${movie.id}`}>
             <Typography
               gutterBottom
               component="div"
@@ -108,11 +112,12 @@ const PosterCard = (props) => {
                     margin: "5px 5px 0px 0px",
                     border: "1px solid",
                     fontSize: "12px",
+                    color: `${cate.color}`,
                   }}
                   key={index}
-                  cate-id={cate.cateId}
+                  cate-id={cate.id}
                 >
-                  {cate.cateName}
+                  {cate.name}
                 </Button>
               );
             })}
@@ -132,7 +137,7 @@ const PosterCard = (props) => {
               marginTop: "10px",
             }}
           >
-            <RestrictLabel>{movie.ageRestrict}</RestrictLabel>
+            <RestrictLabel>{movie.restrictedAge}</RestrictLabel>
           </Typography>
 
           <Typography
@@ -159,7 +164,7 @@ const PosterCard = (props) => {
             <CalendarMonthIcon
               sx={{ color: "neutral.600", marginRight: "5px" }}
             ></CalendarMonthIcon>
-            Release Date: {movie.releaseDate}
+            Release Date: {moment(movie.releaseDate).format("DD/MM/yyyy")}
           </Typography>
         </Box>
       </CardContent>

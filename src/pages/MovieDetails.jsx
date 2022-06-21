@@ -5,6 +5,7 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import SlideshowIcon from "@mui/icons-material/Slideshow";
 import { getMovieDetail } from "../services/MovieService";
+import moment from "moment";
 
 const ImgBox = styled("div")(({ theme }) => ({
   height: "280px",
@@ -84,14 +85,14 @@ const MovieDetails = () => {
     return url?.replace("watch?v=", "embed/");
   };
 
-  const getMovieDetails = async () => {
-    let res = await getMovieDetail(id);
-    setDetail(res.movieDetail);
-  };
-
   useEffect(() => {
-    console.log("Hi");
+    const getMovieDetails = async () => {
+      const res = await getMovieDetail(id);
+      setDetail(res.result);
+    };
+
     getMovieDetails();
+    console.log(detail);
   }, []);
 
   return (
@@ -100,7 +101,7 @@ const MovieDetails = () => {
         className="cover-img"
         sx={{
           backgroundImage: `url(${
-            detail.coverImageUrl ||
+            detail?.coverImageUrl ||
             "https://storage.googleapis.com/ff-storage-p01/festivals/cover_photos/000/041/450/original/cover_photo.jpg?1514473357"
           })`,
         }}
@@ -111,7 +112,7 @@ const MovieDetails = () => {
       <Box className="movie-detail" sx={{ marginTop: "500px" }}>
         <Stack className="movie-detail_content" direction="row">
           <ImgBox className="movie-detail_content_poster">
-            <img src={detail.posterImageUrl} alt="poster-movie" sx={{}}></img>
+            <img src={detail?.posterImageUrl} alt="poster-movie" sx={{}}></img>
           </ImgBox>
 
           <Box
@@ -170,7 +171,7 @@ const MovieDetails = () => {
                   <CalendarMonthIcon
                     sx={{ color: "neutral.600", marginRight: "5px" }}
                   ></CalendarMonthIcon>
-                  {detail.releaseDate}
+                  {moment(detail.releaseDate).format("DD/MM/yyyy")}
                 </Typography>
               </Stack>
             </Stack>
@@ -180,7 +181,7 @@ const MovieDetails = () => {
               direction="row"
               sx={{ marginTop: "25px" }}
             >
-              {detail?.movieTypes?.map((cate, index) => {
+              {detail?.categories?.map((cate, index) => {
                 return (
                   <Button
                     size="small"
@@ -189,12 +190,14 @@ const MovieDetails = () => {
                       marginRight: "10px",
                       border: "1.5px solid",
                       fontSize: "15px",
-                      padding: "10px ",
+                      padding: "10px",
+                      backgroundColor: "transparent",
+                      color: `${cate.color}`,
                     }}
                     key={index}
-                    cate-id={cate.cateId}
+                    cate-id={cate.id}
                   >
-                    {cate.cateName}
+                    {cate.name}
                   </Button>
                 );
               })}
@@ -240,7 +243,8 @@ const MovieDetails = () => {
               <span className="sub-title" style={{ fontWeight: "bold" }}>
                 Actors/Actresses:{" "}
               </span>
-              {detail.actors?.join(", ")}
+              {/* {detail.actors?.join(", ")} */}
+              {/* {JSON.parse(detail?.actors)} */}
             </Typography>
           </Box>
 
