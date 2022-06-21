@@ -10,10 +10,11 @@ import {
   Autocomplete,
   TextField,
   IconButton,
+  FormLabel,
 } from "@mui/material";
 import { SearchBar } from "../components/header/SearchBar";
 import { GridActionsCellItem } from "@mui/x-data-grid";
-import { DataTable } from "../components/index";
+import { DataTable, CustomSnackBar } from "../components/index";
 import { getUserList } from "../services/UserService";
 import { getCompanyListWithoutManger } from "../services/CompanyService";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
@@ -36,7 +37,7 @@ const statusStyle = (status) => {
     case "Active": {
       return "#229A16";
     }
-    case "Block": {
+    case "Inactive": {
       return "#B72136";
     }
   }
@@ -74,6 +75,11 @@ const UserList = () => {
   const [blockedAcc, setBlockedAcc] = useState("");
   const [blockAccParam, setBlockAccParam] = useState({});
   const [companies, setCompanies] = useState([]);
+  const [alert, setAlert] = useState({
+    message: "",
+    status: false,
+    type: "success",
+  });
   const [pageState, setPageState] = useState({
     isLoading: false,
     data: [],
@@ -224,6 +230,34 @@ const UserList = () => {
     pageState: pageState,
   };
 
+  const fetchData = async () => {
+    setPageState((old) => ({ ...old, isLoading: true, data: [] }));
+
+    const res = await getUserList({
+      PageSize: pageState.pageSize,
+      Page: pageState.page,
+      Email: pageState.search,
+    });
+
+    const dataRow = res.users.results.map((data) => ({
+      id: data.id,
+      fullName: data.fullName,
+      email: data.email,
+      avatar: data.pictureUrl,
+      companyId: data.companyId,
+      company: data.company?.name,
+      role: data.role.name,
+      status: data.statusName,
+    }));
+
+    setPageState((old) => ({
+      ...old,
+      isLoading: false,
+      data: dataRow,
+      total: res.users.total,
+    }));
+  };
+
   const pageChangeHandler = (newPage) => {
     setPageState((old) => ({ ...old, page: newPage + 1 }));
   };
@@ -254,12 +288,14 @@ const UserList = () => {
   };
 
   const openConfirmBlockDialog = (value) => {
-    if (value.status) {
-      //call api for unban
+    // console.log(value);
+
+    //Unban account
+    if (value.status === "Inactive") {
+      handleUnban(value);
       return;
     }
 
-    console.log(value);
     setBlockedAcc(value.fullName);
     setBlockAccParam({
       ...blockAccParam,
@@ -270,47 +306,64 @@ const UserList = () => {
   };
 
   const handleUpdate = async () => {
-    await updateRole(editParam);
+    setAlert({});
+
+    const res = await updateRole(editParam);
+
+    setEditParam({});
+
+    if (res.message === "Success") {
+      await fetchData();
+      setAlert({
+        message: "Set manager successfully",
+        status: true,
+        type: "success",
+      });
+    }
 
     setIsDialogOpen(false);
-    // setPageState((old) => ({ ...old, data: [] }));
   };
 
-  const handleBanAndUnBan = async () => {
-    console.log("acc", blockAccParam);
-    // await blockManager(blockAccParam);
+  const handleUnban = async (value) => {
+    console.log(value);
 
-    setIsDialogOpen(false);
+    setAlert({});
+    setBlockAccParam({
+      ...blockAccParam,
+      id: value.companyId,
+      isActive: true,
+    });
+
+    console.log("param: ", blockAccParam);
+
+    const res = await blockManager(blockAccParam);
+    if (res.message === "Success") {
+      await fetchData();
+      setAlert({
+        message: "Unblock account successfully",
+        status: true,
+        type: "success",
+      });
+    }
+  };
+
+  const handleBan = async () => {
+    setAlert({});
+
+    const res = await blockManager(blockAccParam);
+    if (res.message === "Success") {
+      fetchData();
+      setAlert({
+        message: "Block account successfully",
+        status: true,
+        type: "success",
+      });
+    }
+
+    setIsConfirmOpen(false);
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      setPageState((old) => ({ ...old, isLoading: true, data: [] }));
-
-      const res = await getUserList({
-        PageSize: pageState.pageSize,
-        Page: pageState.page,
-        Email: pageState.search,
-      });
-
-      const dataRow = res.users.results.map((data) => ({
-        id: data.id,
-        fullName: data.fullName,
-        email: data.email,
-        avatar: data.pictureUrl,
-        companyId: data.companyId,
-        company: data.company?.name,
-        role: data.role.name,
-        status: data.statusName,
-      }));
-
-      setPageState((old) => ({
-        ...old,
-        isLoading: false,
-        data: dataRow,
-        total: res.users.total,
-      }));
-    };
     fetchData();
   }, [pageState.page, pageState.pageSize, pageState.search]);
 
@@ -323,9 +376,6 @@ const UserList = () => {
     fetchCompaniesData();
   }, []);
 
-  const spin = {
-    left: ["id", "avatar"],
-  };
   return (
     <>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
@@ -364,9 +414,20 @@ const UserList = () => {
               fullWidth
               sx={{ marginBottom: "15px", marginTop: "20px" }}
             >
-              <InputLabel id="demo-simple-select-label">Company</InputLabel>
+              <FormLabel
+                htmlFor="movieId"
+                sx={{
+                  fontWeight: "600",
+                  color: "neutral.800",
+                  marginBottom: "5px",
+                }}
+              >
+                Select a company
+              </FormLabel>
               <Autocomplete
                 freeSolo
+                name="companyId"
+                id="companyId"
                 options={companies}
                 getOptionLabel={(company) => company.name || ""}
                 value={editParam?.companyId}
@@ -374,7 +435,6 @@ const UserList = () => {
                   <TextField {...params} placeholder="Company" />
                 )}
                 onChange={(e, newValue) => {
-                  console.log(newValue);
                   setEditParam({ ...editParam, companyId: newValue.id });
                 }}
               />
@@ -407,7 +467,7 @@ const UserList = () => {
         <DialogActions>
           <Button onClick={handleCloseConfirmDialog}>Cancel</Button>
           <Button
-            onClick={handleBanAndUnBan}
+            onClick={handleBan}
             variant="contained"
             sx={{
               backgroundColor: "#FF4842",
@@ -418,6 +478,15 @@ const UserList = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* Alert message */}
+      {alert?.status && (
+        <CustomSnackBar
+          message={alert.message}
+          status={alert.status}
+          type={alert.type}
+        />
+      )}
     </>
   );
 };

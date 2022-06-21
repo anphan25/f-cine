@@ -99,16 +99,16 @@ const ShowTimeList = () => {
     postShowTime(data)
       .then((res) => {
         setLoading(false);
-        console.log(res.message);
+        console.log(res);
         if (res.status === 400) {
           setAlert({
-            message: res.data.message,
+            message: res.data.errors?.StartTime[0],
             status: true,
             type: "error",
           });
-          console.log(res.data.message);
+          console.log(res.data.errors?.StartTime[0]);
         }
-        if (res.message === "Success") {
+        if (res.status === 200) {
           setAlert({
             message: "Add showtime successfully",
             status: true,
@@ -121,7 +121,7 @@ const ShowTimeList = () => {
         console.log(err);
         setLoading(false);
         setAlert({
-          message: err.response.data?.message,
+          message: err.response.data?.errors?.StartTime[0],
           status: true,
           type: "error",
         });
@@ -278,7 +278,7 @@ const ShowTimeList = () => {
                   color: "neutral.800",
                 }}
               >
-                Room Number
+                Room
               </FormLabel>
               <Autocomplete
                 disabled={data.theaterId && rooms?.length > 0 ? false : true}
