@@ -115,6 +115,7 @@ const UserList = () => {
                   borderRadius: "50%",
                   objectFit: "cover",
                 }}
+                alt=""
               ></img>
             </div>
           );
@@ -292,17 +293,23 @@ const UserList = () => {
 
     //Unban account
     if (value.status === "Inactive") {
-      handleUnban(value);
-      return;
-    }
+      // console.log(blockAccParam);
+      // setBlockAccParam({
+      //   id: value.companyId,
+      //   isActive: true,
+      // });
+      handleUnban({ id: value.companyId, isActive: true });
+      // return;
+    } else {
+      setBlockedAcc(value.fullName);
+      setBlockAccParam({
+        ...blockAccParam,
+        id: value.companyId,
+        isActive: false,
+      });
 
-    setBlockedAcc(value.fullName);
-    setBlockAccParam({
-      ...blockAccParam,
-      id: value.companyId,
-      isActive: false,
-    });
-    isConfirmOpen ? setIsConfirmOpen(false) : setIsConfirmOpen(true);
+      isConfirmOpen ? setIsConfirmOpen(false) : setIsConfirmOpen(true);
+    }
   };
 
   const handleUpdate = async () => {
@@ -328,17 +335,11 @@ const UserList = () => {
     console.log(value);
 
     setAlert({});
-    setBlockAccParam({
-      ...blockAccParam,
-      id: value.companyId,
-      isActive: true,
-    });
 
-    console.log("param: ", blockAccParam);
-
-    const res = await blockManager(blockAccParam);
+    const res = await blockManager(value);
     if (res.message === "Success") {
       await fetchData();
+      console.log(pageState);
       setAlert({
         message: "Unblock account successfully",
         status: true,
