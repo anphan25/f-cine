@@ -1,7 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
-import { styled, Box, Pagination, Stack, Typography } from "@mui/material";
-import { PosterCard } from "../components/index";
-import { getMovieList } from "../services/MovieService";
+import React, { useState, useEffect } from "react";
+import { styled, Box, Pagination, Stack, Button } from "@mui/material";
+import { HeaderBreadcrumbs, PosterCard } from "components";
+import { getMovieList } from "services/MovieService";
+import { MdAdd } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 const PagingDiv = styled("div")(({ theme }) => ({
   "& .MuiPagination-ul .Mui-selected": {
@@ -19,6 +21,7 @@ const PagingDiv = styled("div")(({ theme }) => ({
 }));
 
 const MovieList = () => {
+  const navigate = useNavigate();
   const [movies, setMovies] = useState([]);
   const [page, setPage] = useState({
     PageIndex: 1,
@@ -47,18 +50,21 @@ const MovieList = () => {
 
   return (
     <>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          paddingBottom: "30px",
-          borderBottom: "1px solid #e3e3e3",
-          marginBottom: "30px",
-          marginTop: "30px",
-        }}
-      >
-        <Typography variant="h3">Movies List</Typography>
-      </Box>
+      <Stack justifyContent="space-between" direction="row" alignItems="center">
+        <HeaderBreadcrumbs
+          heading="Movie List"
+          links={[{ name: "Dashboard", to: "/" }, { name: "Movie List" }]}
+        />
+        <Button
+          variant="contained"
+          startIcon={<MdAdd />}
+          onClick={() => {
+            navigate("add");
+          }}
+        >
+          Add Movie
+        </Button>
+      </Stack>
 
       <Box>
         <Stack direction="row" flexWrap="wrap" sx={{ gap: 1.9 }}>

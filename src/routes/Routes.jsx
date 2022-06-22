@@ -56,24 +56,32 @@ export default function Router() {
             },
             {
               path: ":id",
-              children: [
-                {
-                  path: "tickets",
-                  element: (
-                    <ProtectedRoutes roles={["Manager"]}>
-                      <AddTicket />
-                    </ProtectedRoutes>
-                  ),
-                },
-                {
-                  index: true,
-                  element: (
-                    <ProtectedRoutes roles={["Manager"]}>
-                      <ShowTimeDetail />
-                    </ProtectedRoutes>
-                  ),
-                },
-              ],
+              element: (
+                <ProtectedRoutes roles={["Manager"]}>
+                  <ShowTimeDetail />
+                </ProtectedRoutes>
+              ),
+            },
+          ],
+        },
+        {
+          path: "tickets",
+          children: [
+            {
+              element: (
+                <ProtectedRoutes roles={["Manager"]}>
+                  <TicketList />
+                </ProtectedRoutes>
+              ),
+              index: true,
+            },
+            {
+              path: ":id",
+              element: (
+                <ProtectedRoutes roles={["Manager"]}>
+                  <ShowTimeDetail />
+                </ProtectedRoutes>
+              ),
             },
           ],
         },
@@ -83,7 +91,7 @@ export default function Router() {
             {
               index: true,
               element: (
-                <ProtectedRoutes roles={["Manager"]}>
+                <ProtectedRoutes roles={["Manager", "Admin"]}>
                   <TheaterList />
                 </ProtectedRoutes>
               ),
@@ -99,12 +107,25 @@ export default function Router() {
           ],
         },
         {
-          path: "payments",
-          element: (
-            <ProtectedRoutes roles={["Manager", "Admin"]}>
-              <PaymentList />
-            </ProtectedRoutes>
-          ),
+          path: "orders",
+          children: [
+            {
+              index: true,
+              element: (
+                <ProtectedRoutes roles={["Manager", "Admin"]}>
+                  <OrderList />
+                </ProtectedRoutes>
+              ),
+            },
+            {
+              path: ":id",
+              element: (
+                <ProtectedRoutes roles={["Manager", "Admin"]}>
+                  <OrderDetail />
+                </ProtectedRoutes>
+              ),
+            },
+          ],
         },
         {
           path: "analytics",
@@ -119,6 +140,14 @@ export default function Router() {
           element: (
             <ProtectedRoutes roles={["Admin"]}>
               <UserList />
+            </ProtectedRoutes>
+          ),
+        },
+        {
+          path: "customers",
+          element: (
+            <ProtectedRoutes roles={["Admin"]}>
+              <CustomerList />
             </ProtectedRoutes>
           ),
         },
@@ -166,23 +195,28 @@ export default function Router() {
   ]);
 }
 
-const Login = Loading(lazy(() => import("pages/Login")));
+const Login = Loading(lazy(() => import("pages/auth/Login")));
 
-const MovieList = Loading(lazy(() => import("pages/MovieList")));
-const MovieDetails = Loading(lazy(() => import("pages/MovieDetails")));
-const AddMovie = Loading(lazy(() => import("pages/AddMovie")));
-
-const Profile = Loading(lazy(() => import("pages/Profile")));
-const UserList = Loading(lazy(() => import("pages/UserList")));
-const NotFound = Loading(lazy(() => import("pages/NotFound")));
-const PermissionDenied = Loading(lazy(() => import("pages/PermissionDenied")));
-const Dashboard = Loading(lazy(() => import("pages/Dashboard")));
-const RoomList = Loading(lazy(() => import("pages/RoomList")));
-const ShowTimeList = Loading(lazy(() => import("pages/ShowTimeList")));
-const AddTicket = Loading(lazy(() => import("pages/AddTicket")));
-
-const Analytics = Loading(lazy(() => import("pages/Analytics")));
-const TheaterList = Loading(lazy(() => import("pages/TheaterList")));
-const PaymentList = Loading(lazy(() => import("pages/PaymentList")));
-const CompanyList = Loading(lazy(() => import("pages/CompanyList")));
-const ShowTimeDetail = Loading(lazy(() => import("pages/ShowTimeDetail")));
+const MovieList = Loading(lazy(() => import("pages/movie/MovieList")));
+const MovieDetails = Loading(lazy(() => import("pages/movie/MovieDetails")));
+const AddMovie = Loading(lazy(() => import("pages/movie/AddMovie")));
+const Profile = Loading(lazy(() => import("pages/profile/Profile")));
+const UserList = Loading(lazy(() => import("pages/account/UserList")));
+const NotFound = Loading(lazy(() => import("pages/message/NotFound")));
+const PermissionDenied = Loading(
+  lazy(() => import("pages/message/PermissionDenied"))
+);
+const Dashboard = Loading(lazy(() => import("pages/dashboard/Dashboard")));
+const RoomList = Loading(lazy(() => import("pages/room/RoomList")));
+const ShowTimeList = Loading(lazy(() => import("pages/showtime/ShowTimeList")));
+const AddTicket = Loading(lazy(() => import("pages/ticket/AddTicket")));
+const TicketList = Loading(lazy(() => import("pages/ticket/TicketList")));
+const Analytics = Loading(lazy(() => import("pages/analytics/Analytics")));
+const TheaterList = Loading(lazy(() => import("pages/theater/TheaterList")));
+const OrderList = Loading(lazy(() => import("pages/order/OrderList")));
+const OrderDetail = Loading(lazy(() => import("pages/order/OrderDetail")));
+const CompanyList = Loading(lazy(() => import("pages/company/CompanyList")));
+const ShowTimeDetail = Loading(
+  lazy(() => import("pages/showtime/ShowTimeDetail"))
+);
+const CustomerList = Loading(lazy(() => import("pages/account/CustomerList")));

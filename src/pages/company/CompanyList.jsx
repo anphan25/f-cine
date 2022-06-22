@@ -1,21 +1,8 @@
 import React, { useState, useEffect } from "react";
-import {
-  Typography,
-  styled,
-  Box,
-  Paper,
-  Stack,
-  Button,
-  Select,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Autocomplete,
-  TextField,
-} from "@mui/material";
-import { SearchBar } from "../components/header/SearchBar";
-import { DataTable } from "../components/index";
-import { getCompanyList } from "../services/CompanyService";
+import { Typography, Stack } from "@mui/material";
+import { SearchBar } from "components/header/SearchBar";
+import { DataTable } from "components";
+import { getCompanyList } from "services/CompanyService";
 
 const CompanyList = () => {
   const [pageState, setPageState] = useState({

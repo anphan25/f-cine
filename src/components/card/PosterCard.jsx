@@ -6,12 +6,14 @@ import {
   CardMedia,
   styled,
   Box,
+  alpha,
 } from "@mui/material";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import moment from "moment";
+import { CategoryTag } from "components/tag/CategoryTag";
 
 const ImgStyle = styled("div")(({ theme }) => ({
   padding: "15px 15px 0",
@@ -92,10 +94,10 @@ const PosterCard = (props) => {
                 fontWeight: "600",
                 color: "neutral.800",
                 cursor: "pointer",
-                // height: "60px",
                 margin: "0px",
-                // display: "flex",
-                // flex: "1",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
               }}
             >
               {movie.title}
@@ -103,23 +105,8 @@ const PosterCard = (props) => {
           </Link>
 
           <CardActions>
-            {movie.categories?.map((cate, index) => {
-              return (
-                <Button
-                  size="small"
-                  variant="outlined"
-                  sx={{
-                    margin: "5px 5px 0px 0px",
-                    border: "1px solid",
-                    fontSize: "12px",
-                    color: `${cate.color}`,
-                  }}
-                  key={index}
-                  cate-id={cate.id}
-                >
-                  {cate.name}
-                </Button>
-              );
+            {movie.categories?.map((cate) => {
+              return <CategoryTag cate={cate} />;
             })}
           </CardActions>
         </Box>
@@ -152,7 +139,7 @@ const PosterCard = (props) => {
             <AccessTimeIcon
               sx={{ color: "neutral.600", marginRight: "6px" }}
             ></AccessTimeIcon>
-            Running times: {movie.duration}
+            Running times: {movie.duration} min
           </Typography>
 
           <Typography

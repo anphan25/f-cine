@@ -9,3 +9,4 @@ export { default as imgTab3 } from "./images/cuate.svg";
 export { default as seatImg } from "./images/seat.svg";
 export { default as seatSelected } from "./images/seat-selected.svg";
 export { default as seatVip } from "./images/seat-vip.svg";
+export { default as imageNotAvailable } from "./images/Image-Not-Available.png";

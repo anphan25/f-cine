@@ -1,15 +1,44 @@
-export { default as Login } from "./Login";
-export { default as MovieList } from "./MovieList";
-export { default as MovieDetails } from "./MovieDetails";
-export { default as Profile } from "./Profile";
-export { default as NotFound } from "./NotFound";
-export { default as Dashboard } from "./Dashboard";
-export { default as PermissionDenied } from "./PermissionDenied";
-export { default as PaymentList } from "./PaymentList";
-export { default as UserList } from "./UserList";
-export { default as ShowTimeList } from "./ShowTimeList";
-export { default as RoomList } from "./RoomList";
-export { default as Analytics } from "./Analytics";
-export { default as TheaterList } from "./TheaterList";
-export { default as CompanyList } from "./CompanyList";
-export { default as ShowTimeDetail } from "./ShowTimeDetail";
+//auth
+export { default as Login } from "./auth/Login";
+
+//profile
+export { default as Profile } from "./profile/Profile";
+
+//message
+export { default as NotFound } from "./message/NotFound";
+export { default as PermissionDenied } from "./message/PermissionDenied";
+
+//dashboard
+export { default as Dashboard } from "./dashboard/Dashboard";
+
+//order
+export { default as OrderList } from "./order/OrderList";
+export { default as OrderDetail } from "./order/OrderDetail";
+
+//account
+export { default as UserList } from "./account/UserList";
+export { default as CustomerList } from "./account/CustomerList";
+
+//room
+export { default as RoomList } from "./room/RoomList";
+
+//analytics
+export { default as Analytics } from "./analytics/Analytics";
+
+//theater
+export { default as TheaterList } from "./theater/TheaterList";
+
+//company
+export { default as CompanyList } from "./company/CompanyList";
+
+//showtime
+export { default as ShowTimeDetail } from "./showtime/ShowTimeDetail";
+export { default as ShowTimeList } from "./showtime/ShowTimeList";
+
+//movie
+export { default as MovieList } from "./movie/MovieList";
+export { default as MovieDetails } from "./movie/MovieDetails";
+export { default as AddMovie } from "./movie/AddMovie";
+
+//ticket
+export { default as TicketList } from "./ticket/TicketList";
