@@ -1,12 +1,9 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState } from "react";
 import {
-  Typography,
-  styled,
   Box,
   Divider,
   Stack,
   Button,
-  Select,
   FormControl,
   FormLabel,
   DialogActions,
@@ -15,10 +12,10 @@ import {
   Dialog,
   Input,
 } from "@mui/material";
-import { SearchBar } from "../components/header/SearchBar";
+import { SearchBar } from "components/header/SearchBar";
 import { MdAdd } from "react-icons/md";
 import HeaderBreadcrumbs from "components/header/HeaderBreadcrumbs";
-import { DataTable } from "../components/index";
+import { DataTable } from "components";
 
 const TheaterList = () => {
   const [isAddTheaterDialogOpen, setIsAddTheaterDialogOpen] = useState(false);
@@ -84,10 +81,9 @@ const TheaterList = () => {
         <Button
           variant="contained"
           startIcon={<MdAdd />}
-          sx={{ width: "200px", height: "40px" }}
           onClick={handleAddDialog}
         >
-          New Theater
+          Add Theater
         </Button>
       </Stack>
 

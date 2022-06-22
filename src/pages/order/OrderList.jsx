@@ -1,7 +1,10 @@
+import { Button, Stack } from "@mui/material";
 import { DataTable, HeaderBreadcrumbs } from "components";
+import { SearchBar } from "components/header/SearchBar";
 import React, { useEffect, useState } from "react";
+import { MdAdd } from "react-icons/md";
 
-const PaymentList = () => {
+const OrderList = () => {
   const [pageState, setPageState] = useState({
     isLoading: false,
     data: [
@@ -140,12 +143,17 @@ const PaymentList = () => {
     fetchData();
   }, [pageState.page, pageState.pageSize]);
 
+  function searchHandler() {}
+
   return (
     <>
-      <HeaderBreadcrumbs
-        heading="Payment List"
-        links={[{ name: "Dashboard", to: "/" }, { name: "Payment List" }]}
-      />
+      <Stack direction="row" justifyContent="space-between" alignItems="center">
+        <HeaderBreadcrumbs
+          heading="Order List"
+          links={[{ name: "Dashboard", to: "/" }, { name: "Order List" }]}
+        />
+        <SearchBar placeholder="Enter movie..." onSubmit={searchHandler} />
+      </Stack>
 
       <DataTable
         className="dataGrid-transaction"
@@ -157,4 +165,4 @@ const PaymentList = () => {
   );
 };
 
-export default PaymentList;
+export default OrderList;

@@ -1,26 +1,22 @@
 import React, { useState, useEffect } from "react";
 import {
-  Typography,
   Box,
   Stack,
   Button,
   FormControl,
-  InputLabel,
-  MenuItem,
   Autocomplete,
   TextField,
-  IconButton,
   FormLabel,
   Card,
   Tabs,
   Tab,
   Divider,
 } from "@mui/material";
-import { SearchBar } from "../components/header/SearchBar";
+import { SearchBar } from "../../components/header/SearchBar";
 import { GridActionsCellItem } from "@mui/x-data-grid";
-import { DataTable, CustomSnackBar } from "../components/index";
-import { getUserList } from "../services/UserService";
-import { getCompanyListWithoutManger } from "../services/CompanyService";
+import { DataTable, CustomSnackBar } from "../../components/index";
+import { getUserList } from "../../services/UserService";
+import { getCompanyListWithoutManger } from "../../services/CompanyService";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import BlockIcon from "@mui/icons-material/Block";
 import Dialog from "@mui/material/Dialog";
@@ -32,9 +28,9 @@ import Slide from "@mui/material/Slide";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import GroupRemoveIcon from "@mui/icons-material/GroupRemove";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
-import { updateRole } from "../services/RoleService";
+import { updateRole } from "../../services/RoleService";
 import HeaderBreadcrumbs from "components/header/HeaderBreadcrumbs";
-import { blockManager } from "../services/CompanyService";
+import { blockManager } from "../../services/CompanyService";
 import useTabs from "hooks/useTabs";
 
 const statusStyle = (status) => {
@@ -303,7 +299,6 @@ const UserList = () => {
     //Unban account
     if (value.status === "Inactive") {
       handleUnban({ id: value.companyId, isActive: true });
-      // return;
     } else {
       setBlockedAcc(value.fullName);
       setBlockAccParam({
@@ -394,7 +389,7 @@ const UserList = () => {
         <SearchBar placeholder="Enter email..." onSubmit={searchHandler} />
       </Stack>
 
-      <Card>
+      <Card sx={{ mb: 0.5 }}>
         <Tabs
           allowScrollButtonsMobile
           variant="scrollable"
@@ -407,8 +402,6 @@ const UserList = () => {
             <Tab disableRipple key={tab} label={tab} value={tab} />
           ))}
         </Tabs>
-
-        <Divider />
       </Card>
       <DataTable
         gridOptions={gridOptions}

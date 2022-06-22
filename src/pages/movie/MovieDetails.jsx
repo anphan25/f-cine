@@ -4,8 +4,11 @@ import { Button, styled, Box, Stack, Typography, Modal } from "@mui/material";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import SlideshowIcon from "@mui/icons-material/Slideshow";
-import { getMovieDetail } from "../services/MovieService";
+import { getMovieDetail } from "../../services/MovieService";
 import moment from "moment";
+import { NAVBAR } from "utils/constants";
+import { imageNotAvailable } from "assets/images";
+import { CategoryTag } from "components/tag/CategoryTag";
 
 const ImgBox = styled("div")(({ theme }) => ({
   height: "280px",
@@ -27,8 +30,10 @@ const CoverBox = styled("div")(({ theme }) => ({
   width: "100%",
   position: "absolute",
   left: "0",
+  top: `${NAVBAR.BASE_HEIGHT}px`,
   backgroundRepeat: "no-repeat",
   backgroundSize: "cover",
+  backgroundPosition: "center",
 }));
 
 const RestrictLabel = styled("div")(({ theme }) => ({
@@ -102,7 +107,7 @@ const MovieDetails = () => {
         sx={{
           backgroundImage: `url(${
             detail?.coverImageUrl ||
-            "https://storage.googleapis.com/ff-storage-p01/festivals/cover_photos/000/041/450/original/cover_photo.jpg?1514473357"
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBCGH3ttKv97u7GnSxpSM4_ijDWF7yPb7GKmva3LU4_ZDJ-X2Jnfw2DVcwgsqmdome8Uo&usqp=CAU"
           })`,
         }}
       >
@@ -112,7 +117,14 @@ const MovieDetails = () => {
       <Box className="movie-detail" sx={{ marginTop: "500px" }}>
         <Stack className="movie-detail_content" direction="row">
           <ImgBox className="movie-detail_content_poster">
-            <img src={detail?.posterImageUrl} alt="poster-movie" sx={{}}></img>
+            <img
+              src={
+                detail?.posterImageUrl
+                  ? detail?.posterImageUrl
+                  : imageNotAvailable
+              }
+              alt="poster-movie"
+            ></img>
           </ImgBox>
 
           <Box
@@ -181,25 +193,8 @@ const MovieDetails = () => {
               direction="row"
               sx={{ marginTop: "25px" }}
             >
-              {detail?.categories?.map((cate, index) => {
-                return (
-                  <Button
-                    size="small"
-                    variant="outlined"
-                    sx={{
-                      marginRight: "10px",
-                      border: "1.5px solid",
-                      fontSize: "15px",
-                      padding: "10px",
-                      backgroundColor: "transparent",
-                      color: `${cate.color}`,
-                    }}
-                    key={index}
-                    cate-id={cate.id}
-                  >
-                    {cate.name}
-                  </Button>
-                );
+              {detail?.categories?.map((cate) => {
+                return <CategoryTag cate={cate} key={cate.id} />;
               })}
             </Stack>
 
@@ -210,7 +205,7 @@ const MovieDetails = () => {
             >
               <Button
                 variant="contained"
-                sx={{ borderRadius: "50px", fontSize: "17px" }}
+                sx={{ fontSize: "20px" }}
                 startIcon={<SlideshowIcon />}
                 onClick={modalHandler}
               >

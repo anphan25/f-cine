@@ -14,6 +14,7 @@ import {
 } from "react-icons/md";
 import { BiMoviePlay, BiBuildings } from "react-icons/bi";
 import { RiSlideshow2Line } from "react-icons/ri";
+import { HiOutlineTicket, HiOutlineShoppingCart } from "react-icons/hi";
 import { FiActivity, FiUsers } from "react-icons/fi";
 import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -47,23 +48,23 @@ const linksManager = [
     icon: <RiSlideshow2Line fontSize="24" />,
     text: "Show Time",
   },
-  // {
-  //   id: 3,
-  //   to: "/tickets",
-  //   icon: <HiOutlineTicket fontSize="24" />,
-  //   text: "Tickets",
-  // },
   {
     id: 3,
+    to: "/tickets",
+    icon: <HiOutlineTicket fontSize="24" />,
+    text: "Tickets",
+  },
+  {
+    id: 4,
     to: "/theaters",
     icon: <MdOutlineTheaters fontSize="24" />,
     text: "Theaters",
   },
   {
-    id: 4,
-    to: "/payments",
+    id: 5,
+    to: "/orders",
     icon: <MdPayment fontSize="24" />,
-    text: "Payments",
+    text: "Orders",
   },
   {
     id: 5,
@@ -94,16 +95,28 @@ const linksAdmin = [
   },
   {
     id: 4,
+    to: "/theaters",
+    icon: <MdOutlineTheaters fontSize="24" />,
+    text: "Theaters",
+  },
+  {
+    id: 5,
+    to: "/customers",
+    icon: <HiOutlineShoppingCart fontSize="24" />,
+    text: "Customers",
+  },
+  {
+    id: 6,
     to: "/users",
     icon: <FiUsers fontSize="24" />,
     text: "Users",
   },
-  {
-    id: 5,
-    to: "/analytics",
-    icon: <FiActivity fontSize="24" />,
-    text: "Analytics",
-  },
+  // {
+  //   id: 5,
+  //   to: "/analytics",
+  //   icon: <FiActivity fontSize="24" />,
+  //   text: "Analytics",
+  // },
 ];
 
 export const SidebarList = ({ isCollapse }) => {

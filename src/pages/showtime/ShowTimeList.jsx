@@ -195,10 +195,9 @@ const ShowTimeList = () => {
         <Button
           variant="contained"
           startIcon={<MdAdd />}
-          sx={{ width: "200px", height: "40px" }}
           onClick={handleDialog}
         >
-          New Show Time
+          Add Show Time
         </Button>
       </Stack>
       <DataTable
