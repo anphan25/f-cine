@@ -12,3 +12,4 @@ export { default as HeaderBreadcrumbs } from "./header/HeaderBreadcrumbs";
 export { default as DataTable } from "./dataGrid/DataTable";
 export { default as CustomDatePicker } from "./datepicker/CustomDatePicker";
 export { default as CustomSnackBar } from "./snackbar/CustomSnackBar";
+export { default as CustomDialog } from "./dialog/CustomDialog";
