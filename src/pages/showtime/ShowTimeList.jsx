@@ -7,14 +7,18 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  Dialog,
   Divider,
 } from "@mui/material";
 import HeaderBreadcrumbs from "components/header/HeaderBreadcrumbs";
 import React, { useState, useEffect } from "react";
 import { MdAdd } from "react-icons/md";
 import { useSelector } from "react-redux";
-import { CustomDatePicker, DataTable, CustomSnackBar } from "components";
+import {
+  CustomDatePicker,
+  DataTable,
+  CustomSnackBar,
+  CustomDialog,
+} from "components";
 import { getShowTimeList, postShowTime } from "services/ShowTimeService";
 import { getMovieTitle } from "services/MovieService";
 import { getRoomsByTheaterId } from "services/RoomService";
@@ -207,15 +211,12 @@ const ShowTimeList = () => {
       ></DataTable>
 
       {/* Add ShowTime Dialog */}
-      <Dialog
-        sx={{ "& .MuiDialog-paper": { width: "700px" } }}
+      <CustomDialog
         open={isDialogOpen}
         onClose={handleDialog}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
+        sx={{ "& .MuiDialog-paper": { width: "450px" } }}
+        title="Add Show Time"
       >
-        <DialogTitle id="alert-dialog-title">Add Show Time</DialogTitle>
-        <Divider sx={{ mt: "20px" }} />
         <DialogContent>
           <Stack>
             <Stack direction="column" spacing={1} mb={3}>
@@ -318,7 +319,6 @@ const ShowTimeList = () => {
             </Stack>
           </Stack>
         </DialogContent>
-
         <DialogActions>
           <Button disabled={loading} onClick={handleDialog}>
             Cancel
@@ -333,7 +333,7 @@ const ShowTimeList = () => {
             Add Show Time
           </Button>
         </DialogActions>
-      </Dialog>
+      </CustomDialog>
 
       {/* Alert message */}
       {alert?.status && (

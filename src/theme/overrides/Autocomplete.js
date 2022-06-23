@@ -5,6 +5,9 @@ export default function Autocomplete(theme) {
         paper: {},
         root: {
           borderRadius: 12,
+          "& .MuiOutlinedInput-root": {
+            padding: "8px",
+          },
         },
         listbox: {
           padding: theme.spacing(0, 1),
