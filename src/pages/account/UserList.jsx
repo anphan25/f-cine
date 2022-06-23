@@ -338,7 +338,6 @@ const UserList = () => {
     const res = await blockManager(value);
     if (res.message === "Success") {
       await fetchData();
-      console.log(pageState);
       setAlert({
         message: "Unblock account successfully",
         status: true,
