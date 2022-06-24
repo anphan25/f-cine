@@ -4,7 +4,7 @@ const apiPath = "/showtimes";
 
 export const getShowTimeList = async (params) => {
   return await axiosPrivate.get(
-    `${apiPath}?PageSize=${params.PageSize}&Page=${params.Page}`
+    `${apiPath}?PageSize=${params.PageSize}&Page=${params.Page}&IsNotShowedYet=${params.isNotShowedYet}`
   );
 };
 

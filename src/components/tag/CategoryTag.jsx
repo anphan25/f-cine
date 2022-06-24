@@ -11,7 +11,7 @@ export const CategoryTag = ({ cate }) => {
         border: "none",
         fontSize: "12px",
         color: `${cate.color}`,
-        fontWeight: 500,
+        fontWeight: 600,
         backgroundColor: alpha(cate.color, 0.2),
         padding: "2px 8px",
         ":hover": {
@@ -20,7 +20,6 @@ export const CategoryTag = ({ cate }) => {
         },
       }}
       key={cate.id}
-      cate-id={cate.id}
     >
       {cate.name}
     </Button>
