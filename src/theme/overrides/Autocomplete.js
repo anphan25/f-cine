@@ -6,7 +6,7 @@ export default function Autocomplete(theme) {
         root: {
           borderRadius: 12,
           "& .MuiOutlinedInput-root": {
-            padding: "8px",
+            padding: "6px",
           },
         },
         listbox: {

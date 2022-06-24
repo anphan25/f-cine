@@ -96,14 +96,14 @@ export default function Router() {
                 </ProtectedRoutes>
               ),
             },
-            // {
-            //   path: ":id",
-            //   element: (
-            //     <ProtectedRoutes roles={["Manager"]}>
-            //       <RoomList />
-            //     </ProtectedRoutes>
-            //   ),
-            // },
+            {
+              path: ":id",
+              element: (
+                <ProtectedRoutes roles={["Manager", "Admin"]}>
+                  <TheaterDetail />
+                </ProtectedRoutes>
+              ),
+            },
           ],
         },
         {
@@ -213,6 +213,9 @@ const AddTicket = Loading(lazy(() => import("pages/ticket/AddTicket")));
 const TicketList = Loading(lazy(() => import("pages/ticket/TicketList")));
 const Analytics = Loading(lazy(() => import("pages/analytics/Analytics")));
 const TheaterList = Loading(lazy(() => import("pages/theater/TheaterList")));
+const TheaterDetail = Loading(
+  lazy(() => import("pages/theater/TheaterDetail"))
+);
 const OrderList = Loading(lazy(() => import("pages/order/OrderList")));
 const OrderDetail = Loading(lazy(() => import("pages/order/OrderDetail")));
 const CompanyList = Loading(lazy(() => import("pages/company/CompanyList")));

@@ -27,6 +27,7 @@ export { default as Analytics } from "./analytics/Analytics";
 
 //theater
 export { default as TheaterList } from "./theater/TheaterList";
+export { default as TheaterDetail } from "./theater/TheaterDetail";
 
 //company
 export { default as CompanyList } from "./company/CompanyList";

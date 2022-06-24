@@ -1,4 +1,5 @@
 import { Input, styled } from "@mui/material";
+import moment from "moment";
 import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -68,8 +69,7 @@ const CustomDatePicker = ({ id, onDateChange, ...props }) => {
         selected={startDate}
         onChange={(date) => {
           setStartDate(date);
-          console.log(date);
-          onDateChange(date.toISOString());
+          onDateChange(date);
         }}
         showTimeSelect
         timeFormat="HH:mm"

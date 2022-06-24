@@ -2,11 +2,9 @@ import {
   CardContent,
   Card,
   Typography,
-  Button,
   CardMedia,
   styled,
   Box,
-  alpha,
 } from "@mui/material";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
@@ -48,7 +46,7 @@ const PosterCard = (props) => {
 
   return (
     <Card
-      movie-id={movie.id}
+      key={movie.id}
       sx={{
         maxWidth: 345,
         borderRadius: "10px",
@@ -105,7 +103,7 @@ const PosterCard = (props) => {
           </Link>
 
           <CardActions>
-            {movie.categories?.map((cate) => {
+            {movie.categories?.slice(0, 3).map((cate) => {
               return <CategoryTag cate={cate} />;
             })}
           </CardActions>
