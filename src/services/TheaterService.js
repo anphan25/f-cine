@@ -2,7 +2,7 @@ import { axiosPrivate } from "utils/axiosConfig";
 
 const apiPath = "/theaters";
 
-export const getCompanyList = async (params) => {
+export const getTheaterList = async (params) => {
   return await axiosPrivate.get(
     `${apiPath}?CompanyId=${params.CompanyId}&PageSize=${
       params.PageSize

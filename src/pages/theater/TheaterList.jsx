@@ -19,7 +19,10 @@ import { MdAdd } from "react-icons/md";
 import HeaderBreadcrumbs from "components/header/HeaderBreadcrumbs";
 import { DataTable, CustomSnackBar } from "components";
 import { useSelector } from "react-redux";
-import { getCompanyList, createTheater } from "../../services/TheaterService";
+import { getTheaterList, createTheater } from "../../services/TheaterService";
+import { GridActionsCellItem } from "@mui/x-data-grid";
+import { useNavigate } from "react-router-dom";
+import ListAltIcon from "@mui/icons-material/ListAlt";
 import axios from "axios";
 
 const TheaterList = () => {
@@ -29,6 +32,7 @@ const TheaterList = () => {
   const [wards, setWards] = useState([]);
   const [addressParam, setAddressParam] = useState({});
   const companyInfo = useSelector((state) => state.company.company);
+  const navigate = useNavigate();
   const [pageState, setPageState] = useState({
     isLoading: false,
     data: [],
@@ -58,13 +62,29 @@ const TheaterList = () => {
       {
         headerName: "Address",
         field: "address",
-        width: 750,
+        width: 650,
       },
       {
         headerName: "Total Rooms",
         field: "totalRooms",
         type: "number",
         width: 100,
+      },
+      {
+        field: "actions",
+        type: "actions",
+        width: 100,
+        sortable: false,
+        filterable: false,
+        getActions: (params) => [
+          <GridActionsCellItem
+            sx={{ fontSize: "60px" }}
+            icon={<ListAltIcon sx={{ color: "#623CE7" }} />}
+            onClick={() => {
+              navigate(`${params.row.id}`);
+            }}
+          />,
+        ],
       },
     ],
     pageState: pageState,
@@ -95,7 +115,7 @@ const TheaterList = () => {
   const fetchData = async () => {
     setPageState((old) => ({ ...old, isLoading: true, data: [] }));
 
-    const res = await getCompanyList({
+    const res = await getTheaterList({
       CompanyId: companyInfo.id,
       PageSize: pageState.pageSize,
       Page: pageState.page,

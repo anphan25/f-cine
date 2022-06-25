@@ -1,7 +1,7 @@
 import React from 'react';
 
 const RoomList = () => {
-  return <div>RoomList</div>;
+  return <></>;
 };
 
 export default RoomList;
