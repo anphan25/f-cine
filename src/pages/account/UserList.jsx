@@ -262,7 +262,7 @@ const UserList = () => {
       ...old,
       isLoading: false,
       data: dataRow,
-      total: res.users.total,
+      total: res.users.maxPage,
     }));
   };
 
@@ -331,8 +331,6 @@ const UserList = () => {
   };
 
   const handleUnban = async (value) => {
-    console.log(value);
-
     setAlert({});
 
     const res = await blockManager(value);

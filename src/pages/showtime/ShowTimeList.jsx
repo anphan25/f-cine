@@ -95,12 +95,12 @@ const ShowTimeList = () => {
         width: 100,
         align: "center",
       },
-      {
-        headerName: "Showed",
-        field: "showed",
-        width: 100,
-        align: "left",
-      },
+      // {
+      //   headerName: "Showed",
+      //   field: "showed",
+      //   width: 100,
+      //   align: "left",
+      // },
     ],
     pageState: pageState,
   };

@@ -9,3 +9,11 @@ export const getRoomsByTheaterId = async (theaterId) => {
 export const getRoomsById = async (roomId) => {
   return await axiosPrivate.get(apiPath + `/${roomId}`);
 };
+
+export const getRoomsList = async (params) => {
+  return await axiosPrivate.get(
+    `${apiPath}?TheaterId=${params.TheaterId}&PageSize=${
+      params.PageSize
+    }&Page=${params.Page}&SearchKey=${params.SearchKey ? params.SearchKey : ""}`
+  );
+};
