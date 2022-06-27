@@ -161,7 +161,6 @@ const TheaterList = () => {
     });
 
     if (res.message === "Success") {
-      await fetchData();
       setAlert({
         message: "Add theater successfully !!!",
         status: true,
@@ -169,6 +168,7 @@ const TheaterList = () => {
       });
 
       handleAddDialog();
+      await fetchData();
     }
   };
 
