@@ -17,3 +17,7 @@ export const getRoomsList = async (params) => {
     }&Page=${params.Page}&SearchKey=${params.SearchKey ? params.SearchKey : ""}`
   );
 };
+
+export const addRoom = async (params) => {
+  return await axiosPrivate.post(apiPath, params);
+};
