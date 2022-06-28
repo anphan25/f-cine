@@ -6,11 +6,11 @@ import {
   TextField,
   DialogActions,
   DialogContent,
-  DialogTitle,
-  Divider,
   Typography,
   IconButton,
   Input,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import HeaderBreadcrumbs from "components/header/HeaderBreadcrumbs";
 import React, { useState, useEffect } from "react";
@@ -47,8 +47,8 @@ const ShowTimeList = () => {
     startTime: new Date().toISOString(),
     showtimeTicketTypes: [
       {
-        ticketTypeId: null,
-        receivePrice: null,
+        ticketTypeId: 0,
+        receivePrice: "",
       },
     ],
   });
@@ -131,7 +131,8 @@ const ShowTimeList = () => {
           });
           handleDialog();
           fetchData();
-          // navigate(`${res.createdShowtimeId}/tickets`);
+          setData({});
+          //navigate(`/tickets/add/${res.createdShowtimeId}`);
         }
       })
       .catch((err) => {
@@ -174,15 +175,6 @@ const ShowTimeList = () => {
     });
   };
 
-  const handleRemoveField = (i) => {
-    let newFieldValues = [...data.showtimeTicketTypes];
-    newFieldValues.pop({ ticketTypeId: 0, receivePrice: null });
-    setData({
-      ...data,
-      showtimeTicketTypes: newFieldValues,
-    });
-  };
-
   const fetchData = async () => {
     setPageState((old) => ({ ...old, isLoading: true }));
 
@@ -217,7 +209,7 @@ const ShowTimeList = () => {
     const fetchMovieData = async () => {
       const movieTitleRes = await getMovieTitle();
 
-      movieTitleRes.movieTitles?.splice(10);
+      //movieTitleRes.movieTitles?.splice(10);
       setMovies(movieTitleRes?.movieTitles);
     };
     fetchMovieData();
@@ -287,7 +279,7 @@ const ShowTimeList = () => {
                 name="movieId"
                 id="movieId"
                 options={movies}
-                value={data?.movieId}
+                value={data?.movieId || []}
                 getOptionLabel={(option) => option.title || ""}
                 onChange={(e, value) => {
                   setData({ ...data, movieId: value?.movieId });
@@ -311,7 +303,7 @@ const ShowTimeList = () => {
                 freeSolo
                 name="theaterId"
                 id="theaterId"
-                options={companyInfo?.theaters}
+                options={companyInfo?.theaters || []}
                 value={data?.theaterId}
                 getOptionLabel={(option) => option.name || ""}
                 onChange={(e, value) => {
@@ -345,7 +337,7 @@ const ShowTimeList = () => {
                   freeSolo
                   name="roomId"
                   id="roomId"
-                  options={rooms || ""}
+                  options={rooms || []}
                   value={data?.roomId}
                   getOptionLabel={(option) =>
                     option.roomNumber?.toString() || ""
@@ -404,7 +396,7 @@ const ShowTimeList = () => {
             </Stack>
             {data?.showtimeTicketTypes?.map((item, index) => (
               <Stack
-                key={item}
+                key={index}
                 direction="row"
                 spacing={1.5}
                 justifyContent="space-between"
@@ -426,25 +418,33 @@ const ShowTimeList = () => {
                   >
                     Type
                   </FormLabel>
-                  <Autocomplete
-                    disabled={ticketTypes ? false : true}
-                    freeSolo
-                    name="ticketTypeId"
+                  <Select
                     id="ticketTypeId"
-                    options={ticketTypes || ""}
-                    getOptionLabel={(option) => option.name || ""}
-                    onChange={(e, value) => {
-                      let newFieldValues = [...data?.showtimeTicketTypes];
-                      newFieldValues[index].ticketTypeId = value.id;
+                    value={item.ticketTypeId}
+                    onChange={(e) => {
+                      let newFieldValues = [...data.showtimeTicketTypes];
+                      newFieldValues[index].ticketTypeId = e.target.value;
                       setData({
                         ...data,
                         showtimeTicketTypes: newFieldValues,
                       });
                     }}
-                    renderInput={(params) => (
-                      <TextField {...params} placeholder="Ticket Type" />
-                    )}
-                  />
+                    renderValue={
+                      item.ticketTypeId !== 0
+                        ? undefined
+                        : () => (
+                            <Typography sx={{ color: "neutral.700" }}>
+                              Ticket Type
+                            </Typography>
+                          )
+                    }
+                  >
+                    {ticketTypes?.map((item) => (
+                      <MenuItem key={item.id} value={item.id}>
+                        {item.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
                 </Stack>
                 <Stack direction="column" spacing={1} sx={{ width: "50%" }}>
                   <FormLabel
@@ -468,13 +468,20 @@ const ShowTimeList = () => {
                         showtimeTicketTypes: newFieldValues,
                       });
                     }}
-                    value={item?.receivePrice}
+                    value={item.receivePrice === null ? "" : item.receivePrice}
                   />
                 </Stack>
                 <IconButton
                   disabled={index === 0}
                   color="error"
-                  onClick={handleRemoveField}
+                  onClick={() => {
+                    let fields = [...data.showtimeTicketTypes];
+                    fields.splice(index, 1);
+                    setData({
+                      ...data,
+                      showtimeTicketTypes: fields,
+                    });
+                  }}
                   sx={{
                     width: "56px",
                     height: "56px",

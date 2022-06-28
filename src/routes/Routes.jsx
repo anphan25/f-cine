@@ -76,6 +76,14 @@ export default function Router() {
               index: true,
             },
             {
+              path: "add/:showtimeId",
+              element: (
+                <ProtectedRoutes roles={["Manager"]}>
+                  <AddTicket />
+                </ProtectedRoutes>
+              ),
+            },
+            {
               path: ":id",
               element: (
                 <ProtectedRoutes roles={["Manager"]}>
