@@ -21,3 +21,7 @@ export const getCompanyListWithoutManger = async (params) => {
 export const blockManager = async (params) => {
   return await axiosPrivate.patch(apiPath, params);
 };
+
+export const analysisCompany = async (companyId) => {
+  return await axiosPrivate.get(`/analyst?companyid=${companyId}`);
+};

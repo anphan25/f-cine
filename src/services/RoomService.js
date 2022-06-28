@@ -21,3 +21,7 @@ export const getRoomsList = async (params) => {
 export const addRoom = async (params) => {
   return await axiosPrivate.post(apiPath, params);
 };
+
+export const getRoomById = async (roomId) => {
+  return await axiosPrivate.get(`${apiPath}/${roomId}`);
+};

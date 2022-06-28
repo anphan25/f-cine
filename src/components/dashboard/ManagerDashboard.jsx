@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Typography, Box, Paper, Stack } from "@mui/material";
 import { imgTab1, imgTab2, imgTab3 } from "../../assets/images";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import { analysisCompany } from "../../services/CompanyService";
+import { useSelector } from "react-redux";
 
 const tabStyle = {
   padding: "20px",
@@ -35,6 +37,31 @@ const tabStyle = {
 };
 
 const ManagerDashboard = () => {
+  const companyInfo = useSelector((state) => state.company.company);
+  const [dashboardData, setDashboardData] = useState({});
+
+  useEffect(() => {
+    console.log("yoo");
+    const fetchData = async () => {
+      const data = await analysisCompany(companyInfo.id);
+      setDashboardData({
+        ...dashboardData,
+        totalShowtimeQuantity: data.showtimeDashboard.totalShowtimeQuantity,
+        percentShowtimeChange: data.showtimeDashboard.percentShowtimeChange,
+        isShowtimeUpOrDown: data.showtimeDashboard.isShowtimeUpOrDown,
+        totalTicketSoldQuantity:
+          data.ticketSoldDashboard.totalTicketSoldQuantity,
+        percentTicketSoldChange:
+          data.ticketSoldDashboard.percentTicketSoldChange,
+        isTicketSoldUpOrDown: data.ticketSoldDashboard.isTicketSoldUpOrDown,
+        totalIncome: data.incomeDashboard.totalIncome,
+        percentIncomeChange: data.incomeDashboard.percentIncomeChange,
+        isIncomeUpOrDown: data.incomeDashboard.isIncomeUpOrDown,
+      });
+    };
+    fetchData();
+  }, []);
+
   return (
     <>
       <Typography variant="h4" sx={{ marginBottom: "20px" }}>
@@ -49,14 +76,25 @@ const ManagerDashboard = () => {
           <Stack direction="row" justifyContent="space-evenly">
             <Box className="info-tab_left">
               <Typography variant="h3" className="info-tab_number">
-                714K
+                {dashboardData?.totalShowtimeQuantity}
               </Typography>
               <Typography className="info-tab_desc">
                 Weekly show time
               </Typography>
               <Box className="info-tab_percentage">
-                <Box className="info-tab_percentage_number up-style">
-                  <ArrowUpwardIcon /> 31%
+                <Box
+                  className={`info-tab_percentage_number ${
+                    dashboardData?.isShowtimeUpOrDown
+                      ? "up-style"
+                      : "down-style"
+                  }`}
+                >
+                  {dashboardData?.isShowtimeUpOrDown ? (
+                    <ArrowUpwardIcon />
+                  ) : (
+                    <ArrowDownwardIcon />
+                  )}{" "}
+                  {dashboardData?.percentShowtimeChange}%
                 </Box>
                 <Typography fontWeight="600" sx={{ color: "neutral.700" }}>
                   this week
@@ -73,14 +111,25 @@ const ManagerDashboard = () => {
           <Stack direction="row" justifyContent="space-evenly">
             <Box className="info-tab_left">
               <Typography variant="h3" className="info-tab_number">
-                714K
+                {dashboardData?.totalTicketSoldQuantity}
               </Typography>
               <Typography className="info-tab_desc">
                 Weekly tickets sold
               </Typography>
               <Box className="info-tab_percentage">
-                <Box className="info-tab_percentage_number up-style">
-                  <ArrowUpwardIcon /> 31%
+                <Box
+                  className={`info-tab_percentage_number ${
+                    dashboardData?.isTicketSoldUpOrDown
+                      ? "up-style"
+                      : "down-style"
+                  }`}
+                >
+                  {dashboardData?.isTicketSoldUpOrDown ? (
+                    <ArrowUpwardIcon />
+                  ) : (
+                    <ArrowDownwardIcon />
+                  )}{" "}
+                  {dashboardData?.percentTicketSoldChange}%
                 </Box>
                 <Typography fontWeight="600" sx={{ color: "neutral.700" }}>
                   this week
@@ -97,12 +146,21 @@ const ManagerDashboard = () => {
           <Stack direction="row" justifyContent="space-evenly">
             <Box className="info-tab_left">
               <Typography variant="h3" className="info-tab_number">
-                714K
+                {dashboardData?.totalIncome}
               </Typography>
               <Typography className="info-tab_desc">Weekly income</Typography>
               <Box className="info-tab_percentage">
-                <Box className="info-tab_percentage_number down-style">
-                  <ArrowDownwardIcon /> 50%
+                <Box
+                  className={`info-tab_percentage_number ${
+                    dashboardData?.isIncomeUpOrDown ? "up-style" : "down-style"
+                  }`}
+                >
+                  {dashboardData?.isIncomeUpOrDown ? (
+                    <ArrowUpwardIcon />
+                  ) : (
+                    <ArrowDownwardIcon />
+                  )}{" "}
+                  {dashboardData?.percentIncomeChange}%
                 </Box>
                 <Typography fontWeight="600" sx={{ color: "neutral.700" }}>
                   this week
