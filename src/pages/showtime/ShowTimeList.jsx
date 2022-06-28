@@ -123,7 +123,6 @@ const ShowTimeList = () => {
     postShowTime(data)
       .then((res) => {
         setLoading(false);
-        console.log(res);
         if (res.message === "Success") {
           setAlert({
             message: "Add showtime successfully",
@@ -136,7 +135,6 @@ const ShowTimeList = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
         setLoading(false);
         if (err.response.status === 400) {
           setAlert({

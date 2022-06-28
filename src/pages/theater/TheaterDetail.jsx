@@ -26,13 +26,17 @@ import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import { getRoomsList } from "../../services/RoomService";
 import { CustomDialog } from "../../components";
 import ChairIcon from "@mui/icons-material/Chair";
-import { addRoom } from "../../services/RoomService";
+import { addRoom, getRoomById } from "../../services/RoomService";
+import { seatImg, seatSelected, seatVip } from "assets/images";
+import SeatList from "components/seat/SeatList";
 
 const TheaterDetail = () => {
   const { id } = useParams();
   const [isRoomDetailOpen, setIsRoomDetailOpen] = useState(false);
   const [isAddRoomOpen, setIsAddRoomOpen] = useState(false);
   const [addRoomParam, setAddRoomParam] = useState({ theaterId: id });
+  const [room, setRoom] = useState({});
+  const [selectedSeats, setSelectedSeats] = useState([]);
   const [pageState, setPageState] = useState({
     isLoading: false,
     data: [],
@@ -80,12 +84,14 @@ const TheaterDetail = () => {
         sortable: false,
         filterable: false,
         getActions: (params) => [
+          //Room Detail
           <GridActionsCellItem
             icon={<RemoveRedEyeIcon sx={{ color: "#623CE7" }} />}
             onClick={() => {
-              handleRoomDetail();
+              loadRoomMap(params.row.id);
             }}
           />,
+          //Change Seat Type
           <GridActionsCellItem
             icon={<ChairIcon sx={{ color: "#623CE7" }} />}
             // onClick={() => {
@@ -110,20 +116,48 @@ const TheaterDetail = () => {
     isRoomDetailOpen ? setIsRoomDetailOpen(false) : setIsRoomDetailOpen(true);
   };
 
+  const loadRoomMap = async (roomId) => {
+    const res = await getRoomById(roomId);
+    console.log("res: ", res.room);
+    setRoom({
+      ...room,
+      numberOfRow: res.room.numberOfRow,
+      numberOfColumn: res.room.numberOfColumn,
+      seatDtos: res.room.seatDtos,
+      no: res.room.no,
+    });
+
+    console.log("seats: ", room);
+    handleRoomDetail();
+  };
+
   const handleAddRoomDialog = () => {
     isAddRoomOpen ? setIsAddRoomOpen(false) : setIsAddRoomOpen(true);
   };
 
   const handleAddRoom = async () => {
-    const res = await addRoom(addRoomParam);
-    if (res.message === "Success") {
-      handleAddRoomDialog();
-      setAlert({
-        message: "Add new room successfully",
-        status: true,
-        type: "success",
-      });
-      await fetchData();
+    try {
+      setAlert({});
+      const res = await addRoom(addRoomParam);
+
+      if (res.message === "Success") {
+        handleAddRoomDialog();
+        setAlert({
+          message: "Add new room successfully",
+          status: true,
+          type: "success",
+        });
+        await fetchData();
+      }
+    } catch (err) {
+      if (err.response.status === 400) {
+        handleAddRoomDialog();
+        setAlert({
+          message: "This theater's Room No is existed",
+          status: true,
+          type: "error",
+        });
+      }
     }
   };
 
@@ -146,7 +180,6 @@ const TheaterDetail = () => {
                 id="roomNo"
                 placeholder="Room No"
                 onChange={(e) => {
-                  console.log("nooo:", e.target.value);
                   setAddRoomParam({
                     ...addRoomParam,
                     no: e.target.value,
@@ -169,8 +202,8 @@ const TheaterDetail = () => {
               <Select
                 sx={{ border: "2px solid #E4E4E4" }}
                 value={addRoomParam?.roomType}
-                onChange={(e, value) => {
-                  if (value === 1) {
+                onChange={(e) => {
+                  if (e.target.value === 1) {
                     setAddRoomParam({
                       ...addRoomParam,
                       numberOfRow: 8,
@@ -206,6 +239,22 @@ const TheaterDetail = () => {
           </Button>
         </DialogActions>
       </Box>
+    );
+  };
+
+  const roomDetailContent = () => {
+    return (
+      <>
+        <SeatList
+          numberOfRow={room.numberOfRow}
+          numberOfColumn={room.numberOfColumn}
+          seatList={room?.seatDtos}
+          selectedSeats={selectedSeats}
+          onSelectedSeatsChange={(selectedSeats) =>
+            setSelectedSeats(selectedSeats)
+          }
+        />
+      </>
     );
   };
 
@@ -261,7 +310,6 @@ const TheaterDetail = () => {
         gridOptions={gridOptions}
         onPageChange={pageChangeHandler}
         onPageSizeChange={pageSizeChangeHandler}
-        // initialState={spin}
       ></DataTable>
 
       {/* Room Detail Dialog */}
@@ -269,7 +317,8 @@ const TheaterDetail = () => {
         open={isRoomDetailOpen}
         onClose={handleRoomDetail}
         title="Room Detail"
-        sx={{ "& .MuiDialog-paper": { width: "900px", height: "90vh" } }}
+        sx={{ "& .MuiDialog-paper": { width: "1600px", height: "90vh" } }}
+        children={roomDetailContent()}
       />
 
       {/* Add Room Dialog */}
