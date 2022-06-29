@@ -20,12 +20,14 @@ import SeatList from "components/seat/SeatList";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { MdAdd } from "react-icons/md";
-import { useSelector } from "react-redux";
+import { getRoomById } from "services/RoomService";
 import { getShowTimeList } from "services/ShowTimeService";
+import { postTickets } from "services/TicketService";
 
 const TicketList = () => {
   const [showtimes, setShowtimes] = useState([]);
   const [showtime, setShowtime] = useState();
+  const [room, setRoom] = useState();
   const [loading, setLoading] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [alert, setAlert] = useState({
@@ -34,34 +36,67 @@ const TicketList = () => {
     type: "success",
   });
   const [selectedSeats, setSelectedSeats] = useState([]);
+  const [showtimeTicketTypeId, setShowtimeTicketTypeId] = useState();
+  const tickets = [];
 
   const handleDialog = () => {
     setIsDialogOpen(!isDialogOpen);
   };
 
-  const handleSubmit = () => {};
+  const handleSubmit = () => {
+    // selectedSeats.reduce((prev, cur) => {
+    //   if (prev.seatId !== cur.id || prev === null) {
+    //     prev.push({
+    //       seatId: cur.id,
+    //       showtimeTicketTypeId,
+    //     });
+    //     console.log("prev:", prev);
+    //   }
+
+    //   return prev;
+    // }, []);
+    selectedSeats.forEach((seat) => {
+      tickets.push({
+        seatId: seat.id,
+        showtimeTicketTypeId,
+      });
+    });
+    console.log("tickets", tickets);
+    setLoading(true);
+    postTickets(tickets)
+      .then((res) => {
+        setLoading(false);
+        console.log(res);
+      })
+      .catch((err) => {
+        setLoading(false);
+        console.log(err);
+      });
+  };
 
   const fetchShowtimeList = () => {
+    setLoading(true);
     getShowTimeList()
       .then((res) => {
-        console.log(res);
         setShowtimes(res.showtimes.results);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+      });
+  };
+
+  const fetchRoom = (roomId) => {
+    getRoomById(roomId)
+      .then((res) => {
+        //console.log(res);
+        setRoom(res.room);
       })
       .catch((err) => {
         console.log(err);
       });
   };
-
-  // const fetchShowtimeList = () => {
-  //   getShowTimeList()
-  //     .then((res) => {
-  //       console.log(res);
-  //       setShowtimes(res.showtimes.results);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
 
   useEffect(() => {
     fetchShowtimeList();
@@ -87,7 +122,7 @@ const TicketList = () => {
       <CustomDialog
         open={isDialogOpen}
         onClose={handleDialog}
-        sx={{ "& .MuiDialog-paper": { width: "600px" } }}
+        sx={{ "& .MuiDialog-paper": { width: "500px" } }}
         title="Add Tickets"
       >
         <DialogContent>
@@ -110,11 +145,17 @@ const TicketList = () => {
                 getOptionLabel={(option) =>
                   option.movie.title +
                     " - " +
-                    moment.utc(option.startTime).local().format("HH:mm") || ""
+                    moment.utc(option.startTime).local().format("HH:mm") +
+                    " - " +
+                    option.theaterName +
+                    "/room " +
+                    option.room.no || ""
                 }
                 onChange={(e, value) => {
                   setShowtime(value);
-                  console.log(value);
+                  if (value?.roomId) {
+                    fetchRoom(value.roomId);
+                  }
                 }}
                 renderInput={(params) => (
                   <TextField {...params} placeholder="Showtime" />
@@ -136,7 +177,10 @@ const TicketList = () => {
                   <Select
                     id="ticketTypeId"
                     value={showtime.ticketTypeId}
-                    onChange={(e) => {}}
+                    onChange={(e) => {
+                      console.log(e.target.value);
+                      setShowtimeTicketTypeId(e.target.value);
+                    }}
                     renderValue={
                       showtime !== {}
                         ? undefined
@@ -162,16 +206,16 @@ const TicketList = () => {
                     borderRadius: "12px",
                   }}
                 >
-                  <Showcase />
                   <SeatList
-                    numberOfRow={showtime.room?.numberOfRow}
-                    numberOfColumn={showtime.room?.numberOfColumn}
-                    seatList={showtime.room?.seatDtos}
+                    numberOfRow={room?.numberOfRow}
+                    numberOfColumn={room?.numberOfColumn}
+                    seatList={room?.seatDtos}
                     selectedSeats={selectedSeats}
                     onSelectedSeatsChange={(selectedSeats) =>
                       setSelectedSeats(selectedSeats)
                     }
                   />
+                  <Showcase />
                 </Stack>
               </>
             )}

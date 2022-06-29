@@ -5,7 +5,7 @@ const SvgStyle = styled(SvgIcon, {
   shouldForwardProp: (prop) => prop !== "isSelected",
 })(({ isSelected, theme }) => ({
   cursor: "pointer",
-  fontSize: "40px",
+  fontSize: "36px",
   fill: isSelected ? theme.palette.primary.light : theme.palette.neutral[0],
   stroke: isSelected ? theme.palette.primary.main : theme.palette.neutral[500],
 }));
@@ -36,20 +36,20 @@ const SeatList = ({
     >
       <Stack
         direction="column"
-        // sx={{ marginTop: "40px" }}
+        sx={{ marginTop: "40px" }}
         justifyContent="space-between"
       >
-        {[...Array(props.numberOfColumn)].map((x, i) => (
+        {[...Array(props.numberOfRow)].map((x, i) => (
           <Box
             key={i}
             sx={{
-              height: "28px",
-              width: "28px",
+              height: "36px",
+              width: "36px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               fontWeight: "500",
-              // fontSize: "20px",
+              fontSize: "20px",
               marginBottom: "6px",
             }}
           >
@@ -62,12 +62,12 @@ const SeatList = ({
         sx={{
           display: "grid",
           gridGap: "6px",
-          gridTemplateColumns: `repeat(${props.numberOfRow}, min-content)`,
+          gridTemplateColumns: `repeat(${props.numberOfColumn}, min-content)`,
           alignItems: "center",
           justifyContent: "center",
         }}
       >
-        {[...Array(props.numberOfRow)].map((x, i) => (
+        {[...Array(props.numberOfColumn)].map((x, i) => (
           <Box
             key={i}
             sx={{

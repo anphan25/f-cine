@@ -208,7 +208,6 @@ const ShowTimeList = () => {
   useEffect(() => {
     const fetchMovieData = async () => {
       const movieTitleRes = await getMovieTitle();
-
       //movieTitleRes.movieTitles?.splice(10);
       setMovies(movieTitleRes?.movieTitles);
     };
@@ -279,7 +278,7 @@ const ShowTimeList = () => {
                 name="movieId"
                 id="movieId"
                 options={movies}
-                value={data?.movieId || []}
+                //value={data?.movieId || []}
                 getOptionLabel={(option) => option.title || ""}
                 onChange={(e, value) => {
                   setData({ ...data, movieId: value?.movieId });
