@@ -32,24 +32,24 @@ const SeatList = ({
       direction="row"
       alignItems="center"
       justifyContent="center"
-      gap="20px"
+      gap="12px"
     >
       <Stack
         direction="column"
-        sx={{ marginTop: "40px" }}
+        // sx={{ marginTop: "40px" }}
         justifyContent="space-between"
       >
         {[...Array(props.numberOfColumn)].map((x, i) => (
           <Box
             key={i}
             sx={{
-              height: "40px",
-              width: "40px",
+              height: "28px",
+              width: "28px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               fontWeight: "500",
-              fontSize: "20px",
+              // fontSize: "20px",
               marginBottom: "6px",
             }}
           >

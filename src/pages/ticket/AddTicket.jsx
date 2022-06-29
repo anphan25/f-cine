@@ -23,12 +23,12 @@ const SeatStyle = styled("img")(() => ({
 }));
 
 const AddTicket = () => {
-  const { id } = useParams();
+  const { showtimeId } = useParams();
   const [room, setRoom] = useState({});
 
   useEffect(() => {
     const fetchShowTime = () => {
-      getShowTimeById(id)
+      getShowTimeById(showtimeId)
         .then((res) => {
           console.log(res);
           setRoom(res?.showtime?.room);
@@ -37,7 +37,7 @@ const AddTicket = () => {
     };
 
     fetchShowTime();
-  }, [id]);
+  }, [showtimeId]);
   const [selectedSeats, setSelectedSeats] = useState([]);
 
   return (

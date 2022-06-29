@@ -1,5 +1,5 @@
 //
-import { InputSelectIcon } from './CustomIcons';
+import { InputSelectIcon } from "./CustomIcons";
 
 // ----------------------------------------------------------------------
 
@@ -8,6 +8,11 @@ export default function Select() {
     MuiSelect: {
       defaultProps: {
         IconComponent: InputSelectIcon,
+      },
+      styleOverrides: {
+        select: {
+          padding: "4px",
+        },
       },
     },
   };
