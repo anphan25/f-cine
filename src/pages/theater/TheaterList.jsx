@@ -19,7 +19,11 @@ import { MdAdd } from "react-icons/md";
 import HeaderBreadcrumbs from "components/header/HeaderBreadcrumbs";
 import { DataTable, CustomSnackBar } from "components";
 import { useSelector } from "react-redux";
-import { getTheaterList, createTheater } from "../../services/TheaterService";
+import {
+  getTheaterListForManager,
+  getTheaterListForAdmin,
+  createTheater,
+} from "../../services/TheaterService";
 import { GridActionsCellItem } from "@mui/x-data-grid";
 import { useNavigate } from "react-router-dom";
 import ListAltIcon from "@mui/icons-material/ListAlt";
@@ -31,7 +35,8 @@ const TheaterList = () => {
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
   const [addressParam, setAddressParam] = useState({});
-  const companyInfo = useSelector((state) => state.company.company);
+  const companyInfo = useSelector((state) => state.company?.company);
+  const userInfo = useSelector((state) => state.auth.auth?.user);
   const navigate = useNavigate();
   const [pageState, setPageState] = useState({
     isLoading: false,
@@ -115,12 +120,25 @@ const TheaterList = () => {
   const fetchData = async () => {
     setPageState((old) => ({ ...old, isLoading: true, data: [] }));
 
-    const res = await getTheaterList({
-      CompanyId: companyInfo.id,
-      PageSize: pageState.pageSize,
-      Page: pageState.page,
-      SearchKey: pageState.search,
-    });
+    let res;
+
+    if (userInfo?.Role === "Manager") {
+      res = await getTheaterListForManager({
+        CompanyId: companyInfo?.id,
+        PageSize: pageState.pageSize,
+        Page: pageState.page,
+        SearchKey: pageState.search,
+      });
+    }
+
+    if (userInfo?.Role === "Admin") {
+      console.log("admin");
+      res = await getTheaterListForAdmin({
+        PageSize: pageState.pageSize,
+        Page: pageState.page,
+        SearchKey: pageState.search,
+      });
+    }
 
     const dataRow = res.theaters.results.map((data) => ({
       id: data.id,
