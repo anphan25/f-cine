@@ -41,7 +41,6 @@ const ManagerDashboard = () => {
   const [dashboardData, setDashboardData] = useState({});
 
   useEffect(() => {
-    console.log("yoo");
     if (companyInfo?.id) {
       const fetchData = () => {
         analysisCompany(companyInfo?.id).then((res) => {
@@ -97,7 +96,7 @@ const ManagerDashboard = () => {
                   ) : (
                     <ArrowDownwardIcon />
                   )}{" "}
-                  {dashboardData?.percentShowtimeChange}%
+                  {dashboardData?.percentShowtimeChange?.toFixed(2)}%
                 </Box>
                 <Typography fontWeight="600" sx={{ color: "neutral.700" }}>
                   this week
@@ -132,7 +131,7 @@ const ManagerDashboard = () => {
                   ) : (
                     <ArrowDownwardIcon />
                   )}{" "}
-                  {dashboardData?.percentTicketSoldChange}%
+                  {dashboardData?.percentTicketSoldChange?.toFixed(2)}%
                 </Box>
                 <Typography fontWeight="600" sx={{ color: "neutral.700" }}>
                   this week
@@ -163,7 +162,7 @@ const ManagerDashboard = () => {
                   ) : (
                     <ArrowDownwardIcon />
                   )}{" "}
-                  {dashboardData?.percentIncomeChange}%
+                  {dashboardData?.percentIncomeChange?.toFixed(2)}%
                 </Box>
                 <Typography fontWeight="600" sx={{ color: "neutral.700" }}>
                   this week
