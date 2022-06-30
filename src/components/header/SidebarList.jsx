@@ -67,7 +67,7 @@ const linksManager = [
     text: "Orders",
   },
   {
-    id: 5,
+    id: 6,
     to: "/analytics",
     icon: <FiActivity fontSize="24" />,
     text: "Analytics",
@@ -110,6 +110,12 @@ const linksAdmin = [
     to: "/users",
     icon: <FiUsers fontSize="24" />,
     text: "Users",
+  },
+  {
+    id: 7,
+    to: "/orders",
+    icon: <MdPayment fontSize="24" />,
+    text: "Orders",
   },
   // {
   //   id: 5,
