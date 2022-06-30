@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { RiLogoutCircleLine } from "react-icons/ri";
 import { BiChevronDown, BiChevronUp, BiUser } from "react-icons/bi";
 import {
@@ -17,13 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { defaultAvatar } from "assets/images";
 import { Link, useNavigate } from "react-router-dom";
 import { logoutSuccess } from "redux/auth/AuthSlice";
-import { getCompanyDetail } from "services/CompanyService";
-import {
-  companyError,
-  companyPending,
-  removeCompany,
-  setCompany,
-} from "redux/company/CompanySlice";
+import { removeCompany } from "redux/company/CompanySlice";
 
 const MenuItemContainer = styled(MenuItem)(({ theme }) => ({
   padding: "12px",
@@ -54,25 +48,6 @@ export const NavBarAccount = () => {
       icon: <BiUser fontSize="24px" />,
     },
   ];
-
-  const handleGetCompany = () => {
-    dispatch(companyPending());
-    getCompanyDetail()
-      .then((response) => {
-        console.log(response);
-        dispatch(setCompany(response.company));
-      })
-      .catch((err) => {
-        console.log(err);
-        dispatch(companyError());
-      });
-  };
-
-  useEffect(() => {
-    if (userInfo?.Role === "Manager") {
-      handleGetCompany();
-    }
-  }, [userInfo]);
 
   return (
     <>

@@ -3,7 +3,7 @@ import { Typography, Box, Paper, Stack } from "@mui/material";
 import { imgTab1, imgTab2, imgTab3 } from "../../assets/images";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
-import { analysisCompany } from "../../services/CompanyService";
+import { analysisCompany } from "services/CompanyService";
 import { useSelector } from "react-redux";
 
 const tabStyle = {
@@ -42,25 +42,28 @@ const ManagerDashboard = () => {
 
   useEffect(() => {
     console.log("yoo");
-    const fetchData = async () => {
-      const data = await analysisCompany(companyInfo.id);
-      setDashboardData({
-        ...dashboardData,
-        totalShowtimeQuantity: data.showtimeDashboard.totalShowtimeQuantity,
-        percentShowtimeChange: data.showtimeDashboard.percentShowtimeChange,
-        isShowtimeUpOrDown: data.showtimeDashboard.isShowtimeUpOrDown,
-        totalTicketSoldQuantity:
-          data.ticketSoldDashboard.totalTicketSoldQuantity,
-        percentTicketSoldChange:
-          data.ticketSoldDashboard.percentTicketSoldChange,
-        isTicketSoldUpOrDown: data.ticketSoldDashboard.isTicketSoldUpOrDown,
-        totalIncome: data.incomeDashboard.totalIncome,
-        percentIncomeChange: data.incomeDashboard.percentIncomeChange,
-        isIncomeUpOrDown: data.incomeDashboard.isIncomeUpOrDown,
-      });
-    };
-    fetchData();
-  }, []);
+    if (companyInfo?.id) {
+      const fetchData = () => {
+        analysisCompany(companyInfo?.id).then((res) => {
+          setDashboardData((dashboardData) => ({
+            ...dashboardData,
+            totalShowtimeQuantity: res.showtimeDashboard.totalShowtimeQuantity,
+            percentShowtimeChange: res.showtimeDashboard.percentShowtimeChange,
+            isShowtimeUpOrDown: res.showtimeDashboard.isShowtimeUpOrDown,
+            totalTicketSoldQuantity:
+              res.ticketSoldDashboard.totalTicketSoldQuantity,
+            percentTicketSoldChange:
+              res.ticketSoldDashboard.percentTicketSoldChange,
+            isTicketSoldUpOrDown: res.ticketSoldDashboard.isTicketSoldUpOrDown,
+            totalIncome: res.incomeDashboard.totalIncome,
+            percentIncomeChange: res.incomeDashboard.percentIncomeChange,
+            isIncomeUpOrDown: res.incomeDashboard.isIncomeUpOrDown,
+          }));
+        });
+      };
+      fetchData();
+    }
+  }, [companyInfo]);
 
   return (
     <>
