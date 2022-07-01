@@ -2,9 +2,31 @@ import { axiosPublic } from "utils/axiosConfig";
 
 const apiPath = "/movies";
 
-export const getMovieList = async (params) => {
+export const getMovieNowShowingList = async (params) => {
   return await axiosPublic.get(
-    `${apiPath}?Action=page&PageSize=${params.PageSize}&PageIndex=${params.PageIndex}`
+    `${apiPath}?Action=page&IsAvailableOnly=true&PageSize=${
+      params.PageSize
+    }&PageIndex=${params.PageIndex}&SearchKey=${
+      params.SearchKey ? params.SearchKey : ""
+    }`
+  );
+};
+
+export const getMovieStopShowingList = async (params) => {
+  return await axiosPublic.get(
+    `${apiPath}?Action=page&IsDisabledOnly=true&PageSize=${
+      params.PageSize
+    }&PageIndex=${params.PageIndex}&SearchKey=${
+      params.SearchKey ? params.SearchKey : ""
+    }`
+  );
+};
+
+export const getAllMovies = async (params) => {
+  return await axiosPublic.get(
+    `${apiPath}?Action=page&PageSize=${params.PageSize}&PageIndex=${
+      params.PageIndex
+    }&SearchKey=${params.SearchKey ? params.SearchKey : ""}`
   );
 };
 
