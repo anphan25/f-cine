@@ -64,35 +64,35 @@ export default function Router() {
             },
           ],
         },
-        {
-          path: "tickets",
-          children: [
-            {
-              element: (
-                <ProtectedRoutes roles={["Manager"]}>
-                  <TicketList />
-                </ProtectedRoutes>
-              ),
-              index: true,
-            },
-            {
-              path: "add/:showtimeId",
-              element: (
-                <ProtectedRoutes roles={["Manager"]}>
-                  <AddTicket />
-                </ProtectedRoutes>
-              ),
-            },
-            {
-              path: ":id",
-              element: (
-                <ProtectedRoutes roles={["Manager"]}>
-                  <ShowTimeDetail />
-                </ProtectedRoutes>
-              ),
-            },
-          ],
-        },
+        // {
+        //   path: "tickets",
+        //   children: [
+        //     {
+        //       element: (
+        //         <ProtectedRoutes roles={["Manager"]}>
+        //           <TicketList />
+        //         </ProtectedRoutes>
+        //       ),
+        //       index: true,
+        //     },
+        //     {
+        //       path: "add/:showtimeId",
+        //       element: (
+        //         <ProtectedRoutes roles={["Manager"]}>
+        //           <AddTicket />
+        //         </ProtectedRoutes>
+        //       ),
+        //     },
+        //     {
+        //       path: ":id",
+        //       element: (
+        //         <ProtectedRoutes roles={["Manager"]}>
+        //           <ShowTimeDetail />
+        //         </ProtectedRoutes>
+        //       ),
+        //     },
+        //   ],
+        // },
         {
           path: "theaters",
           children: [

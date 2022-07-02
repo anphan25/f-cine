@@ -4,17 +4,11 @@ import {
   Divider,
   Stack,
   Button,
-  FormControl,
   FormLabel,
   DialogActions,
   DialogContent,
-  DialogTitle,
-  Dialog,
   Input,
-  Autocomplete,
-  TextField,
   MenuItem,
-  InputLabel,
   Select,
 } from "@mui/material";
 import { useParams } from "react-router-dom";
@@ -27,7 +21,6 @@ import { getRoomsList } from "../../services/RoomService";
 import { CustomDialog } from "../../components";
 import ChairIcon from "@mui/icons-material/Chair";
 import { addRoom, getRoomById } from "../../services/RoomService";
-import { seatImg, seatSelected, seatVip } from "assets/images";
 import SeatList from "components/seat/SeatList";
 
 const TheaterDetail = () => {
