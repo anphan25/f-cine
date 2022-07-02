@@ -5,16 +5,16 @@ export default function List(theme) {
     MuiListItemIcon: {
       styleOverrides: {
         root: {
-          color: 'inherit',
-          minWidth: 'auto',
-          marginRight: theme.spacing(2),
+          color: "inherit",
+          minWidth: "auto",
+          // marginRight: theme.spacing(2),
         },
       },
     },
     MuiListItemAvatar: {
       styleOverrides: {
         root: {
-          minWidth: 'auto',
+          minWidth: "auto",
           marginRight: theme.spacing(2),
         },
       },

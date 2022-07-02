@@ -97,8 +97,8 @@ const MovieDetails = () => {
     };
 
     getMovieDetails();
-    console.log(detail);
-  }, []);
+    // console.log(detail);
+  }, [id]);
 
   return (
     <>

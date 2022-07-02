@@ -1,12 +1,11 @@
 import { Input, styled } from "@mui/material";
-import moment from "moment";
 import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 const DatePickerStyle = styled("div")(({ theme }) => ({
   "& .react-datepicker-popper": {
-    paddingTop: "20px",
+    paddingTop: "10px",
   },
   "& .react-datepicker": {
     padding: "10px",
