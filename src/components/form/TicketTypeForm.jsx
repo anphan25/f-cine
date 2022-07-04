@@ -53,13 +53,100 @@ const TicketTypeForm = ({
         >
           ticket type
         </Typography>
-        <IconButton color="primary" onClick={handleAddField}>
-          <MdAdd />
-        </IconButton>
+        {Array.isArray(showtimeTicketTypes) && (
+          <IconButton color="primary" onClick={handleAddField}>
+            <MdAdd />
+          </IconButton>
+        )}
       </Stack>
-      {showtimeTicketTypes?.map((item, index) => (
+      {Array.isArray(showtimeTicketTypes) ? (
+        showtimeTicketTypes?.map((item, index) => (
+          <Stack
+            key={index}
+            direction="row"
+            spacing={1.5}
+            justifyContent="space-between"
+            alignItems="end"
+            sx={{
+              marginBottom: "24px",
+            }}
+          >
+            <Stack direction="column" spacing={1} sx={{ width: "50%" }}>
+              <FormLabel
+                htmlFor="ticketTypeId"
+                sx={{
+                  fontWeight: "600",
+                  color: "neutral.800",
+                }}
+              >
+                Type
+              </FormLabel>
+              <Select
+                id="ticketTypeId"
+                value={item?.ticketTypeId}
+                onChange={(e) => {
+                  let newFieldValues = [...showtimeTicketTypes];
+                  newFieldValues[index].ticketTypeId = e.target.value;
+                  setShowtimeTicketTypes(newFieldValues);
+                }}
+                renderValue={
+                  item.ticketTypeId !== 0
+                    ? undefined
+                    : () => (
+                        <Typography sx={{ color: "neutral.700" }}>
+                          Ticket Type
+                        </Typography>
+                      )
+                }
+              >
+                {ticketTypes?.map((item) => (
+                  <MenuItem key={item.id} value={item.id}>
+                    {item.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </Stack>
+            <Stack direction="column" spacing={1} sx={{ width: "50%" }}>
+              <FormLabel
+                htmlFor="receivePrice"
+                sx={{
+                  fontWeight: "600",
+                  color: "neutral.800",
+                }}
+              >
+                Price
+              </FormLabel>
+              <Input
+                name="receivePrice"
+                id="receivePrice"
+                placeholder="Ticket Price"
+                onChange={(e) => {
+                  let newFieldValues = [...showtimeTicketTypes];
+                  newFieldValues[index][e.target.name] = e.target.value;
+                  setShowtimeTicketTypes(newFieldValues);
+                }}
+                value={item.receivePrice === null ? "" : item.receivePrice}
+              />
+            </Stack>
+            <IconButton
+              disabled={index === 0}
+              color="error"
+              onClick={() => {
+                let fields = [...showtimeTicketTypes];
+                fields.splice(index, 1);
+                setShowtimeTicketTypes(fields);
+              }}
+              sx={{
+                width: "56px",
+                height: "56px",
+              }}
+            >
+              <MdDeleteOutline />
+            </IconButton>
+          </Stack>
+        ))
+      ) : (
         <Stack
-          key={index}
           direction="row"
           spacing={1.5}
           justifyContent="space-between"
@@ -80,14 +167,15 @@ const TicketTypeForm = ({
             </FormLabel>
             <Select
               id="ticketTypeId"
-              value={item?.ticketTypeId}
+              value={showtimeTicketTypes?.ticketTypeId}
               onChange={(e) => {
-                let newFieldValues = [...showtimeTicketTypes];
-                newFieldValues[index].ticketTypeId = e.target.value;
-                setShowtimeTicketTypes(newFieldValues);
+                setShowtimeTicketTypes({
+                  ...showtimeTicketTypes,
+                  ticketTypeId: e.target.value,
+                });
               }}
               renderValue={
-                item.ticketTypeId !== 0
+                showtimeTicketTypes.ticketTypeId !== 0
                   ? undefined
                   : () => (
                       <Typography sx={{ color: "neutral.700" }}>
@@ -118,30 +206,20 @@ const TicketTypeForm = ({
               id="receivePrice"
               placeholder="Ticket Price"
               onChange={(e) => {
-                let newFieldValues = [...showtimeTicketTypes];
-                newFieldValues[index][e.target.name] = e.target.value;
-                setShowtimeTicketTypes(newFieldValues);
+                setShowtimeTicketTypes({
+                  ...showtimeTicketTypes,
+                  receivePrice: e.target.value,
+                });
               }}
-              value={item.receivePrice === null ? "" : item.receivePrice}
+              value={
+                showtimeTicketTypes.receivePrice === null
+                  ? ""
+                  : showtimeTicketTypes.receivePrice
+              }
             />
           </Stack>
-          <IconButton
-            disabled={index === 0}
-            color="error"
-            onClick={() => {
-              let fields = [...showtimeTicketTypes];
-              fields.splice(index, 1);
-              setShowtimeTicketTypes(fields);
-            }}
-            sx={{
-              width: "56px",
-              height: "56px",
-            }}
-          >
-            <MdDeleteOutline />
-          </IconButton>
         </Stack>
-      ))}
+      )}
     </>
   );
 };

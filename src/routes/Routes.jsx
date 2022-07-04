@@ -64,35 +64,35 @@ export default function Router() {
             },
           ],
         },
-        // {
-        //   path: "tickets",
-        //   children: [
-        //     {
-        //       element: (
-        //         <ProtectedRoutes roles={["Manager"]}>
-        //           <TicketList />
-        //         </ProtectedRoutes>
-        //       ),
-        //       index: true,
-        //     },
-        //     {
-        //       path: "add/:showtimeId",
-        //       element: (
-        //         <ProtectedRoutes roles={["Manager"]}>
-        //           <AddTicket />
-        //         </ProtectedRoutes>
-        //       ),
-        //     },
-        //     {
-        //       path: ":id",
-        //       element: (
-        //         <ProtectedRoutes roles={["Manager"]}>
-        //           <ShowTimeDetail />
-        //         </ProtectedRoutes>
-        //       ),
-        //     },
-        //   ],
-        // },
+        {
+          path: "ticket-type",
+          children: [
+            {
+              element: (
+                <ProtectedRoutes roles={["Manager"]}>
+                  <TicketTypeList />
+                </ProtectedRoutes>
+              ),
+              index: true,
+            },
+            // {
+            //   path: "add/:showtimeId",
+            //   element: (
+            //     <ProtectedRoutes roles={["Manager"]}>
+            //       <AddTicket />
+            //     </ProtectedRoutes>
+            //   ),
+            // },
+            // {
+            //   path: ":id",
+            //   element: (
+            //     <ProtectedRoutes roles={["Manager"]}>
+            //       <ShowTimeDetail />
+            //     </ProtectedRoutes>
+            //   ),
+            // },
+          ],
+        },
         {
           path: "theaters",
           children: [
@@ -218,7 +218,9 @@ const Dashboard = Loading(lazy(() => import("pages/dashboard/Dashboard")));
 const RoomList = Loading(lazy(() => import("pages/room/RoomList")));
 const ShowTimeList = Loading(lazy(() => import("pages/showtime/ShowTimeList")));
 const AddTicket = Loading(lazy(() => import("pages/ticket/AddTicket")));
-const TicketList = Loading(lazy(() => import("pages/ticket/TicketList")));
+const TicketTypeList = Loading(
+  lazy(() => import("pages/ticket/TicketTypeList"))
+);
 const Analytics = Loading(lazy(() => import("pages/analytics/Analytics")));
 const TheaterList = Loading(lazy(() => import("pages/theater/TheaterList")));
 const TheaterDetail = Loading(

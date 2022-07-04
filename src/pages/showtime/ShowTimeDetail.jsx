@@ -24,19 +24,19 @@ import SeatList from "components/seat/SeatList";
 import React, { useEffect, useState } from "react";
 import { MdAdd } from "react-icons/md";
 import { useParams } from "react-router-dom";
-import { getRoomById } from "services/RoomService";
 import { getShowTimeById } from "services/ShowTimeService";
-import { postTickets } from "services/TicketService";
+import { getTickets, postTickets } from "services/TicketService";
 import { getMovieDetail } from "services/MovieService";
 import { useCallback } from "react";
 import moment from "moment";
+import { postShowtimeTicketType } from "services/ShowtimeTicketTypesService";
 
 const ShowTimeDetail = () => {
   const { id } = useParams();
   const [data, setData] = useState({
     showtime: null,
-    room: null,
     movie: null,
+    tickets: null,
   });
   const [loading, setLoading] = useState(false);
   const [isDialogTicketOpen, setIsDialogTicketOpen] = useState(false);
@@ -47,14 +47,13 @@ const ShowTimeDetail = () => {
     type: "success",
   });
   const [selectedSeats, setSelectedSeats] = useState([]);
+  const [disabledSeats, setDisabledSeats] = useState([]);
+  const [soldSeats, setSoldSeats] = useState([]);
   const [showtimeTicketTypeId, setShowtimeTicketTypeId] = useState();
-  const [showtimeTicketTypes, setShowtimeTicketTypes] = useState([
-    {
-      ticketTypeId: 0,
-      receivePrice: "",
-    },
-  ]);
-  const tickets = [];
+  const [showtimeTicketType, setShowtimeTicketType] = useState({
+    ticketTypeId: 0,
+    receivePrice: "",
+  });
 
   const handleDialogTicket = () => {
     setIsDialogTicketOpen(!isDialogTicketOpen);
@@ -65,15 +64,16 @@ const ShowTimeDetail = () => {
   };
 
   const handleSubmitTicket = () => {
+    setAlert({});
     setLoading(true);
+    let params = [];
     selectedSeats.forEach((seat) => {
-      tickets.push({
+      params.push({
         seatId: seat.id,
         showtimeTicketTypeId,
       });
     });
-    console.log("tickets", tickets);
-    postTickets(tickets)
+    postTickets(params)
       .then((res) => {
         setLoading(false);
         console.log(res);
@@ -82,12 +82,14 @@ const ShowTimeDetail = () => {
           status: true,
           type: "success",
         });
+        handleDialogTicket();
+        fetchShowtimeById();
       })
       .catch((err) => {
         setLoading(false);
         console.log(err);
         setAlert({
-          message: "Add showtime failed",
+          message: "Add tickets failed",
           status: true,
           type: "error",
         });
@@ -95,22 +97,28 @@ const ShowTimeDetail = () => {
   };
 
   const handleSubmitType = () => {
+    setAlert({});
     setLoading(true);
-    postTickets(tickets)
+    postShowtimeTicketType({
+      showtimeId: id,
+      ...showtimeTicketType,
+    })
       .then((res) => {
         setLoading(false);
         console.log(res);
         setAlert({
-          message: "Add tickets successfully",
+          message: "Add ticket type successfully",
           status: true,
           type: "success",
         });
+        handleDialogType();
+        fetchShowtimeById();
       })
       .catch((err) => {
         setLoading(false);
         console.log(err);
         setAlert({
-          message: "Add showtime failed",
+          message: err.response.data.message || "Add ticket type failed",
           status: true,
           type: "error",
         });
@@ -127,14 +135,33 @@ const ShowTimeDetail = () => {
         }));
         if (res.showtime) {
           Promise.all([
-            getRoomById(res.showtime.roomId)
-              .then((res) => {
-                //console.log(res);
+            getTickets({
+              ShowtimeId: id,
+              PageSize:
+                res.showtime.room.numberOfColumn *
+                res.showtime.room.numberOfRow,
+            })
+              .then((response) => {
+                let tickets = response.result.results;
                 setData((d) => ({
                   ...d,
-                  room: res.room,
+                  tickets,
                 }));
-              })
+                let disabled = [];
+                let sold = [];
+                res.showtime.room.seatDtos.forEach((seat) => {
+                  tickets.forEach((ticket) => {
+                    ticket.seatId === seat.id &&
+                      ticket.statusName === "Available" &&
+                      disabled.push(seat);
+                    ticket.seatId === seat.id &&
+                      ticket.statusName === "UnAvailable" &&
+                      sold.push(seat);
+                  });
+                });
+                setDisabledSeats(disabled);
+                setSoldSeats(sold);
+              }, [])
               .catch((err) => {
                 console.log(err);
               }),
@@ -188,10 +215,13 @@ const ShowTimeDetail = () => {
           <Card sx={{ p: 3 }}>
             <Stack direction="column" alignItems="center">
               <SeatList
-                numberOfRow={data.room?.numberOfRow}
-                numberOfColumn={data.room?.numberOfColumn}
-                seatList={data.room?.seatDtos}
+                isView={true}
+                numberOfRow={data.showtime?.room?.numberOfRow}
+                numberOfColumn={data.showtime?.room?.numberOfColumn}
+                seatList={data.showtime?.room?.seatDtos}
                 selectedSeats={selectedSeats}
+                disabledSeats={disabledSeats}
+                soldSeats={soldSeats}
                 onSelectedSeatsChange={(selectedSeats) =>
                   setSelectedSeats(selectedSeats)
                 }
@@ -290,7 +320,7 @@ const ShowTimeDetail = () => {
                 </Typography>
 
                 <Typography sx={{ fontSize: 14, fontWeight: 600 }}>
-                  {data.room?.no}
+                  {data.showtime?.room?.no}
                 </Typography>
               </Stack>
 
@@ -325,16 +355,17 @@ const ShowTimeDetail = () => {
               {data.showtime?.showtimeTicketTypes?.length > 0 ? (
                 data.showtime.showtimeTicketTypes.map((type) => (
                   <Stack
+                    key={type.id}
                     direction="row"
                     justifyContent="space-between"
-                    sx={{ mb: 3 }}
+                    sx={{ mb: 3, mt: 1 }}
                   >
                     <Typography sx={{ fontSize: 14, fontWeight: 400 }}>
-                      {type.name}
+                      {type?.ticketType?.name}
                     </Typography>
 
                     <Typography sx={{ fontSize: 14, fontWeight: 600 }}>
-                      {type.price}
+                      {type?.receivePrice}
                     </Typography>
                   </Stack>
                 ))
@@ -400,10 +431,13 @@ const ShowTimeDetail = () => {
               }}
             >
               <SeatList
-                numberOfRow={data.room?.numberOfRow}
-                numberOfColumn={data.room?.numberOfColumn}
-                seatList={data.room?.seatDtos}
+                isView={false}
+                numberOfRow={data.showtime?.room?.numberOfRow}
+                numberOfColumn={data.showtime?.room?.numberOfColumn}
+                seatList={data.showtime?.room?.seatDtos}
                 selectedSeats={selectedSeats}
+                disabledSeats={disabledSeats}
+                soldSeats={soldSeats}
                 onSelectedSeatsChange={(selectedSeats) =>
                   setSelectedSeats(selectedSeats)
                 }
@@ -436,8 +470,8 @@ const ShowTimeDetail = () => {
       >
         <DialogContent>
           <TicketTypeForm
-            showtimeTicketTypes={showtimeTicketTypes}
-            setShowtimeTicketTypes={setShowtimeTicketTypes}
+            showtimeTicketTypes={showtimeTicketType}
+            setShowtimeTicketTypes={setShowtimeTicketType}
           />
         </DialogContent>
         <DialogActions>

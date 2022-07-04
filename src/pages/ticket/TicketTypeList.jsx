@@ -24,7 +24,7 @@ import { getRoomById } from "services/RoomService";
 import { getShowTimeList } from "services/ShowTimeService";
 import { postTickets } from "services/TicketService";
 
-const TicketList = () => {
+const TicketTypeList = () => {
   const [showtimes, setShowtimes] = useState([]);
   const [showtime, setShowtime] = useState();
   const [room, setRoom] = useState();
@@ -249,4 +249,4 @@ const TicketList = () => {
   );
 };
 
-export default TicketList;
+export default TicketTypeList;
