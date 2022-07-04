@@ -1,4 +1,5 @@
 import { axiosPrivate } from "utils/axiosConfig";
+import queryString from 'query-string'
 
 const apiPath = "/tickets";
 
@@ -7,5 +8,5 @@ export const postTickets = async (params) => {
 };
 
 export const getTickets = async (params) => {
-  return await axiosPrivate.get(apiPath, params);
+  return await axiosPrivate.get(`${apiPath}?${queryString.stringify(params)}`);
 };

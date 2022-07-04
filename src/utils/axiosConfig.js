@@ -30,9 +30,9 @@ axiosPrivate.interceptors.response.use(
   (response) => response.data,
   async (error) => {
     const prevRequest = error?.config;
-    if (error?.response?.status === 401 && prevRequest?.sent) {
-      store.dispatch(refreshFail("Something went wrong!"));
-    }
+    // if (error?.response?.status === 401 && prevRequest?.sent) {
+    //   store.dispatch(refreshFail("Something went wrong!"));
+    // }
     if (error?.response?.status === 401 && !prevRequest?.sent) {
       prevRequest.sent = true;
       await getNewAccessToken(store.getState().auth.auth?.refreshToken)

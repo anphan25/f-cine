@@ -42,4 +42,4 @@ export { default as MovieDetails } from "./movie/MovieDetails";
 export { default as AddMovie } from "./movie/AddMovie";
 
 //ticket
-export { default as TicketList } from "./ticket/TicketList";
+export { default as TicketTypeList } from "./ticket/TicketTypeList";

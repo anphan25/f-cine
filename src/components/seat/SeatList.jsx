@@ -2,21 +2,36 @@ import React from "react";
 import { Box, Stack, styled, SvgIcon } from "@mui/material";
 
 const SvgStyle = styled(SvgIcon, {
-  shouldForwardProp: (prop) => prop !== "isSelected",
-})(({ isSelected, theme }) => ({
-  cursor: "pointer",
-  fontSize: "36px",
-  fill: isSelected ? theme.palette.primary.light : theme.palette.neutral[0],
-  stroke: isSelected ? theme.palette.primary.main : theme.palette.neutral[500],
+  shouldForwardProp: (prop) =>
+    prop !== "isSelected" && prop !== "isDisabled" && prop !== "isSold",
+})(({ theme, isSelected, isDisabled, isSold }) => ({
+  fontSize: "32px",
+  fill: theme.palette.neutral[0],
+  stroke: theme.palette.neutral[500],
+  ...(isSelected && {
+    fill: theme.palette.primary.light,
+    stroke: theme.palette.primary.main,
+  }),
+  ...(isDisabled && {
+    fill: theme.palette.info.light,
+    stroke: theme.palette.info.main,
+  }),
+  ...(isSold && {
+    fill: theme.palette.error.light,
+  }),
 }));
 
 const SeatList = ({
   seatList,
   selectedSeats,
+  disabledSeats,
+  soldSeats,
   onSelectedSeatsChange,
+  isView,
   ...props
 }) => {
   function handleSelectedState(seat) {
+    console.log(disabledSeats.findIndex((s) => seat.id === s.id));
     const isSelected = selectedSeats.includes(seat);
     if (isSelected) {
       onSelectedSeatsChange(
@@ -43,13 +58,13 @@ const SeatList = ({
           <Box
             key={i}
             sx={{
-              height: "36px",
-              width: "36px",
+              height: "32px",
+              width: "32px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               fontWeight: "500",
-              fontSize: "20px",
+              fontSize: "18px",
               marginBottom: "6px",
             }}
           >
@@ -75,19 +90,36 @@ const SeatList = ({
               width: "32px",
               textAlign: "center",
               fontWeight: "500",
-              fontSize: "20px",
+              fontSize: "18px",
             }}
           >
             {++i}
           </Box>
         ))}
-        {seatList?.map((seat, index) =>
-          seat.seatType?.name === "Vip" ? (
-            <SvgStyle
-              key={index}
-              onClick={() => handleSelectedState(seat)}
-              isSelected={selectedSeats.includes(seat)}
-            >
+        {seatList?.map((seat, index) => (
+          <SvgStyle
+            key={index}
+            onClick={() => {
+              if (!disabledSeats?.includes(seat) && !isView) {
+                handleSelectedState(seat);
+              }
+            }}
+            sx={{
+              cursor:
+                !isView && !disabledSeats?.includes(seat)
+                  ? "pointer"
+                  : "default",
+            }}
+            isSelected={selectedSeats?.includes(seat)}
+            // isDisabled={
+            //   disabledSeats.findIndex((s) => seat.id === s.id) === -1
+            //     ? false
+            //     : true
+            // }
+            isDisabled={disabledSeats?.includes(seat)}
+            isSold={soldSeats?.includes(seat)}
+          >
+            {seat.seatType?.name === "Vip" && (
               <g clipPath="url(#clip0_0_2810)">
                 <rect
                   x="2.71133"
@@ -136,23 +168,8 @@ const SeatList = ({
                   strokeWidth="1.2"
                 />
               </g>
-              <defs>
-                <clipPath id="clip0_0_2810">
-                  <rect
-                    width="18.4202"
-                    height="21.4752"
-                    fill="white"
-                    transform="translate(0.71582 0.197205)"
-                  />
-                </clipPath>
-              </defs>
-            </SvgStyle>
-          ) : (
-            <SvgStyle
-              key={index}
-              onClick={() => handleSelectedState(seat)}
-              isSelected={selectedSeats.includes(seat)}
-            >
+            )}
+            {seat.seatType?.name === "Normal" && (
               <g clipPath="url(#clip0_0_2810)">
                 <rect
                   x="2.71133"
@@ -191,19 +208,19 @@ const SeatList = ({
                   strokeWidth="1.2"
                 />
               </g>
-              <defs>
-                <clipPath id="clip0_0_2810">
-                  <rect
-                    width="18.4202"
-                    height="21.4752"
-                    fill="white"
-                    transform="translate(0.71582 0.197205)"
-                  />
-                </clipPath>
-              </defs>
-            </SvgStyle>
-          )
-        )}
+            )}
+            <defs>
+              <clipPath id="clip0_0_2810">
+                <rect
+                  width="18.4202"
+                  height="21.4752"
+                  fill="white"
+                  transform="translate(0.71582 0.197205)"
+                />
+              </clipPath>
+            </defs>
+          </SvgStyle>
+        ))}
       </Box>
     </Stack>
   );
