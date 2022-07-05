@@ -12,7 +12,7 @@ import { CategoryTag } from "components/tag/CategoryTag";
 
 const ImgBox = styled("div")(({ theme }) => ({
   height: "280px",
-  width: "40%",
+  width: "38%",
   position: "relative",
   marginTop: "40px",
 
@@ -129,7 +129,7 @@ const MovieDetails = () => {
 
           <Box
             className="movie-detail_content_detail_left"
-            sx={{ marginTop: "40px", width: "60%" }}
+            sx={{ width: "60%" }}
           >
             <Typography variant="h3" sx={{ width: "100% " }}>
               {detail.title}

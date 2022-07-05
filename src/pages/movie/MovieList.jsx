@@ -154,7 +154,7 @@ const MovieList = () => {
             <Paper
               key={e}
               elevation={2}
-              sx={{ padding: "15px", width: "345px", borderRadius: "10px" }}
+              sx={{ padding: "15px", width: "24%", borderRadius: "10px" }}
             >
               <Stack direction="column">
                 <Skeleton
