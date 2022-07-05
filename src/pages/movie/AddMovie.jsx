@@ -9,18 +9,22 @@ import {
   FormControl,
   Input,
   Button,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import {
   CustomDatePicker,
   CustomMultipleInput,
   HeaderBreadcrumbs,
 } from "components";
+import { Editor } from "@tinymce/tinymce-react";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import { getCategoryList } from "../../services/CategoryService";
 import { storage } from "../../config/firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { createMovie } from "../../services/MovieService";
-import React, { useState, useEffect } from "react";
+import { v4 as uuidv4 } from "uuid";
+import React, { useState, useEffect, useRef } from "react";
 
 const coverUploadStyle = {
   backgroundColor: "#D6D6D6",
@@ -87,7 +91,17 @@ const AddMovie = () => {
   const [progress, setProgress] = useState(0);
   const [data, setData] = useState({ releasedDate: new Date().toISOString() });
   const [categories, setCategories] = useState([]);
+  const editorRef = useRef(null);
   let filesList = [];
+
+  const getDescriptionValue = () => {
+    if (editorRef.current) {
+      setData((old) => ({
+        ...old,
+        description: editorRef.current.getContent(),
+      }));
+    }
+  };
 
   const handleSelectCategories = (e, value) => {
     const cateArr = value.map((cate) => {
@@ -100,9 +114,12 @@ const AddMovie = () => {
     });
   };
 
-  const handleGetMultipleValues = (values) => {
-    // setData({ ...data, actors: values });
+  const handleGetMultipleActors = (values) => {
     setData((pre) => ({ ...pre, actors: values }));
+  };
+
+  const handleGetMultipleLanguages = (values) => {
+    setData((pre) => ({ ...pre, languages: values }));
   };
 
   const imagePreviewHandler = (files, elementId) => {
@@ -148,62 +165,14 @@ const AddMovie = () => {
         });
       }
     );
-    // uploadTask.on(
-    //   "state_changed",
-    //   (snapshot) => {
-    //     const progress =
-    //       (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-    //     console.log("Upload is " + progress + "% done");
-    //     switch (snapshot.state) {
-    //       case "paused":
-    //         console.log("Upload is paused");
-    //         break;
-    //       case "running":
-    //         console.log("Upload is running");
-    //         break;
-    //     }
-    //   },
-    //   (error) => {
-    //     switch (error.code) {
-    //       case "storage/unauthorized":
-    //         // User doesn't have permission to access the object
-    //         break;
-    //       case "storage/canceled":
-    //         // User canceled the upload
-    //         break;
-
-    //       // ...
-
-    //       case "storage/unknown":
-    //         // Unknown error occurred, inspect error.serverResponse
-    //         break;
-    //     }
-    //   },
-    //   () => {
-    //     // Upload completed successfully, now we can get the download URL
-    //     getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-    //       if (type === "cover") {
-    //         // setData({ ...data, coverImgURL: downloadURL });
-    //         console.log("set cover");
-    //         setData((pre) => ({ ...pre, coverImgURL: downloadURL }));
-    //       }
-
-    //       if (type === "poster") {
-    //         // setData({ ...data, posterImgURL: downloadURL });
-    //         console.log("set poster");
-
-    //         setData((pre) => ({ ...pre, posterImgURL: downloadURL }));
-    //       }
-    //     });
-    //   }
-    // );
   };
 
   const handleAddMovie = () => {
-    // //Cover
+    debugger;
+    //Cover
     uploadImage(document.querySelector("#upload-cover-input"), "cover");
 
-    // // //Poster
+    //Poster
     uploadImage(document.querySelector("#upload-poster-input"), "poster");
 
     createMovie(data)
@@ -328,17 +297,22 @@ const AddMovie = () => {
               >
                 Age Limitation
               </FormLabel>
-              <Input
-                required
-                placeholder="Age Limitation"
+
+              <Select
                 id="age-restricted"
+                value={data?.restrictedAge}
                 onChange={(e) => {
                   setData({
                     ...data,
                     restrictedAge: e.target.value,
                   });
                 }}
-              />
+              >
+                <MenuItem value={0}>P</MenuItem>
+                <MenuItem value={13}>C13</MenuItem>
+                <MenuItem value={16}>C16</MenuItem>
+                <MenuItem value={18}>C18</MenuItem>
+              </Select>
             </Stack>
 
             <Stack spacing={1} mb={3}>
@@ -359,7 +333,7 @@ const AddMovie = () => {
                 onChange={(e) => {
                   setData({
                     ...data,
-                    duration: e.target.value,
+                    duration: Number(e.target.value),
                   });
                 }}
               />
@@ -425,16 +399,11 @@ const AddMovie = () => {
           >
             Language
           </FormLabel>
-          <Input
+          <CustomMultipleInput
             required
-            placeholder="Language"
             id="language"
-            onChange={(e) => {
-              setData({
-                ...data,
-                language: e.target.value,
-              });
-            }}
+            handleGetMultipleValues={handleGetMultipleLanguages}
+            placeholder="Language"
           />
         </Stack>
 
@@ -497,7 +466,7 @@ const AddMovie = () => {
           <CustomMultipleInput
             required
             id="actor"
-            handleGetMultipleValues={handleGetMultipleValues}
+            handleGetMultipleValues={handleGetMultipleActors}
             placeholder="Actors/Actresses"
           />
         </Stack>
@@ -512,17 +481,34 @@ const AddMovie = () => {
           >
             Description
           </FormLabel>
-          <TextField
-            required
-            multiline
-            rows={4}
-            placeholder="Description"
+
+          <Editor
             id="description"
-            onChange={(e) => {
-              setData({
-                ...data,
-                description: e.target.value,
-              });
+            onChange={getDescriptionValue}
+            apiKey={process.env.REACT_APP_TINYMCE_API_KEY}
+            onInit={(evt, editor) => (editorRef.current = editor)}
+            init={{
+              height: 500,
+              menubar: false,
+              plugins: [
+                "advlist autolink lists link image charmap print preview anchor",
+                "searchreplace visualblocks code fullscreen",
+                "insertdatetime media table paste code help wordcount",
+              ],
+              // toolbar:
+              //   "undo redo | fontselect fontsizeselect formatselect | " +
+              //   "bold italic backcolor | alignleft aligncenter " +
+              //   "alignright alignjustify | bullist numlist checklist outdent indent | " +
+              //   "removeformat | preview | help",
+              toolbar:
+                "formatselect | " +
+                "bold italic backcolor forecolor| alignleft aligncenter " +
+                "alignright alignjustify | bullist numlist outdent indent | " +
+                "removeformat | help | codesample | link image | undo redo | code",
+              content_style:
+                "body { font-family:Helvetica,Arial,sans-serif; font-size:14px; resixe:none; }",
+              // content_css: `${bgEditor === "dark" ? "dark" : ""}`,
+              // skin: bgEditor,
             }}
           />
         </Stack>

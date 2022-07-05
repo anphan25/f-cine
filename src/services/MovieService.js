@@ -39,5 +39,5 @@ export const getMovieTitle = async () => {
 };
 
 export const createMovie = async (params) => {
-  return await axiosPrivate.post(apiPath, params);
+  return await axiosPrivate.post(apiPath, [params]);
 };
