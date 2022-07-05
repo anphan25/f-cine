@@ -84,6 +84,7 @@ const multipleSelectStyle = {
 };
 
 const AddMovie = () => {
+  const [progress, setProgress] = useState(0);
   const [data, setData] = useState({ releasedDate: new Date().toISOString() });
   const [categories, setCategories] = useState([]);
   let filesList = [];
@@ -115,76 +116,103 @@ const AddMovie = () => {
     reader.readAsDataURL(filesList[0]);
   };
 
-  const uploadImage = async (inputFileElement, type) => {
+  const uploadImage = (inputFileElement, type) => {
     const filePath = `movie-images/`;
 
     const file = inputFileElement.files[0];
     const name = file.name;
     const storageRef = ref(storage, `${filePath}/${name}`);
-    const metadata = {
-      contentType: file.type,
-    };
+    // const metadata = {
+    //   contentType: file.type,
+    // };
     const uploadTask = uploadBytesResumable(storageRef, file);
-
     uploadTask.on(
       "state_changed",
       (snapshot) => {
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log("Upload is " + progress + "% done");
-        switch (snapshot.state) {
-          case "paused":
-            console.log("Upload is paused");
-            break;
-          case "running":
-            console.log("Upload is running");
-            break;
-        }
+        setProgress((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
       },
       (error) => {
-        switch (error.code) {
-          case "storage/unauthorized":
-            // User doesn't have permission to access the object
-            break;
-          case "storage/canceled":
-            // User canceled the upload
-            break;
-
-          // ...
-
-          case "storage/unknown":
-            // Unknown error occurred, inspect error.serverResponse
-            break;
-        }
+        console.log(error);
       },
       () => {
-        // Upload completed successfully, now we can get the download URL
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           if (type === "cover") {
-            // setData({ ...data, coverImgURL: downloadURL });
             console.log("set cover");
             setData((pre) => ({ ...pre, coverImgURL: downloadURL }));
           }
 
           if (type === "poster") {
-            // setData({ ...data, posterImgURL: downloadURL });
             console.log("set poster");
-
             setData((pre) => ({ ...pre, posterImgURL: downloadURL }));
           }
         });
       }
     );
+    // uploadTask.on(
+    //   "state_changed",
+    //   (snapshot) => {
+    //     const progress =
+    //       (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+    //     console.log("Upload is " + progress + "% done");
+    //     switch (snapshot.state) {
+    //       case "paused":
+    //         console.log("Upload is paused");
+    //         break;
+    //       case "running":
+    //         console.log("Upload is running");
+    //         break;
+    //     }
+    //   },
+    //   (error) => {
+    //     switch (error.code) {
+    //       case "storage/unauthorized":
+    //         // User doesn't have permission to access the object
+    //         break;
+    //       case "storage/canceled":
+    //         // User canceled the upload
+    //         break;
+
+    //       // ...
+
+    //       case "storage/unknown":
+    //         // Unknown error occurred, inspect error.serverResponse
+    //         break;
+    //     }
+    //   },
+    //   () => {
+    //     // Upload completed successfully, now we can get the download URL
+    //     getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+    //       if (type === "cover") {
+    //         // setData({ ...data, coverImgURL: downloadURL });
+    //         console.log("set cover");
+    //         setData((pre) => ({ ...pre, coverImgURL: downloadURL }));
+    //       }
+
+    //       if (type === "poster") {
+    //         // setData({ ...data, posterImgURL: downloadURL });
+    //         console.log("set poster");
+
+    //         setData((pre) => ({ ...pre, posterImgURL: downloadURL }));
+    //       }
+    //     });
+    //   }
+    // );
   };
 
-  const handleAddMovie = async () => {
-    //Cover
-    await uploadImage(document.querySelector("#upload-cover-input"), "cover");
+  const handleAddMovie = () => {
+    // //Cover
+    uploadImage(document.querySelector("#upload-cover-input"), "cover");
 
-    // //Poster
-    await uploadImage(document.querySelector("#upload-poster-input"), "poster");
+    // // //Poster
+    uploadImage(document.querySelector("#upload-poster-input"), "poster");
 
-    await createMovie(data);
+    createMovie(data)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   useEffect(() => {
@@ -225,7 +253,7 @@ const AddMovie = () => {
             zIndex: "100",
           }}
         ></AddPhotoAlternateIcon>
-        <img id="img-cover" src="" />
+        <img id="img-cover" src="" alt="movie cover" />
 
         <Input
           id="upload-cover-input"
@@ -253,7 +281,7 @@ const AddMovie = () => {
               zIndex: "100",
             }}
           ></AddPhotoAlternateIcon>
-          <img id="img-poster" src="" />
+          <img id="img-poster" src="" alt="movie poster" />
 
           <Input
             id="upload-poster-input"

@@ -106,11 +106,24 @@ export default function Router() {
             },
             {
               path: ":id",
-              element: (
-                <ProtectedRoutes roles={["Manager", "Admin"]}>
-                  <TheaterDetail />
-                </ProtectedRoutes>
-              ),
+              children: [
+                {
+                  element: (
+                    <ProtectedRoutes roles={["Manager", "Admin"]}>
+                      <TheaterDetail />
+                    </ProtectedRoutes>
+                  ),
+                  index: true,
+                },
+                {
+                  element: (
+                    <ProtectedRoutes roles={["Manager", "Admin"]}>
+                      <RoomDetail />
+                    </ProtectedRoutes>
+                  ),
+                  path: "room/:id",
+                },
+              ],
             },
           ],
         },
@@ -215,7 +228,7 @@ const PermissionDenied = Loading(
   lazy(() => import("pages/message/PermissionDenied"))
 );
 const Dashboard = Loading(lazy(() => import("pages/dashboard/Dashboard")));
-const RoomList = Loading(lazy(() => import("pages/room/RoomList")));
+const RoomDetail = Loading(lazy(() => import("pages/room/RoomDetail")));
 const ShowTimeList = Loading(lazy(() => import("pages/showtime/ShowTimeList")));
 const AddTicket = Loading(lazy(() => import("pages/ticket/AddTicket")));
 const TicketTypeList = Loading(

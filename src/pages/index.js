@@ -21,6 +21,7 @@ export { default as CustomerList } from "./account/CustomerList";
 
 //room
 export { default as RoomList } from "./room/RoomList";
+export { default as RoomDetail } from "./room/RoomDetail";
 
 //analytics
 export { default as Analytics } from "./analytics/Analytics";

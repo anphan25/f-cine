@@ -390,7 +390,7 @@ const ShowTimeDetail = () => {
           <Stack>
             <Stack direction="column" spacing={1} mb={3}>
               <FormLabel
-                htmlFor="movieId"
+                htmlFor="ticketTypeId"
                 sx={{
                   fontWeight: "600",
                   color: "neutral.800",

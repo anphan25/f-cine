@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Box,
-  Divider,
   Stack,
   Button,
   FormLabel,
@@ -11,7 +10,7 @@ import {
   MenuItem,
   Select,
 } from "@mui/material";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { MdAdd } from "react-icons/md";
 import { GridActionsCellItem } from "@mui/x-data-grid";
 import { DataTable, CustomSnackBar } from "components";
@@ -25,6 +24,7 @@ import SeatList from "components/seat/SeatList";
 
 const TheaterDetail = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [isRoomDetailOpen, setIsRoomDetailOpen] = useState(false);
   const [isAddRoomOpen, setIsAddRoomOpen] = useState(false);
   const [addRoomParam, setAddRoomParam] = useState({ theaterId: id });
@@ -64,7 +64,7 @@ const TheaterDetail = () => {
         width: 300,
       },
       {
-        headerName: "is Active",
+        headerName: "Status",
         field: "isActive",
         type: "boolean",
         width: 300,
@@ -81,15 +81,15 @@ const TheaterDetail = () => {
           <GridActionsCellItem
             icon={<RemoveRedEyeIcon sx={{ color: "#623CE7" }} />}
             onClick={() => {
-              loadRoomMap(params.row.id);
+              navigate(`room/${params.row.id}`);
             }}
           />,
           //Change Seat Type
           <GridActionsCellItem
             icon={<ChairIcon sx={{ color: "#623CE7" }} />}
-            // onClick={() => {
-            //   handleRoomDetail();
-            // }}
+            onClick={() => {
+              loadRoomMap(params.row.id);
+            }}
           />,
         ],
       },
@@ -239,10 +239,13 @@ const TheaterDetail = () => {
     return (
       <>
         <SeatList
+          isView={false}
           numberOfRow={room.numberOfRow}
           numberOfColumn={room.numberOfColumn}
           seatList={room?.seatDtos}
           selectedSeats={selectedSeats}
+          // disabledSeats={disabledSeats}
+          // soldSeats={soldSeats}
           onSelectedSeatsChange={(selectedSeats) =>
             setSelectedSeats(selectedSeats)
           }
@@ -251,7 +254,7 @@ const TheaterDetail = () => {
     );
   };
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setPageState((old) => ({ ...old, isLoading: true, data: [] }));
 
     const res = await getRoomsList({
@@ -274,11 +277,11 @@ const TheaterDetail = () => {
       data: dataRow,
       total: res.result.total,
     }));
-  };
+  }, [id, pageState.page, pageState.pageSize, pageState.search]);
 
   useEffect(() => {
     fetchData();
-  }, [pageState.page, pageState.pageSize, pageState.search]);
+  }, [fetchData, pageState.page, pageState.pageSize, pageState.search]);
   return (
     <>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
@@ -309,7 +312,7 @@ const TheaterDetail = () => {
       <CustomDialog
         open={isRoomDetailOpen}
         onClose={handleRoomDetail}
-        title="Room Detail"
+        title="Seat Map"
         sx={{ "& .MuiDialog-paper": { width: "1600px", height: "90vh" } }}
         children={roomDetailContent()}
       />
@@ -320,7 +323,7 @@ const TheaterDetail = () => {
         onClose={handleAddRoomDialog}
         title="Add New Room"
         children={AddRoomDialogContent()}
-        sx={{ "& .MuiDialog-paper": { width: "900px", height: "470px" } }}
+        sx={{ "& .MuiDialog-paper": { width: "400px", height: "470px" } }}
       />
 
       {/* Alert message */}
