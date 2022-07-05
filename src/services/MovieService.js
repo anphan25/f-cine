@@ -1,4 +1,4 @@
-import { axiosPublic } from "utils/axiosConfig";
+import { axiosPrivate, axiosPublic } from "utils/axiosConfig";
 
 const apiPath = "/movies";
 
@@ -38,8 +38,6 @@ export const getMovieTitle = async () => {
   return await axiosPublic.get(`${apiPath}?Action=titles`);
 };
 
-export const postMovieList = async (params) => {
-  return await axiosPublic.post(apiPath, {
-    params,
-  });
+export const createMovie = async (params) => {
+  return await axiosPrivate.post(apiPath, params);
 };

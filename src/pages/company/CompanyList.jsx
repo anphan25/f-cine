@@ -62,10 +62,10 @@ const CompanyList = () => {
       },
       {
         headerName: "is Active",
-        type: "boolean",
         field: "isActive",
+        type: "boolean",
         width: 100,
-        valueGetter: ({ value }) => value || "-",
+        // valueGetter: ({ value }) => value || "-",
       },
     ],
     pageState: pageState,
