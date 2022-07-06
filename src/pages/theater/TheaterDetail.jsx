@@ -18,18 +18,13 @@ import HeaderBreadcrumbs from "components/header/HeaderBreadcrumbs";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import { getRoomsList } from "../../services/RoomService";
 import { CustomDialog } from "../../components";
-import ChairIcon from "@mui/icons-material/Chair";
-import { addRoom, getRoomById } from "../../services/RoomService";
-import SeatList from "components/seat/SeatList";
+import { addRoom } from "../../services/RoomService";
 
 const TheaterDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [isRoomDetailOpen, setIsRoomDetailOpen] = useState(false);
   const [isAddRoomOpen, setIsAddRoomOpen] = useState(false);
   const [addRoomParam, setAddRoomParam] = useState({ theaterId: id });
-  const [room, setRoom] = useState({});
-  const [selectedSeats, setSelectedSeats] = useState([]);
   const [pageState, setPageState] = useState({
     isLoading: false,
     data: [],
@@ -84,13 +79,6 @@ const TheaterDetail = () => {
               navigate(`room/${params.row.id}`);
             }}
           />,
-          //Change Seat Type
-          <GridActionsCellItem
-            icon={<ChairIcon sx={{ color: "#623CE7" }} />}
-            onClick={() => {
-              loadRoomMap(params.row.id);
-            }}
-          />,
         ],
       },
     ],
@@ -103,25 +91,6 @@ const TheaterDetail = () => {
 
   const pageSizeChangeHandler = (newPageSize) => {
     setPageState((old) => ({ ...old, pageSize: newPageSize }));
-  };
-
-  const handleRoomDetail = () => {
-    isRoomDetailOpen ? setIsRoomDetailOpen(false) : setIsRoomDetailOpen(true);
-  };
-
-  const loadRoomMap = async (roomId) => {
-    const res = await getRoomById(roomId);
-    console.log("res: ", res.room);
-    setRoom({
-      ...room,
-      numberOfRow: res.room.numberOfRow,
-      numberOfColumn: res.room.numberOfColumn,
-      seatDtos: res.room.seatDtos,
-      no: res.room.no,
-    });
-
-    console.log("seats: ", room);
-    handleRoomDetail();
   };
 
   const handleAddRoomDialog = () => {
@@ -235,25 +204,6 @@ const TheaterDetail = () => {
     );
   };
 
-  const roomDetailContent = () => {
-    return (
-      <>
-        <SeatList
-          isView={false}
-          numberOfRow={room.numberOfRow}
-          numberOfColumn={room.numberOfColumn}
-          seatList={room?.seatDtos}
-          selectedSeats={selectedSeats}
-          // disabledSeats={disabledSeats}
-          // soldSeats={soldSeats}
-          onSelectedSeatsChange={(selectedSeats) =>
-            setSelectedSeats(selectedSeats)
-          }
-        />
-      </>
-    );
-  };
-
   const fetchData = useCallback(async () => {
     setPageState((old) => ({ ...old, isLoading: true, data: [] }));
 
@@ -307,15 +257,6 @@ const TheaterDetail = () => {
         onPageChange={pageChangeHandler}
         onPageSizeChange={pageSizeChangeHandler}
       ></DataTable>
-
-      {/* Room Detail Dialog */}
-      <CustomDialog
-        open={isRoomDetailOpen}
-        onClose={handleRoomDetail}
-        title="Seat Map"
-        sx={{ "& .MuiDialog-paper": { width: "1600px", height: "90vh" } }}
-        children={roomDetailContent()}
-      />
 
       {/* Add Room Dialog */}
       <CustomDialog

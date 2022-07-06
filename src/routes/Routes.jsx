@@ -121,7 +121,7 @@ export default function Router() {
                       <RoomDetail />
                     </ProtectedRoutes>
                   ),
-                  path: "room/:id",
+                  path: "room/:roomId",
                 },
               ],
             },
