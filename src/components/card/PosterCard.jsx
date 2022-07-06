@@ -24,9 +24,18 @@ const RestrictLabel = styled("div")(({ theme }) => ({
   paddingTop: "3.2px",
   borderRadius: "5px",
   verticalAlign: "middle",
-  backgroundColor: theme.palette.error.light,
   color: theme.palette.error.main,
 }));
+
+const restrictedStyle = {
+  backgroundColor: "#FFBC99",
+  color: "#FF4842",
+};
+
+const noRestrictStyle = {
+  backgroundColor: "#AAF27F",
+  color: "#54D62C",
+};
 
 const CardActions = styled("div")(({ theme }) => ({
   padding: "0",
@@ -40,6 +49,21 @@ const RatingDiv = styled("div")(({ theme }) => ({
   display: "flex",
   alignContent: "center",
 }));
+
+const renderAgeRestricted = (param) => {
+  switch (param) {
+    case 0:
+      return "P";
+
+    case 13:
+      return "C13";
+    case 16:
+      return "C16";
+
+    case 18:
+      return "C18";
+  }
+};
 
 const PosterCard = (props) => {
   const [movie, setMovie] = useState(props.movie);
@@ -122,7 +146,11 @@ const PosterCard = (props) => {
               marginTop: "10px",
             }}
           >
-            <RestrictLabel>{movie.restrictedAge}</RestrictLabel>
+            <RestrictLabel
+              sx={movie.restrictedAge === 0 ? noRestrictStyle : restrictedStyle}
+            >
+              {renderAgeRestricted(movie.restrictedAge)}
+            </RestrictLabel>
           </Typography>
 
           <Typography

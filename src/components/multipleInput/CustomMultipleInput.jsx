@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FormControl, Chip, Input } from "@mui/material";
 
 const useStyles = {
@@ -48,10 +48,9 @@ const CustomMultipleInput = ({ handleGetMultipleValues, placeholder }) => {
   const [currValue, setCurrValue] = useState("");
 
   const handleKeyUp = (e) => {
-    if (e.keyCode === 32 || e.keyCode === 13) {
+    if (e.keyCode === 13) {
       setValues((oldState) => [...oldState, e.target.value]);
       setCurrValue("");
-      handleGetMultipleValues(values);
     }
   };
 
@@ -65,6 +64,10 @@ const CustomMultipleInput = ({ handleGetMultipleValues, placeholder }) => {
     setValues(arr);
   };
 
+  useEffect(() => {
+    handleGetMultipleValues(values);
+  }, [values]);
+
   return (
     <div className="App">
       <FormControl sx={useStyles}>
@@ -74,7 +77,9 @@ const CustomMultipleInput = ({ handleGetMultipleValues, placeholder }) => {
               key={index}
               sx={{ marginRight: "5px" }}
               size="small"
-              onDelete={() => handleDelete(item, index)}
+              onDelete={() => {
+                handleDelete(item, index);
+              }}
               label={item}
             />
           ))}

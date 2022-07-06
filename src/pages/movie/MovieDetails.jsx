@@ -1,14 +1,27 @@
 import React, { useState, useEffect } from "react";
+import parse from "html-react-parser";
 import { useParams } from "react-router-dom";
-import { Button, styled, Box, Stack, Typography, Modal } from "@mui/material";
+import {
+  Button,
+  styled,
+  Box,
+  Stack,
+  Typography,
+  Modal,
+  DialogContent,
+  DialogActions,
+} from "@mui/material";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import SlideshowIcon from "@mui/icons-material/Slideshow";
-import { getMovieDetail } from "../../services/MovieService";
+import { getMovieDetail, deleteMovie } from "../../services/MovieService";
 import moment from "moment";
 import { NAVBAR } from "utils/constants";
 import { imageNotAvailable } from "assets/images";
 import { CategoryTag } from "components/tag/CategoryTag";
+import DeleteIcon from "@mui/icons-material/Delete";
+import RestoreFromTrashIcon from "@mui/icons-material/RestoreFromTrash";
+import { CustomDialog, CustomSnackBar } from "../../components";
 
 const ImgBox = styled("div")(({ theme }) => ({
   height: "280px",
@@ -78,6 +91,16 @@ const modalStyle = {
   borderRadius: "18px",
 };
 
+const restrictedStyle = {
+  backgroundColor: "#FFBC99",
+  color: "#FF4842",
+};
+
+const noRestrictStyle = {
+  backgroundColor: "#AAF27F",
+  color: "#54D62C",
+};
+
 const MovieDetails = () => {
   let { id } = useParams();
   const [open, setOpen] = useState(false);
@@ -85,19 +108,117 @@ const MovieDetails = () => {
     open ? setOpen(false) : setOpen(true);
   };
   const [detail, setDetail] = useState({});
+  const [alert, setAlert] = useState({
+    message: "",
+    status: false,
+    type: "success",
+  });
+  const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = useState(false);
+  const [isConfirmRestoreOpen, setIsConfirmRestoreOpen] = useState(false);
 
   const convertToEmbedUrl = (url) => {
     return url?.replace("watch?v=", "embed/");
   };
 
-  useEffect(() => {
-    const getMovieDetails = async () => {
-      const res = await getMovieDetail(id);
-      setDetail(res.result);
-    };
+  const handleConfirmDeleteOpen = () => {
+    isConfirmDeleteOpen
+      ? setIsConfirmDeleteOpen(false)
+      : setIsConfirmDeleteOpen(true);
+  };
 
+  const handleConfirmRestoreOpen = () => {
+    isConfirmRestoreOpen
+      ? setIsConfirmRestoreOpen(false)
+      : setIsConfirmRestoreOpen(true);
+  };
+
+  const handleDeleteMovie = async () => {
+    const res = await deleteMovie(id);
+    if (res.message === "Success") {
+      setAlert({
+        message:
+          "Delete movie successfully !!! (Data will update in 5 minutes)",
+        status: true,
+        type: "success",
+      });
+
+      handleConfirmDeleteOpen();
+    }
+  };
+
+  const handleRestoreMovie = async () => {};
+
+  const renderAgeRestricted = (param) => {
+    switch (param) {
+      case 0:
+        return "P";
+
+      case 13:
+        return "C13";
+      case 16:
+        return "C16";
+
+      case 18:
+        return "C18";
+    }
+  };
+
+  const deleteConfirmContent = () => {
+    return (
+      <Stack flex={1}>
+        <DialogContent>
+          Are you sure to delete{" "}
+          <span style={{ fontWeight: "600" }}>{detail.title}</span> ?
+        </DialogContent>
+        <DialogActions sx={{ marginTop: "auto" }}>
+          <Button onClick={handleConfirmDeleteOpen}>Cancel</Button>
+          <Button
+            sx={{
+              backgroundColor: "error.main",
+              "&:hover": { backgroundColor: "error.dark" },
+            }}
+            type="submit"
+            variant="contained"
+            autoFocus
+            onClick={handleDeleteMovie}
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Stack>
+    );
+  };
+
+  const restoreConfirmContent = () => {
+    return (
+      <Stack flex={1}>
+        <DialogContent>Are you sure to restore {detail.title} ?</DialogContent>
+        <DialogActions sx={{ marginTop: "auto" }}>
+          <Button onClick={handleConfirmRestoreOpen}>Cancel</Button>
+          <Button
+            sx={{
+              backgroundColor: "success.main",
+              "&:hover": { backgroundColor: "success.dark" },
+            }}
+            type="submit"
+            variant="contained"
+            autoFocus
+            onClick={handleRestoreMovie}
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Stack>
+    );
+  };
+
+  const getMovieDetails = async () => {
+    const res = await getMovieDetail(id);
+    setDetail(res.result);
+  };
+
+  useEffect(() => {
     getMovieDetails();
-    // console.log(detail);
   }, [id]);
 
   return (
@@ -142,7 +263,13 @@ const MovieDetails = () => {
               spacing={3}
               sx={{ marginTop: "25px" }}
             >
-              <RestrictLabel>{detail.restrictedAge}</RestrictLabel>
+              <RestrictLabel
+                sx={
+                  detail.restrictedAge === 0 ? noRestrictStyle : restrictedStyle
+                }
+              >
+                {renderAgeRestricted(detail.restrictedAge)}
+              </RestrictLabel>
 
               <Stack>
                 <Typography
@@ -201,6 +328,7 @@ const MovieDetails = () => {
             <Stack
               className="movie-detail_action"
               direction="row"
+              spacing={2}
               sx={{ marginTop: "25px" }}
             >
               <Button
@@ -211,6 +339,34 @@ const MovieDetails = () => {
               >
                 Watch trailer
               </Button>
+
+              {detail.isAvailable ? (
+                <Button
+                  variant="contained"
+                  sx={{
+                    fontSize: "20px",
+                    backgroundColor: "error.main",
+                    "&:hover": { backgroundColor: "error.dark" },
+                  }}
+                  startIcon={<DeleteIcon />}
+                  onClick={handleConfirmDeleteOpen}
+                >
+                  Delete
+                </Button>
+              ) : (
+                <Button
+                  variant="contained"
+                  sx={{
+                    fontSize: "20px",
+                    backgroundColor: "success.main",
+                    "&:hover": { backgroundColor: "success.dark" },
+                  }}
+                  startIcon={<RestoreFromTrashIcon />}
+                  onClick={handleConfirmDeleteOpen}
+                >
+                  Restore
+                </Button>
+              )}
             </Stack>
           </Box>
         </Stack>
@@ -253,11 +409,30 @@ const MovieDetails = () => {
               <span className="sub-title" style={{ fontWeight: "bold" }}>
                 Description: <br />
               </span>
-              {detail.description || "This movie does not have description"}
+              {parse(`${detail?.description}`) ||
+                "This movie does not have description"}
             </Typography>
           </Box>
         </Box>
       </Box>
+
+      {/* Confirm Delete Dialog */}
+      <CustomDialog
+        open={isConfirmDeleteOpen}
+        onClose={handleConfirmDeleteOpen}
+        title="Delete Movie Confirmation"
+        children={deleteConfirmContent()}
+        sx={{ "& .MuiDialog-paper": { width: "500px", height: "300px" } }}
+      />
+
+      {/* Confirm Restore Dialog */}
+      <CustomDialog
+        open={isConfirmRestoreOpen}
+        onClose={handleConfirmRestoreOpen}
+        title="Delete Movie Confirmation"
+        children={restoreConfirmContent()}
+        sx={{ "& .MuiDialog-paper": { width: "500px", height: "300px" } }}
+      />
 
       {/* Modal */}
       <Modal
@@ -284,6 +459,15 @@ const MovieDetails = () => {
           </Box>
         </Box>
       </Modal>
+
+      {/* Alert message */}
+      {alert?.status && (
+        <CustomSnackBar
+          message={alert.message}
+          status={alert.status}
+          type={alert.type}
+        />
+      )}
     </>
   );
 };
