@@ -16,6 +16,7 @@ import {
   CustomDatePicker,
   CustomMultipleInput,
   HeaderBreadcrumbs,
+  CustomSnackBar,
 } from "components";
 import { Editor } from "@tinymce/tinymce-react";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
@@ -24,6 +25,7 @@ import { storage } from "../../config/firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { createMovie } from "../../services/MovieService";
 import { v4 as uuidv4 } from "uuid";
+import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect, useRef } from "react";
 
 const coverUploadStyle = {
@@ -90,8 +92,15 @@ const multipleSelectStyle = {
 const AddMovie = () => {
   const [progress, setProgress] = useState(0);
   const [data, setData] = useState({ releasedDate: new Date().toISOString() });
+  const [isUpload, setIsUpload] = useState(false);
   const [categories, setCategories] = useState([]);
   const editorRef = useRef(null);
+  const [alert, setAlert] = useState({
+    message: "",
+    status: false,
+    type: "success",
+  });
+  const navigate = useNavigate();
   let filesList = [];
 
   const getDescriptionValue = () => {
@@ -138,7 +147,7 @@ const AddMovie = () => {
 
     const file = inputFileElement.files[0];
     const name = file.name;
-    const storageRef = ref(storage, `${filePath}/${name}`);
+    const storageRef = ref(storage, `${filePath}/${name}-${uuidv4()}`);
     // const metadata = {
     //   contentType: file.type,
     // };
@@ -161,27 +170,31 @@ const AddMovie = () => {
           if (type === "poster") {
             console.log("set poster");
             setData((pre) => ({ ...pre, posterImgURL: downloadURL }));
+            // setIsUpload(true);
           }
         });
       }
     );
   };
 
-  const handleAddMovie = () => {
-    debugger;
-    //Cover
-    uploadImage(document.querySelector("#upload-cover-input"), "cover");
+  const handleAddMovie = async () => {
+    // setAlert({});
 
-    //Poster
-    uploadImage(document.querySelector("#upload-poster-input"), "poster");
+    try {
+      const res = await createMovie(data);
+      if (res.message === "Success") {
+        console.log("okee boyy");
+        setAlert({
+          message: "Add Movie successfully !!!",
+          status: true,
+          type: "success",
+        });
 
-    createMovie(data)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+        navigate("/movies");
+      }
+    } catch (e) {
+      console.log(e.message);
+    }
   };
 
   useEffect(() => {
@@ -230,6 +243,7 @@ const AddMovie = () => {
           sx={{ display: "none" }}
           onChange={(e) => {
             imagePreviewHandler(e.target.files, "img-cover");
+            uploadImage(document.querySelector("#upload-cover-input"), "cover");
           }}
         />
       </Paper>
@@ -258,6 +272,10 @@ const AddMovie = () => {
             sx={{ display: "none" }}
             onChange={(e) => {
               imagePreviewHandler(e.target.files, "img-poster");
+              uploadImage(
+                document.querySelector("#upload-poster-input"),
+                "poster"
+              );
             }}
           />
         </Paper>
@@ -495,11 +513,6 @@ const AddMovie = () => {
                 "searchreplace visualblocks code fullscreen",
                 "insertdatetime media table paste code help wordcount",
               ],
-              // toolbar:
-              //   "undo redo | fontselect fontsizeselect formatselect | " +
-              //   "bold italic backcolor | alignleft aligncenter " +
-              //   "alignright alignjustify | bullist numlist checklist outdent indent | " +
-              //   "removeformat | preview | help",
               toolbar:
                 "formatselect | " +
                 "bold italic backcolor forecolor| alignleft aligncenter " +
@@ -522,6 +535,15 @@ const AddMovie = () => {
           Add movie
         </Button>
       </Box>
+
+      {/* Alert message */}
+      {alert?.status && (
+        <CustomSnackBar
+          message={alert.message}
+          status={alert.status}
+          type={alert.type}
+        />
+      )}
     </>
   );
 };

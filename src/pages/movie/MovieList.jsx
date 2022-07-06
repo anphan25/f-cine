@@ -100,7 +100,15 @@ const MovieList = () => {
           break;
 
         default:
-          console.log("meo");
+          getMovieNowShowingList(page).then((res) => {
+            setPage({
+              ...page,
+              PageIndex: res.movies.page,
+              totalPages: res.movies.maxPage,
+            });
+            setIsLoading(false);
+            setMovies(res.movies.results);
+          });
       }
     };
     setIsLoading(true);

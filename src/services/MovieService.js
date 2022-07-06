@@ -41,3 +41,7 @@ export const getMovieTitle = async () => {
 export const createMovie = async (params) => {
   return await axiosPrivate.post(apiPath, [params]);
 };
+
+export const deleteMovie = async (movieId) => {
+  return await axiosPrivate.delete(`${apiPath}?movieId=${movieId}`);
+};
