@@ -82,6 +82,7 @@ const ShowTimeDetail = () => {
           status: true,
           type: "success",
         });
+        setSelectedSeats([]);
         handleDialogTicket();
         fetchShowtimeById();
       })
@@ -383,7 +384,7 @@ const ShowTimeDetail = () => {
       <CustomDialog
         open={isDialogTicketOpen}
         onClose={handleDialogTicket}
-        sx={{ "& .MuiDialog-paper": { width: "500px" } }}
+        sx={{ "& .MuiDialog-paper": { width: "600px" } }}
         title="Add Tickets"
       >
         <DialogContent>
