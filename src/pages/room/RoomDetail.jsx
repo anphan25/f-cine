@@ -66,6 +66,7 @@ const RoomDetail = () => {
           status: true,
           type: "success",
         });
+        setSelectedSeats([]);
         fetchData();
       })
       .catch((err) => {

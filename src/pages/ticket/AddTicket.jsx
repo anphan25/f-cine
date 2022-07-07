@@ -1,4 +1,4 @@
-import { HeaderBreadcrumbs } from "components";
+import { HeaderBreadcrumbs, Showcase } from "components";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getShowTimeById } from "services/ShowTimeService";
@@ -38,6 +38,7 @@ const AddTicket = () => {
 
     fetchShowTime();
   }, [showtimeId]);
+
   const [selectedSeats, setSelectedSeats] = useState([]);
 
   return (
@@ -62,7 +63,7 @@ const AddTicket = () => {
                 borderRadius: "12px",
               }}
             >
-              <ShowCase />
+              <Showcase />
               <SeatList
                 numberOfRow={room.numberOfRow}
                 numberOfColumn={room.numberOfColumn}
@@ -131,50 +132,5 @@ const AddTicket = () => {
     </>
   );
 };
-
-function ShowCase() {
-  return (
-    <Stack direction="row" gap="30px">
-      <Stack
-        direction="column"
-        alignItems="center"
-        justifyContent="center"
-        gap="40px"
-      >
-        <Box>
-          <SeatStyle src={seatImg} alt="" />
-          <Typography textAlign="center" fontWeight="600" color="neutral.700">
-            N/A
-          </Typography>
-        </Box>
-        <Box>
-          <SeatStyle src={seatSelected} alt="" />
-          <Typography textAlign="center" fontWeight="600" color="neutral.700">
-            Selected
-          </Typography>
-        </Box>
-      </Stack>
-      <Stack
-        direction="column"
-        alignItems="center"
-        justifyContent="center"
-        gap="40px"
-      >
-        <Box>
-          <SeatStyle src={seatImg} alt="" />
-          <Typography textAlign="center" fontWeight="600" color="neutral.700">
-            Normal Seat
-          </Typography>
-        </Box>
-        <Box>
-          <SeatStyle src={seatVip} alt="" />
-          <Typography textAlign="center" fontWeight="600" color="neutral.700">
-            Vip Seat
-          </Typography>
-        </Box>
-      </Stack>
-    </Stack>
-  );
-}
 
 export default AddTicket;
