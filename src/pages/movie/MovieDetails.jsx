@@ -14,7 +14,11 @@ import {
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import SlideshowIcon from "@mui/icons-material/Slideshow";
-import { getMovieDetail, deleteMovie } from "../../services/MovieService";
+import {
+  getMovieDetail,
+  deleteMovie,
+  restoreMovie,
+} from "../../services/MovieService";
 import moment from "moment";
 import { NAVBAR } from "utils/constants";
 import { imageNotAvailable } from "assets/images";
@@ -146,7 +150,20 @@ const MovieDetails = () => {
     }
   };
 
-  const handleRestoreMovie = async () => {};
+  const handleRestoreMovie = async () => {
+    const res = await restoreMovie(id);
+
+    if (res.message === "Success") {
+      setAlert({
+        message:
+          "Restore movie successfully !!! (Data will update in 5 minutes)",
+        status: true,
+        type: "success",
+      });
+
+      handleConfirmRestoreOpen();
+    }
+  };
 
   const renderAgeRestricted = (param) => {
     switch (param) {
@@ -192,7 +209,10 @@ const MovieDetails = () => {
   const restoreConfirmContent = () => {
     return (
       <Stack flex={1}>
-        <DialogContent>Are you sure to restore {detail.title} ?</DialogContent>
+        <DialogContent>
+          Are you sure to restore{" "}
+          <span style={{ fontWeight: "600" }}>{detail.title}</span> ?
+        </DialogContent>
         <DialogActions sx={{ marginTop: "auto" }}>
           <Button onClick={handleConfirmRestoreOpen}>Cancel</Button>
           <Button
@@ -205,7 +225,7 @@ const MovieDetails = () => {
             autoFocus
             onClick={handleRestoreMovie}
           >
-            Delete
+            Restore
           </Button>
         </DialogActions>
       </Stack>
@@ -362,7 +382,7 @@ const MovieDetails = () => {
                     "&:hover": { backgroundColor: "success.dark" },
                   }}
                   startIcon={<RestoreFromTrashIcon />}
-                  onClick={handleConfirmDeleteOpen}
+                  onClick={handleConfirmRestoreOpen}
                 >
                   Restore
                 </Button>

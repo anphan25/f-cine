@@ -12,7 +12,7 @@ export const getTheaterListForManager = async (params) => {
 
 export const getTheaterListForAdmin = async (params) => {
   return await axiosPrivate.get(
-    `${apiPath}?IsIncludeRoom=false&PageSize=${params.PageSize}&Page=${
+    `${apiPath}?IsIncludeRoom=true&PageSize=${params.PageSize}&Page=${
       params.Page
     }&SearchKey=${params.SearchKey ? params.SearchKey : ""}`
   );

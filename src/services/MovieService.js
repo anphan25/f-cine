@@ -45,3 +45,7 @@ export const createMovie = async (params) => {
 export const deleteMovie = async (movieId) => {
   return await axiosPrivate.delete(`${apiPath}?movieId=${movieId}`);
 };
+
+export const restoreMovie = async (movieId) => {
+  return await axiosPrivate.put(`${apiPath}?movieid=${movieId}`);
+};
