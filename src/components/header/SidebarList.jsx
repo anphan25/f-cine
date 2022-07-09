@@ -66,12 +66,12 @@ const linksManager = [
     icon: <MdPayment fontSize="24" />,
     text: "Orders",
   },
-  {
-    id: 6,
-    to: "/analytics",
-    icon: <FiActivity fontSize="24" />,
-    text: "Analytics",
-  },
+  // {
+  //   id: 6,
+  //   to: "/analytics",
+  //   icon: <FiActivity fontSize="24" />,
+  //   text: "Analytics",
+  // },
 ];
 
 const linksAdmin = [
@@ -99,20 +99,20 @@ const linksAdmin = [
     icon: <MdOutlineTheaters fontSize="24" />,
     text: "Theaters",
   },
+  // {
+  //   id: 5,
+  //   to: "/customers",
+  //   icon: <HiOutlineShoppingCart fontSize="24" />,
+  //   text: "Customers",
+  // },
   {
     id: 5,
-    to: "/customers",
-    icon: <HiOutlineShoppingCart fontSize="24" />,
-    text: "Customers",
-  },
-  {
-    id: 6,
     to: "/users",
     icon: <FiUsers fontSize="24" />,
     text: "Users",
   },
   {
-    id: 7,
+    id: 6,
     to: "/orders",
     icon: <MdPayment fontSize="24" />,
     text: "Orders",

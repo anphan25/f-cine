@@ -66,8 +66,6 @@ const roleTextStyle = (role) => {
   }
 };
 
-const STATUS_OPTIONS = ["all", "active", "banned"];
-
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -385,21 +383,6 @@ const UserList = () => {
         />
         <SearchBar placeholder="Enter email..." onSubmit={searchHandler} />
       </Stack>
-
-      <Card sx={{ mb: 0.5 }}>
-        <Tabs
-          allowScrollButtonsMobile
-          variant="scrollable"
-          scrollButtons="auto"
-          value={filterStatus}
-          onChange={onChangeFilterStatus}
-          sx={{ px: 2, bgcolor: "background.neutral" }}
-        >
-          {STATUS_OPTIONS.map((tab) => (
-            <Tab disableRipple key={tab} label={tab} value={tab} />
-          ))}
-        </Tabs>
-      </Card>
       <DataTable
         gridOptions={gridOptions}
         onPageChange={pageChangeHandler}

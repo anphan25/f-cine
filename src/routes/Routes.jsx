@@ -148,14 +148,14 @@ export default function Router() {
             },
           ],
         },
-        {
-          path: "analytics",
-          element: (
-            <ProtectedRoutes roles={["Manager", "Admin"]}>
-              <Analytics />
-            </ProtectedRoutes>
-          ),
-        },
+        // {
+        //   path: "analytics",
+        //   element: (
+        //     <ProtectedRoutes roles={["Manager", "Admin"]}>
+        //       <Analytics />
+        //     </ProtectedRoutes>
+        //   ),
+        // },
         {
           path: "users",
           element: (
@@ -164,14 +164,14 @@ export default function Router() {
             </ProtectedRoutes>
           ),
         },
-        {
-          path: "customers",
-          element: (
-            <ProtectedRoutes roles={["Admin"]}>
-              <CustomerList />
-            </ProtectedRoutes>
-          ),
-        },
+        // {
+        //   path: "customers",
+        //   element: (
+        //     <ProtectedRoutes roles={["Admin"]}>
+        //       <CustomerList />
+        //     </ProtectedRoutes>
+        //   ),
+        // },
         {
           path: "movies",
           element: (
