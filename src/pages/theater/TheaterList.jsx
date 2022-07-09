@@ -17,20 +17,24 @@ import {
 import { SearchBar } from "components/header/SearchBar";
 import { MdAdd } from "react-icons/md";
 import HeaderBreadcrumbs from "components/header/HeaderBreadcrumbs";
-import { DataTable, CustomSnackBar } from "components";
+import { DataTable, CustomSnackBar, CustomDialog } from "components";
 import { useSelector } from "react-redux";
 import {
   getTheaterListForManager,
   getTheaterListForAdmin,
   createTheater,
+  deleteTheater,
 } from "../../services/TheaterService";
 import { GridActionsCellItem } from "@mui/x-data-grid";
 import { useNavigate } from "react-router-dom";
 import ListAltIcon from "@mui/icons-material/ListAlt";
+import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 
 const TheaterList = () => {
   const [isAddTheaterDialogOpen, setIsAddTheaterDialogOpen] = useState(false);
+  const [isDeleteTheaterDialogOpen, setIsDeleteTheaterDialogOpen] =
+    useState(false);
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
@@ -38,6 +42,8 @@ const TheaterList = () => {
   const companyInfo = useSelector((state) => state.company?.company);
   const userInfo = useSelector((state) => state.auth.auth?.user);
   const navigate = useNavigate();
+  const [removedTheaterNamed, setRemovedTheaterNamed] = useState("");
+  const [removedTheaterId, setRemovedTheaterId] = useState();
   const [pageState, setPageState] = useState({
     isLoading: false,
     data: [],
@@ -89,10 +95,46 @@ const TheaterList = () => {
               navigate(`${params.row.id}`);
             }}
           />,
+
+          <GridActionsCellItem
+            sx={{ fontSize: "60px" }}
+            icon={<DeleteIcon sx={{ color: "#FF4842" }} />}
+            onClick={() => {
+              setRemovedTheaterNamed(params.row.name);
+              setRemovedTheaterId(params.row.id);
+              handleDeleteTheaterDialog();
+            }}
+          />,
         ],
       },
     ],
     pageState: pageState,
+  };
+
+  const deleteTheaterConfirmContent = () => {
+    return (
+      <Stack flex={1}>
+        <DialogContent>
+          Are you sure to delete{" "}
+          <span style={{ fontWeight: "600" }}>{removedTheaterNamed}</span> ?
+        </DialogContent>
+        <DialogActions sx={{ marginTop: "auto" }}>
+          <Button onClick={handleDeleteTheaterDialog}>Cancel</Button>
+          <Button
+            sx={{
+              backgroundColor: "error.main",
+              "&:hover": { backgroundColor: "error.dark" },
+            }}
+            type="submit"
+            variant="contained"
+            autoFocus
+            onClick={handleDeleteTheater}
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Stack>
+    );
   };
 
   const pageChangeHandler = (newPage) => {
@@ -109,6 +151,28 @@ const TheaterList = () => {
       search: searchValue.searchTerm,
       page: 1,
     }));
+  };
+
+  const handleDeleteTheater = async () => {
+    setAlert({});
+    const res = await deleteTheater(removedTheaterId);
+    if (res.message === "Success") {
+      setAlert({
+        message: "Delete theater successfully !!!",
+        status: true,
+        type: "success",
+      });
+
+      handleDeleteTheaterDialog();
+
+      await fetchData();
+    }
+  };
+
+  const handleDeleteTheaterDialog = () => {
+    isDeleteTheaterDialogOpen
+      ? setIsDeleteTheaterDialogOpen(false)
+      : setIsDeleteTheaterDialogOpen(true);
   };
 
   const handleAddDialog = () => {
@@ -132,7 +196,6 @@ const TheaterList = () => {
     }
 
     if (userInfo?.Role === "Admin") {
-      console.log("admin");
       res = await getTheaterListForAdmin({
         PageSize: pageState.pageSize,
         Page: pageState.page,
@@ -404,6 +467,15 @@ const TheaterList = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* Delete Theater Dialog */}
+      <CustomDialog
+        open={isDeleteTheaterDialogOpen}
+        onClose={handleDeleteTheaterDialog}
+        title="Delete Theater Confirmation"
+        children={deleteTheaterConfirmContent()}
+        sx={{ "& .MuiDialog-paper": { width: "500px", height: "300px" } }}
+      ></CustomDialog>
 
       {/* Alert message */}
       {alert?.status && (

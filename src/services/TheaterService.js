@@ -21,3 +21,7 @@ export const getTheaterListForAdmin = async (params) => {
 export const createTheater = async (params) => {
   return await axiosPrivate.post(apiPath, params);
 };
+
+export const deleteTheater = async (theaterId) => {
+  return await axiosPrivate.delete(`${apiPath}/${theaterId}`);
+};

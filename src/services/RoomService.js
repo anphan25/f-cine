@@ -21,3 +21,7 @@ export const addRoom = async (params) => {
 export const getRoomById = async (roomId) => {
   return await axiosPrivate.get(`${apiPath}/${roomId}`);
 };
+
+export const deleteRoom = async (roomId) => {
+  return await axiosPrivate.delete(`${apiPath}/${roomId}`);
+};
