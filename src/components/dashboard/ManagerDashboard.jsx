@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Typography, Box, Paper, Stack } from "@mui/material";
+import { Typography, Box, Paper, Stack, Select, MenuItem } from "@mui/material";
 import { imgTab1, imgTab2, imgTab3 } from "../../assets/images";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import { analysisCompany } from "services/CompanyService";
 import { useSelector } from "react-redux";
+import Chart from "react-apexcharts";
 
 const tabStyle = {
   padding: "20px",
@@ -39,6 +40,56 @@ const tabStyle = {
 const ManagerDashboard = () => {
   const companyInfo = useSelector((state) => state.company.company);
   const [dashboardData, setDashboardData] = useState({});
+  const [year, setYear] = useState(2022);
+  const [income, setIncome] = useState([
+    300, 350, 400, 100, 500, 700, 630, 120, 340, 120, 80, 490,
+  ]);
+
+  const options = {
+    chart: { height: 350, type: "line" },
+    colors: ["#6346FA"],
+    dataLabels: { enabled: false },
+    stroke: { curve: "smooth" },
+    xaxis: {
+      type: "String",
+      categories: [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ],
+    },
+
+    yaxis: {
+      labels: {
+        formatter: function (value) {
+          return value.toLocaleString("vi-VN", {
+            style: "currency",
+            currency: "VND",
+          });
+        },
+      },
+    },
+  };
+
+  const series = [
+    {
+      name: "Total Income",
+      data: income,
+    },
+  ];
+
+  const handelChooseYear = (e) => {
+    setYear(e.target.value);
+  };
 
   useEffect(() => {
     if (companyInfo?.id) {
@@ -148,7 +199,10 @@ const ManagerDashboard = () => {
           <Stack direction="row" justifyContent="space-evenly">
             <Box className="info-tab_left">
               <Typography variant="h3" className="info-tab_number">
-                {dashboardData?.totalIncome}
+                {dashboardData?.totalIncome?.toLocaleString("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
+                })}
               </Typography>
               <Typography className="info-tab_desc">Weekly income</Typography>
               <Box className="info-tab_percentage">
@@ -175,6 +229,33 @@ const ManagerDashboard = () => {
           </Stack>
         </Paper>
       </Stack>
+
+      <Paper elevation={2} sx={{ marginTop: "20px", padding: "20px" }}>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          sx={{ marginBottom: "20px" }}
+        >
+          <Typography variant="h4">Total Earning</Typography>
+          <Select
+            value={year}
+            label="Year"
+            onChange={handelChooseYear}
+            defaultValue={year}
+          >
+            <MenuItem value={2022}>2022</MenuItem>
+            <MenuItem value={2021}>2021</MenuItem>
+            <MenuItem value={2020}>2020</MenuItem>
+          </Select>
+        </Stack>
+        <Chart
+          options={options}
+          series={series}
+          type="line"
+          width="100%"
+          height={500}
+        />
+      </Paper>
     </>
   );
 };

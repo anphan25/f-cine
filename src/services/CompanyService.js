@@ -25,3 +25,7 @@ export const blockManager = async (params) => {
 export const analysisCompany = async (companyId) => {
   return await axiosPrivate.get(`/analyst?companyid=${companyId}`);
 };
+
+export const analysisCompanyForAdmin = async () => {
+  return await axiosPrivate.get("/analyst/admin");
+};
