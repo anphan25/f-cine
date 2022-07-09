@@ -16,15 +16,19 @@ import { GridActionsCellItem } from "@mui/x-data-grid";
 import { DataTable, CustomSnackBar } from "components";
 import HeaderBreadcrumbs from "components/header/HeaderBreadcrumbs";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
-import { getRoomsList } from "../../services/RoomService";
+import { getRoomsList, deleteRoom } from "../../services/RoomService";
 import { CustomDialog } from "../../components";
 import { addRoom } from "../../services/RoomService";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const TheaterDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [isAddRoomOpen, setIsAddRoomOpen] = useState(false);
   const [addRoomParam, setAddRoomParam] = useState({ theaterId: id });
+  const [isDeleteRoomDialogOpen, setIsDeleteRoomDialogOpen] = useState(false);
+  const [removedRoomNamed, setRemovedRoomNamed] = useState("");
+  const [removedRoomId, setRemovedRoomId] = useState();
   const [pageState, setPageState] = useState({
     isLoading: false,
     data: [],
@@ -79,10 +83,45 @@ const TheaterDetail = () => {
               navigate(`room/${params.row.id}`);
             }}
           />,
+
+          <GridActionsCellItem
+            icon={<DeleteIcon sx={{ color: "#FF4842" }} />}
+            onClick={() => {
+              setRemovedRoomNamed(params.row.roomNo);
+              setRemovedRoomId(params.row.id);
+              handleDeleteRoomDialog();
+            }}
+          />,
         ],
       },
     ],
     pageState: pageState,
+  };
+
+  const deleteRoomConfirmContent = () => {
+    return (
+      <Stack flex={1}>
+        <DialogContent>
+          Are you sure to delete room no:{" "}
+          <span style={{ fontWeight: "600" }}>{removedRoomNamed}</span> ?
+        </DialogContent>
+        <DialogActions sx={{ marginTop: "auto" }}>
+          <Button onClick={handleDeleteRoomDialog}>Cancel</Button>
+          <Button
+            sx={{
+              backgroundColor: "error.main",
+              "&:hover": { backgroundColor: "error.dark" },
+            }}
+            type="submit"
+            variant="contained"
+            autoFocus
+            onClick={handleDeleteRoom}
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Stack>
+    );
   };
 
   const pageChangeHandler = (newPage) => {
@@ -121,6 +160,28 @@ const TheaterDetail = () => {
         });
       }
     }
+  };
+
+  const handleDeleteRoom = async () => {
+    setAlert({});
+    const res = await deleteRoom(removedRoomId);
+    if (res.message === "Success") {
+      setAlert({
+        message: "Delete room successfully !!!",
+        status: true,
+        type: "success",
+      });
+
+      handleDeleteRoomDialog();
+
+      await fetchData();
+    }
+  };
+
+  const handleDeleteRoomDialog = () => {
+    isDeleteRoomDialogOpen
+      ? setIsDeleteRoomDialogOpen(false)
+      : setIsDeleteRoomDialogOpen(true);
   };
 
   const AddRoomDialogContent = () => {
@@ -266,6 +327,15 @@ const TheaterDetail = () => {
         children={AddRoomDialogContent()}
         sx={{ "& .MuiDialog-paper": { width: "400px", height: "470px" } }}
       />
+
+      {/* Delete Room Dialog */}
+      <CustomDialog
+        open={isDeleteRoomDialogOpen}
+        onClose={handleDeleteRoomDialog}
+        title="Delete Room Confirmation"
+        children={deleteRoomConfirmContent()}
+        sx={{ "& .MuiDialog-paper": { width: "500px", height: "300px" } }}
+      ></CustomDialog>
 
       {/* Alert message */}
       {alert?.status && (
