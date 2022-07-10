@@ -155,17 +155,28 @@ const TheaterList = () => {
 
   const handleDeleteTheater = async () => {
     setAlert({});
-    const res = await deleteTheater(removedTheaterId);
-    if (res.message === "Success") {
+
+    try {
+      const res = await deleteTheater(removedTheaterId);
+      if (res.message === "Success") {
+        setAlert({
+          message: "Delete theater successfully !!!",
+          status: true,
+          type: "success",
+        });
+
+        handleDeleteTheaterDialog();
+
+        await fetchData();
+      }
+    } catch (e) {
       setAlert({
-        message: "Delete theater successfully !!!",
+        message: "There is a not-yet-showed showtime in this theater !!!",
         status: true,
-        type: "success",
+        type: "error",
       });
 
       handleDeleteTheaterDialog();
-
-      await fetchData();
     }
   };
 
@@ -474,7 +485,7 @@ const TheaterList = () => {
         onClose={handleDeleteTheaterDialog}
         title="Delete Theater Confirmation"
         children={deleteTheaterConfirmContent()}
-        sx={{ "& .MuiDialog-paper": { width: "500px", height: "300px" } }}
+        sx={{ "& .MuiDialog-paper": { width: "500px", height: "250px" } }}
       ></CustomDialog>
 
       {/* Alert message */}

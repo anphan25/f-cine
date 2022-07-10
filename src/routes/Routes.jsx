@@ -128,13 +128,13 @@ export default function Router() {
           ],
         },
         {
-          path: "orders",
+          path: "transactions",
           children: [
             {
               index: true,
               element: (
                 <ProtectedRoutes roles={["Manager", "Admin"]}>
-                  <OrderList />
+                  <TransactionList />
                 </ProtectedRoutes>
               ),
             },
@@ -142,7 +142,7 @@ export default function Router() {
               path: ":id",
               element: (
                 <ProtectedRoutes roles={["Manager", "Admin"]}>
-                  <OrderDetail />
+                  <TransactionDetail />s
                 </ProtectedRoutes>
               ),
             },
@@ -239,8 +239,12 @@ const TheaterList = Loading(lazy(() => import("pages/theater/TheaterList")));
 const TheaterDetail = Loading(
   lazy(() => import("pages/theater/TheaterDetail"))
 );
-const OrderList = Loading(lazy(() => import("pages/order/OrderList")));
-const OrderDetail = Loading(lazy(() => import("pages/order/OrderDetail")));
+const TransactionList = Loading(
+  lazy(() => import("pages/transaction/TransactionList"))
+);
+const TransactionDetail = Loading(
+  lazy(() => import("pages/transaction/TransactionDetail"))
+);
 const CompanyList = Loading(lazy(() => import("pages/company/CompanyList")));
 const ShowTimeDetail = Loading(
   lazy(() => import("pages/showtime/ShowTimeDetail"))
