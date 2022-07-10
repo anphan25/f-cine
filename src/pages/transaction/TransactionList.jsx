@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import { MdAdd } from "react-icons/md";
 import InfoIcon from "@mui/icons-material/Info";
 import { getTransaction } from "../../services/TransactionService";
+import { useNavigate } from "react-router-dom";
 import moment from "moment";
 
 const statusStyle = (status) => {
@@ -28,6 +29,7 @@ const statusStyle = (status) => {
 };
 
 const TransactionList = () => {
+  const navigate = useNavigate();
   const [pageState, setPageState] = useState({
     isLoading: false,
     data: [],
@@ -58,6 +60,7 @@ const TransactionList = () => {
         headerName: "Purchased Date",
         field: "purchasedDate",
         width: 150,
+        type: "dateTime",
       },
       {
         headerName: "Theater",
@@ -99,9 +102,19 @@ const TransactionList = () => {
         filterable: false,
         getActions: (params) => [
           <GridActionsCellItem
+            disabled={params.row.status === "Successful" ? false : true}
             sx={{ fontSize: "60px" }}
-            icon={<InfoIcon sx={{ color: "#623CE7" }} />}
-            onClick={() => {}}
+            icon={
+              <InfoIcon
+                sx={{
+                  color:
+                    params.row.status === "Successful" ? "#623CE7" : "#CABDFF",
+                }}
+              />
+            }
+            onClick={() => {
+              navigate(`${params.row.id}`);
+            }}
           />,
         ],
       },
@@ -158,11 +171,10 @@ const TransactionList = () => {
           heading="Transaction"
           links={[{ name: "Dashboard", to: "/" }, { name: "Transaction" }]}
         />
-        <SearchBar placeholder="Enter movie..." onSubmit={searchHandler} />
+        {/* <SearchBar placeholder="Enter movie..." onSubmit={searchHandler} /> */}
       </Stack>
 
       <DataTable
-        initialState={{ pinnedColumns: { left: ["id"] } }}
         className="dataGrid-transaction"
         gridOptions={gridOptions}
         onPageChange={pageChangeHandler}

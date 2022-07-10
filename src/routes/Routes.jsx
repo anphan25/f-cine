@@ -142,7 +142,7 @@ export default function Router() {
               path: ":id",
               element: (
                 <ProtectedRoutes roles={["Manager", "Admin"]}>
-                  <TransactionDetail />s
+                  <TransactionDetail />
                 </ProtectedRoutes>
               ),
             },
