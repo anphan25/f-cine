@@ -7,3 +7,7 @@ export const getTransaction = async (params) => {
     `${apiPath}?PageSize=${params.PageSize}&Page=${params.Page}`
   );
 };
+
+export const getTransactionDetail = async (transactionId) => {
+  return await axiosPrivate.get(`${apiPath}/${transactionId}`);
+};
