@@ -10,7 +10,7 @@ const tableContainerStyle = {
 };
 
 const containerDataGrid = {
-  height: "773px",
+  height: "600px",
   width: "100%",
 
   "& .MuiDataGrid-columnHeaders": {
@@ -106,6 +106,7 @@ const DataTable = (props) => {
     >
       <Box sx={containerDataGrid}>
         <DataGrid
+          initialState={props?.initialState}
           rowHeight={65}
           className="gridStyle"
           columns={props.gridOptions.columns}

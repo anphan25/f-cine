@@ -62,9 +62,9 @@ const linksManager = [
   },
   {
     id: 5,
-    to: "/orders",
+    to: "/transactions",
     icon: <MdPayment fontSize="24" />,
-    text: "Orders",
+    text: "Transaction",
   },
   // {
   //   id: 6,
@@ -113,9 +113,9 @@ const linksAdmin = [
   },
   {
     id: 6,
-    to: "/orders",
+    to: "/transactions",
     icon: <MdPayment fontSize="24" />,
-    text: "Orders",
+    text: "Transaction",
   },
   // {
   //   id: 5,

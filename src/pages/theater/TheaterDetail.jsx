@@ -48,33 +48,34 @@ const TheaterDetail = () => {
       {
         headerName: "ID",
         field: "id",
-        width: 30,
+        width: 100,
       },
       {
         headerName: "Room No",
         field: "roomNo",
         type: "number",
-        width: 300,
+        width: 330,
       },
       {
         headerName: "Total Seat",
         field: "totalSeat",
         type: "number",
-        width: 300,
+        width: 330,
       },
-      {
-        headerName: "Status",
-        field: "isActive",
-        type: "boolean",
-        width: 300,
-      },
+      // {
+      //   headerName: "Status",
+      //   field: "isActive",
+      //   type: "boolean",
+      //   width: 300,
+      // },
 
       {
         field: "actions",
         type: "actions",
-        width: 190,
+        width: 330,
         sortable: false,
         filterable: false,
+        align: "right",
         getActions: (params) => [
           //Room Detail
           <GridActionsCellItem
@@ -334,7 +335,7 @@ const TheaterDetail = () => {
         onClose={handleDeleteRoomDialog}
         title="Delete Room Confirmation"
         children={deleteRoomConfirmContent()}
-        sx={{ "& .MuiDialog-paper": { width: "500px", height: "300px" } }}
+        sx={{ "& .MuiDialog-paper": { width: "500px", height: "250px" } }}
       ></CustomDialog>
 
       {/* Alert message */}

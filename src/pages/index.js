@@ -12,8 +12,8 @@ export { default as PermissionDenied } from "./message/PermissionDenied";
 export { default as Dashboard } from "./dashboard/Dashboard";
 
 //order
-export { default as OrderList } from "./order/OrderList";
-export { default as OrderDetail } from "./order/OrderDetail";
+export { default as OrderList } from "./transaction/TransactionList";
+export { default as OrderDetail } from "./transaction/TransactionDetail";
 
 //account
 export { default as UserList } from "./account/UserList";
