@@ -3,7 +3,7 @@ import { Typography, Box, Paper, Stack, Select, MenuItem } from "@mui/material";
 import { imgTab1, imgTab2, imgTab3 } from "../../assets/images";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
-import { analysisCompanyForAdmin } from "services/CompanyService";
+import { getDataChart, getDataDashboard } from "services/AnalystService";
 import Chart from "react-apexcharts";
 
 const tabStyle = {
@@ -39,18 +39,31 @@ const tabStyle = {
 const AdminDashboard = () => {
   const [dashboardData, setDashboardData] = useState({});
   const [year, setYear] = useState(2022);
+  const [incomes, setIncomes] = useState([]);
+  const [months, setMonths] = useState([]);
 
   const options = {
     chart: { height: 350, type: "line" },
+    colors: ["#6346FA"],
     dataLabels: { enabled: false },
     stroke: { curve: "smooth" },
     xaxis: {
       type: "number",
-      categories: ["1990", "1991", "1992"],
+      categories: months,
+    },
+    yaxis: {
+      labels: {
+        formatter: function (value) {
+          return value.toLocaleString("vi-VN", {
+            style: "currency",
+            currency: "VND",
+          });
+        },
+      },
     },
   };
 
-  const series = [{ name: "series1", data: [30, 35, 40] }];
+  const series = [{ name: "Total Incomes", data: incomes }];
 
   const handelChooseYear = (e) => {
     setYear(e.target.value);
@@ -58,7 +71,7 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     const fetchData = () => {
-      analysisCompanyForAdmin().then((res) => {
+      getDataDashboard().then((res) => {
         setDashboardData((dashboardData) => ({
           ...dashboardData,
           totalShowtimeQuantity: res.showtimeDashboard.totalShowtimeQuantity,
@@ -77,6 +90,19 @@ const AdminDashboard = () => {
     };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const fetchDataChart = async () => {
+      const res = await getDataChart({
+        year: year,
+      });
+
+      setMonths(res.result.map((e) => e.month));
+      setIncomes(res.result.map((e) => e.income));
+    };
+
+    fetchDataChart();
+  }, [year]);
 
   return (
     <>

@@ -183,7 +183,6 @@ const AddMovie = () => {
     try {
       const res = await createMovie(data);
       if (res.message === "Success") {
-        console.log("okee boyy");
         setAlert({
           message: "Add Movie successfully !!!",
           status: true,
