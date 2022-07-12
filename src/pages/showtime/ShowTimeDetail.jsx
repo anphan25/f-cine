@@ -156,7 +156,7 @@ const ShowTimeDetail = () => {
                       ticket.statusName === "Available" &&
                       disabled.push(seat);
                     ticket.seatId === seat.id &&
-                      ticket.statusName === "UnAvailable" &&
+                      ticket.statusName === "Sold" &&
                       sold.push(seat);
                   });
                 });
