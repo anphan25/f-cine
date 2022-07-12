@@ -146,7 +146,7 @@ const UserList = () => {
       {
         headerName: "Company",
         field: "company",
-        width: 150,
+        width: 200,
         valueGetter: ({ value }) => value || "-",
       },
 
@@ -194,44 +194,44 @@ const UserList = () => {
         },
       },
 
-      {
-        field: "actions",
-        type: "actions",
-        width: 80,
-        sortable: false,
-        filterable: false,
-        getActions: (params) => [
-          <GridActionsCellItem
-            disabled={params.row.role === "Customer" ? false : true}
-            icon={<ModeEditIcon sx={{ color: "#623CE7" }} />}
-            onClick={() => {
-              openEditDialog(params.row);
-            }}
-            label="Set to Manager"
-            showInMenu
-          />,
+      // {
+      //   field: "actions",
+      //   type: "actions",
+      //   width: 80,
+      //   sortable: false,
+      //   filterable: false,
+      //   getActions: (params) => [
+      //     <GridActionsCellItem
+      //       disabled={params.row.role === "Customer" ? false : true}
+      //       icon={<ModeEditIcon sx={{ color: "#623CE7" }} />}
+      //       onClick={() => {
+      //         openEditDialog(params.row);
+      //       }}
+      //       label="Set to Manager"
+      //       showInMenu
+      //     />,
 
-          <GridActionsCellItem
-            disabled={params.row.role === "Manager" ? false : true}
-            icon={
-              params.row.status === "Active" ? (
-                <GroupRemoveIcon sx={{ color: "#FF4842" }} />
-              ) : (
-                <GroupAddIcon sx={{ color: "#54D62C" }} />
-              )
-            }
-            label={
-              params.row.status === "Active"
-                ? "Block account"
-                : "Unblock account"
-            }
-            onClick={() => {
-              openConfirmBlockDialog(params.row);
-            }}
-            showInMenu
-          />,
-        ],
-      },
+      //     <GridActionsCellItem
+      //       disabled={params.row.role === "Manager" ? false : true}
+      //       icon={
+      //         params.row.status === "Active" ? (
+      //           <GroupRemoveIcon sx={{ color: "#FF4842" }} />
+      //         ) : (
+      //           <GroupAddIcon sx={{ color: "#54D62C" }} />
+      //         )
+      //       }
+      //       label={
+      //         params.row.status === "Active"
+      //           ? "Block account"
+      //           : "Unblock account"
+      //       }
+      //       onClick={() => {
+      //         openConfirmBlockDialog(params.row);
+      //       }}
+      //       showInMenu
+      //     />,
+      //   ],
+      // },
     ],
     pageState: pageState,
   };

@@ -22,10 +22,6 @@ export const blockManager = async (params) => {
   return await axiosPrivate.patch(apiPath, params);
 };
 
-export const analysisCompany = async (companyId) => {
-  return await axiosPrivate.get(`/analyst?companyid=${companyId}`);
-};
-
-export const analysisCompanyForAdmin = async () => {
-  return await axiosPrivate.get("/analyst/admin");
+export const createCompany = async (params) => {
+  return await axiosPrivate.post(apiPath, params);
 };

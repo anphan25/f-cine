@@ -3,9 +3,9 @@ import { Typography, Box, Paper, Stack, Select, MenuItem } from "@mui/material";
 import { imgTab1, imgTab2, imgTab3 } from "../../assets/images";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
-import { analysisCompany } from "services/CompanyService";
 import { useSelector } from "react-redux";
 import Chart from "react-apexcharts";
+import { getDataChart, getDataDashboard } from "services/AnalystService";
 
 const tabStyle = {
   padding: "20px",
@@ -41,9 +41,8 @@ const ManagerDashboard = () => {
   const companyInfo = useSelector((state) => state.company.company);
   const [dashboardData, setDashboardData] = useState({});
   const [year, setYear] = useState(2022);
-  const [income, setIncome] = useState([
-    300, 350, 400, 100, 500, 700, 630, 120, 340, 120, 80, 490,
-  ]);
+  const [incomes, setIncomes] = useState([]);
+  const [months, setMonths] = useState([]);
 
   const options = {
     chart: { height: 350, type: "line" },
@@ -52,20 +51,7 @@ const ManagerDashboard = () => {
     stroke: { curve: "smooth" },
     xaxis: {
       type: "String",
-      categories: [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ],
+      categories: months,
     },
 
     yaxis: {
@@ -82,8 +68,8 @@ const ManagerDashboard = () => {
 
   const series = [
     {
-      name: "Total Income",
-      data: income,
+      name: "Total Incomes",
+      data: incomes,
     },
   ];
 
@@ -94,7 +80,7 @@ const ManagerDashboard = () => {
   useEffect(() => {
     if (companyInfo?.id) {
       const fetchData = () => {
-        analysisCompany(companyInfo?.id).then((res) => {
+        getDataDashboard().then((res) => {
           setDashboardData((dashboardData) => ({
             ...dashboardData,
             totalShowtimeQuantity: res.showtimeDashboard.totalShowtimeQuantity,
@@ -111,10 +97,23 @@ const ManagerDashboard = () => {
           }));
         });
       };
+
       fetchData();
     }
   }, [companyInfo]);
 
+  useEffect(() => {
+    const fetchDataChart = async () => {
+      const res = await getDataChart({
+        year: year,
+      });
+
+      setMonths(res.result.map((e) => e.month));
+      setIncomes(res.result.map((e) => e.income));
+    };
+
+    fetchDataChart();
+  }, [year]);
   return (
     <>
       <Typography variant="h4" sx={{ marginBottom: "20px" }}>

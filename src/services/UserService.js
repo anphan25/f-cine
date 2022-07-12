@@ -19,3 +19,7 @@ export const searchUser = async (page, limit, searchValue) => {
     `${apiPath}?page=${page}&limit=${limit}&searchValue=${searchValue}`
   );
 };
+
+export const getCustomers = async () => {
+  return await axiosPrivate.get(`${apiPath}?IsCustomerOnly=true`);
+};
