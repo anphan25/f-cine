@@ -18,6 +18,7 @@ const SvgStyle = styled(SvgIcon, {
   }),
   ...(isSold && {
     fill: theme.palette.error.light,
+    stroke: theme.palette.error.main,
   }),
 }));
 
