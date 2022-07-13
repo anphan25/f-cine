@@ -48,7 +48,7 @@ const SeatList = ({
   disabledSeats,
   soldSeats,
   onSelectedSeatsChange,
-  isView,
+  mode,
   ...props
 }) => {
   function handleSelectedState(seat) {
@@ -132,13 +132,16 @@ const SeatList = ({
                       <SvgStyle
                         key={seat.id}
                         onClick={() => {
-                          if (!disabledSeats?.includes(seat) && !isView) {
+                          if (
+                            !disabledSeats?.includes(seat) &&
+                            mode !== "view"
+                          ) {
                             handleSelectedState(seat);
                           }
                         }}
                         sx={{
                           cursor:
-                            !isView && !disabledSeats?.includes(seat)
+                            mode !== "view" && !disabledSeats?.includes(seat)
                               ? "pointer"
                               : "default",
                         }}
@@ -223,10 +226,15 @@ const SeatList = ({
                       <BoxStyle
                         key={iC}
                         sx={{
-                          cursor: !isView ? "pointer" : "default",
+                          ...((mode === "view" || mode === "addTicket") && {
+                            cursor: "default",
+                          }),
+                          ...(mode === "addSeat" && {
+                            cursor: "pointer",
+                          }),
                         }}
                         onClick={() => {
-                          if (!isView) {
+                          if (mode === "addSeat") {
                             let pos = {
                               name: `${String.fromCharCode(iR + 65)}${iC + 1}`,
                               columnPos: iC + 1,
@@ -251,11 +259,11 @@ const SeatList = ({
       </Stack>
       <Box
         sx={{
-          margin: "20px",
+          margin: "16px",
           height: "90px",
           backgroundColor: "neutral.400",
           width: "100%",
-          transform: "rotateX(258deg) scale(1.1)",
+          transform: "rotateX(258deg)",
           boxShadow: "0 3px 10px 2px #e7e7e8",
         }}
       />
