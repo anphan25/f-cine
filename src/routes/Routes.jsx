@@ -230,7 +230,6 @@ const PermissionDenied = Loading(
 const Dashboard = Loading(lazy(() => import("pages/dashboard/Dashboard")));
 const RoomDetail = Loading(lazy(() => import("pages/room/RoomDetail")));
 const ShowTimeList = Loading(lazy(() => import("pages/showtime/ShowTimeList")));
-const AddTicket = Loading(lazy(() => import("pages/ticket/AddTicket")));
 const TicketTypeList = Loading(
   lazy(() => import("pages/ticket/TicketTypeList"))
 );

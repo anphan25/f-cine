@@ -1,33 +1,25 @@
 import {
-  Autocomplete,
+  Avatar,
+  Box,
   Button,
   DialogActions,
   DialogContent,
   FormLabel,
-  MenuItem,
-  Select,
+  Input,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
   Stack,
-  TextField,
-  Typography,
 } from "@mui/material";
-import {
-  CustomDialog,
-  CustomSnackBar,
-  HeaderBreadcrumbs,
-  Showcase,
-} from "components";
-import SeatList from "components/seat/SeatList";
-import moment from "moment";
+import { CustomDialog, CustomSnackBar, HeaderBreadcrumbs } from "components";
 import React, { useEffect, useState } from "react";
 import { MdAdd } from "react-icons/md";
-import { getRoomById } from "services/RoomService";
-import { getShowTimeList } from "services/ShowTimeService";
-import { postTickets } from "services/TicketService";
+import { HiOutlineTicket } from "react-icons/hi";
+import { getTicketTypeList, postTicketType } from "services/TicketTypeService";
 
 const TicketTypeList = () => {
-  const [showtimes, setShowtimes] = useState([]);
-  const [showtime, setShowtime] = useState();
-  const [room, setRoom] = useState();
+  const [name, setName] = useState();
   const [loading, setLoading] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [alert, setAlert] = useState({
@@ -35,190 +27,133 @@ const TicketTypeList = () => {
     status: false,
     type: "success",
   });
-  const [selectedSeats, setSelectedSeats] = useState([]);
-  const [showtimeTicketTypeId, setShowtimeTicketTypeId] = useState();
-  const tickets = [];
+  const [ticketTypes, setTicketTypes] = useState([]);
+
+  const fetchTicketType = () => {
+    setLoading(true);
+    getTicketTypeList()
+      .then((res) => {
+        console.log(res);
+        setTicketTypes(res.result);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+      });
+  };
 
   const handleDialog = () => {
     setIsDialogOpen(!isDialogOpen);
   };
 
   const handleSubmit = () => {
-    // selectedSeats.reduce((prev, cur) => {
-    //   if (prev.seatId !== cur.id || prev === null) {
-    //     prev.push({
-    //       seatId: cur.id,
-    //       showtimeTicketTypeId,
-    //     });
-    //     console.log("prev:", prev);
-    //   }
-
-    //   return prev;
-    // }, []);
-    selectedSeats.forEach((seat) => {
-      tickets.push({
-        seatId: seat.id,
-        showtimeTicketTypeId,
-      });
-    });
-    console.log("tickets", tickets);
-    setLoading(true);
-    postTickets(tickets)
+    postTicketType({ name })
       .then((res) => {
-        setLoading(false);
-        console.log(res);
+        handleDialog();
+        setAlert({
+          message: "Add new ticket type successfully",
+          status: true,
+          type: "success",
+        });
+        fetchTicketType();
       })
       .catch((err) => {
-        setLoading(false);
-        console.log(err);
-      });
-  };
-
-  const fetchShowtimeList = () => {
-    setLoading(true);
-    getShowTimeList()
-      .then((res) => {
-        setShowtimes(res.showtimes.results);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setLoading(false);
-      });
-  };
-
-  const fetchRoom = (roomId) => {
-    getRoomById(roomId)
-      .then((res) => {
-        //console.log(res);
-        setRoom(res.room);
-      })
-      .catch((err) => {
-        console.log(err);
+        console.log(err.respone);
+        if (err?.response?.status === 400) {
+          setAlert({
+            message: err.response?.data?.message,
+            status: true,
+            type: "error",
+          });
+        }
       });
   };
 
   useEffect(() => {
-    fetchShowtimeList();
+    fetchTicketType();
   }, []);
 
   return (
     <>
       <Stack justifyContent="space-between" direction="row" alignItems="center">
         <HeaderBreadcrumbs
-          heading="Ticket List"
-          links={[{ name: "Dashboard", to: "/" }, { name: "Ticket List" }]}
+          heading="Ticket Type List"
+          links={[{ name: "Dashboard", to: "/" }, { name: "Ticket Type List" }]}
         />
         <Button
           variant="contained"
           startIcon={<MdAdd />}
           onClick={handleDialog}
         >
-          Add Tickets
+          Add Ticket Type
         </Button>
       </Stack>
+      <Box
+        sx={{
+          display: "grid",
+          gap: 3,
+          gridTemplateColumns: {
+            xs: "repeat(1, 1fr)",
+            sm: "repeat(2, 1fr)",
+            md: "repeat(3, 1fr)",
+          },
+        }}
+      >
+        {ticketTypes.map((type) => (
+          <List
+            sx={{
+              width: "100%",
+              maxWidth: 370,
+              bgcolor: "neutral.0",
+              borderRadius: "8px",
+            }}
+          >
+            <ListItem>
+              <ListItemAvatar>
+                <Avatar
+                  sx={{
+                    backgroundColor: "primary.light",
+                    color: "primary.main",
+                  }}
+                >
+                  <HiOutlineTicket />
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText primary="Name" secondary={type?.name} />
+            </ListItem>
+          </List>
+        ))}
+      </Box>
 
       {/* Add Tickets Dialog */}
       <CustomDialog
         open={isDialogOpen}
         onClose={handleDialog}
         sx={{ "& .MuiDialog-paper": { width: "500px" } }}
-        title="Add Tickets"
+        title="Add Ticket Type"
       >
         <DialogContent>
           <Stack>
             <Stack direction="column" spacing={1} mb={3}>
               <FormLabel
-                htmlFor="movieId"
+                htmlFor="name"
                 sx={{
                   fontWeight: "600",
                   color: "neutral.800",
                 }}
               >
-                Showtime
+                Name
               </FormLabel>
-              <Autocomplete
-                freeSolo
-                name="showtimeId"
-                id="showtimeId"
-                options={showtimes}
-                getOptionLabel={(option) =>
-                  option.movie.title +
-                    " - " +
-                    moment.utc(option.startTime).local().format("HH:mm") +
-                    " - " +
-                    option.theaterName +
-                    "/room " +
-                    option.room.no || ""
-                }
-                onChange={(e, value) => {
-                  setShowtime(value);
-                  if (value?.roomId) {
-                    fetchRoom(value.roomId);
-                  }
+              <Input
+                id="name"
+                placeholder="Name"
+                onChange={(e) => {
+                  setName(e.target.value);
                 }}
-                renderInput={(params) => (
-                  <TextField {...params} placeholder="Showtime" />
-                )}
+                sx={{ width: "100%" }}
               />
             </Stack>
-            {showtime && (
-              <>
-                <Stack direction="column" spacing={1} mb={3}>
-                  <FormLabel
-                    htmlFor="movieId"
-                    sx={{
-                      fontWeight: "600",
-                      color: "neutral.800",
-                    }}
-                  >
-                    Ticket Type
-                  </FormLabel>
-                  <Select
-                    id="ticketTypeId"
-                    value={showtime.ticketTypeId}
-                    onChange={(e) => {
-                      console.log(e.target.value);
-                      setShowtimeTicketTypeId(e.target.value);
-                    }}
-                    renderValue={
-                      showtime !== {}
-                        ? undefined
-                        : () => (
-                            <Typography sx={{ color: "neutral.700" }}>
-                              Ticket Type
-                            </Typography>
-                          )
-                    }
-                  >
-                    {showtime?.showtimeTicketTypes?.map((item) => (
-                      <MenuItem key={item.id} value={item.id}>
-                        {item.ticketType.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </Stack>
-                <Stack
-                  direction="column"
-                  alignItems="center"
-                  p={3}
-                  sx={{
-                    borderRadius: "12px",
-                  }}
-                >
-                  <SeatList
-                    numberOfRow={room?.numberOfRow}
-                    numberOfColumn={room?.numberOfColumn}
-                    seatList={room?.seatDtos}
-                    selectedSeats={selectedSeats}
-                    onSelectedSeatsChange={(selectedSeats) =>
-                      setSelectedSeats(selectedSeats)
-                    }
-                  />
-                  <Showcase />
-                </Stack>
-              </>
-            )}
           </Stack>
         </DialogContent>
         <DialogActions>
@@ -232,7 +167,7 @@ const TicketTypeList = () => {
             variant="contained"
             autoFocus
           >
-            Add Tickets
+            Add
           </Button>
         </DialogActions>
       </CustomDialog>

@@ -11,11 +11,7 @@ import React, { useEffect, useState } from "react";
 import { getTicketTypeList } from "services/TicketTypeService";
 import { MdAdd, MdDeleteOutline } from "react-icons/md";
 
-const TicketTypeForm = ({
-  showtimeTicketTypes,
-  setShowtimeTicketTypes,
-  ...props
-}) => {
+const TicketTypeForm = ({ showtimeTicketTypes, setShowtimeTicketTypes }) => {
   const [ticketTypes, setTicketTypes] = useState([]);
 
   const fetchTicketType = () => {
