@@ -216,7 +216,7 @@ const ShowTimeDetail = () => {
           <Card sx={{ p: 3 }}>
             <Stack direction="column" alignItems="center">
               <SeatList
-                isView={true}
+                mode="view"
                 numberOfRow={data.showtime?.room?.numberOfRow}
                 numberOfColumn={data.showtime?.room?.numberOfColumn}
                 seatList={data.showtime?.room?.seatDtos}
@@ -432,7 +432,7 @@ const ShowTimeDetail = () => {
               }}
             >
               <SeatList
-                isView={false}
+                mode={"addTicket"}
                 numberOfRow={data.showtime?.room?.numberOfRow}
                 numberOfColumn={data.showtime?.room?.numberOfColumn}
                 seatList={data.showtime?.room?.seatDtos}

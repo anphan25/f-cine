@@ -127,7 +127,7 @@ const RoomDetail = () => {
           <Card sx={{ p: 3 }}>
             <Stack direction="column" alignItems="center">
               <SeatList
-                isView={true}
+                mode="view"
                 numberOfRow={room?.numberOfRow}
                 numberOfColumn={room?.numberOfColumn}
                 seatList={room?.seatDtos}
@@ -203,7 +203,7 @@ const RoomDetail = () => {
               }}
             >
               <SeatList
-                isView={false}
+                mode="addSeat"
                 numberOfRow={room?.numberOfRow}
                 numberOfColumn={room?.numberOfColumn}
                 seatList={room?.seatDtos}
