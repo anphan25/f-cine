@@ -212,41 +212,49 @@ const TheaterDetail = () => {
                 sx={{ width: "100%" }}
               />
             </Stack>
-
             <Stack direction="column" spacing={1} mb={3}>
               <FormLabel
+                htmlFor="numberRow"
                 sx={{
                   fontWeight: "600",
                   color: "neutral.800",
                 }}
               >
-                Room Type
+                Number Row
               </FormLabel>
-
-              <Select
-                sx={{ border: "2px solid #E4E4E4" }}
-                value={addRoomParam?.roomType}
+              <Input
+                id="numberRow"
+                placeholder="Number Row"
                 onChange={(e) => {
-                  if (e.target.value === 1) {
-                    setAddRoomParam({
-                      ...addRoomParam,
-                      numberOfRow: 8,
-                      numberOfColumn: 8,
-                    });
-                  } else {
-                    setAddRoomParam({
-                      ...addRoomParam,
-                      numberOfRow: 10,
-                      numberOfColumn: 10,
-                    });
-                  }
+                  setAddRoomParam({
+                    ...addRoomParam,
+                    numberOfRow: e.target.value,
+                  });
                 }}
-                label="Room Type"
-                placeholder="Room Type"
+                sx={{ width: "100%" }}
+              />
+            </Stack>
+            <Stack direction="column" spacing={1} mb={3}>
+              <FormLabel
+                htmlFor="numberColumn"
+                sx={{
+                  fontWeight: "600",
+                  color: "neutral.800",
+                }}
               >
-                <MenuItem value={1}>8x8</MenuItem>
-                <MenuItem value={2}>10x10</MenuItem>
-              </Select>
+                Number Column
+              </FormLabel>
+              <Input
+                id="numberColumn"
+                placeholder="Number Column"
+                onChange={(e) => {
+                  setAddRoomParam({
+                    ...addRoomParam,
+                    numberOfColumn: e.target.value,
+                  });
+                }}
+                sx={{ width: "100%" }}
+              />
             </Stack>
           </Stack>
         </DialogContent>
