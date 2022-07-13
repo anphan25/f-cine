@@ -100,7 +100,7 @@ const TicketTypeList = () => {
           },
         }}
       >
-        {ticketTypes.map((type) => (
+        {ticketTypes?.map((type) => (
           <List
             sx={{
               width: "100%",
