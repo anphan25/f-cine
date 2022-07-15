@@ -10,6 +10,10 @@ export const axiosPublic = axios.create({
 
 export const axiosPrivate = axios.create({
   baseURL: process.env.REACT_APP_BASE_API_URL,
+  headers: {
+    Accept: "application/json",
+    "Content-type": "application/json; charset=utf-8",
+  },
 });
 
 axiosPublic.interceptors.response.use((response) => response.data);

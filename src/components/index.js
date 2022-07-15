@@ -16,4 +16,5 @@ export { default as CustomDialog } from "./dialog/CustomDialog";
 export { default as Showcase } from "./seat/Showcase";
 export { default as TicketTypeForm } from "./form/TicketTypeForm";
 export { default as Image } from "./Image";
+export { default as UploadFile } from "./upload/UploadFile";
 export { default as CustomMultipleInput } from "./multipleInput/CustomMultipleInput";

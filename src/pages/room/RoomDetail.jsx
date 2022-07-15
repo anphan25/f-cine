@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Card,
   DialogActions,
@@ -15,6 +16,7 @@ import {
   CustomSnackBar,
   HeaderBreadcrumbs,
   Showcase,
+  UploadFile,
 } from "components";
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -40,14 +42,24 @@ const RoomDetail = () => {
     type: "success",
   });
 
+  const handleUpload = (e) => {
+    let reader = new FileReader();
+    reader.onload = function (event) {
+      const result = event.target.result;
+      console.log("result :", result);
+      handlePostSeats(result);
+    };
+    reader.readAsText(e.target.files[0]);
+  };
+
   const handleAddSeatDialog = () => {
     setIsDialogOpen(!isDialogOpen);
   };
 
   const handleSubmitSeat = () => {
     setLoading(true);
-    setAlert({});
     let seats = [];
+
     selectedSeats.forEach((s) => {
       seats.push({
         ...s,
@@ -56,11 +68,16 @@ const RoomDetail = () => {
       });
     });
     console.log(seats);
+    handlePostSeats(seats);
+    handleAddSeatDialog();
+  };
+
+  const handlePostSeats = (seats) => {
+    setAlert({});
     postSeats(seats)
       .then((res) => {
         setLoading(false);
         console.log(res);
-        handleAddSeatDialog();
         setAlert({
           message: "Add seats successfully",
           status: true,
@@ -114,13 +131,16 @@ const RoomDetail = () => {
             { name: "Room Detail" },
           ]}
         />
-        <Button
-          variant="contained"
-          startIcon={<MdAdd />}
-          onClick={handleAddSeatDialog}
-        >
-          Add Seat
-        </Button>
+        <Box>
+          <UploadFile handleUpload={handleUpload} type=".json"></UploadFile>
+          <Button
+            variant="contained"
+            startIcon={<MdAdd />}
+            onClick={handleAddSeatDialog}
+          >
+            Add Seat
+          </Button>
+        </Box>
       </Stack>
       <Grid container spacing={3}>
         <Grid item xs={12} md={8}>
