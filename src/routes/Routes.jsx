@@ -233,7 +233,6 @@ const ShowTimeList = Loading(lazy(() => import("pages/showtime/ShowTimeList")));
 const TicketTypeList = Loading(
   lazy(() => import("pages/ticket/TicketTypeList"))
 );
-const Analytics = Loading(lazy(() => import("pages/analytics/Analytics")));
 const TheaterList = Loading(lazy(() => import("pages/theater/TheaterList")));
 const TheaterDetail = Loading(
   lazy(() => import("pages/theater/TheaterDetail"))
@@ -248,4 +247,3 @@ const CompanyList = Loading(lazy(() => import("pages/company/CompanyList")));
 const ShowTimeDetail = Loading(
   lazy(() => import("pages/showtime/ShowTimeDetail"))
 );
-const CustomerList = Loading(lazy(() => import("pages/account/CustomerList")));

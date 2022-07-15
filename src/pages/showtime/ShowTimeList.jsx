@@ -6,6 +6,7 @@ import {
   TextField,
   DialogActions,
   DialogContent,
+  Box,
 } from "@mui/material";
 import HeaderBreadcrumbs from "components/header/HeaderBreadcrumbs";
 import React, { useState, useEffect } from "react";
@@ -17,6 +18,7 @@ import {
   CustomSnackBar,
   CustomDialog,
   TicketTypeForm,
+  UploadFile,
 } from "components";
 import { getShowTimeList, postShowTime } from "services/ShowTimeService";
 import { getMovieTitle } from "services/MovieService";
@@ -237,6 +239,7 @@ const ShowTimeList = () => {
           heading="Showtime List"
           links={[{ name: "Dashboard", to: "/" }, { name: "Showtime List" }]}
         />
+
         <Button
           variant="contained"
           startIcon={<MdAdd />}
