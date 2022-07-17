@@ -188,7 +188,7 @@ const ShowTimeList = () => {
     const dataRow = res.showtimes.results.map((row) => ({
       id: row.id,
       title: row.movie.title,
-      date: moment(row.startTime).format("DD/MM/yyyy"),
+      date: moment.utc(row.startTime).local().format("DD/MM/yyyy"),
       startTime: moment.utc(row.startTime).local().format("HH:mm"),
       theater: row.theaterName,
       room: row.room.no,
