@@ -24,17 +24,18 @@ const RestrictLabel = styled("div")(({ theme }) => ({
   paddingTop: "3.2px",
   borderRadius: "5px",
   verticalAlign: "middle",
+  fontWeight: "600",
   color: theme.palette.error.main,
 }));
 
 const restrictedStyle = {
   backgroundColor: "#FFBC99",
-  color: "#FF4842",
+  color: "#FFFFFF",
 };
 
 const noRestrictStyle = {
   backgroundColor: "#AAF27F",
-  color: "#54D62C",
+  color: "#FFFFFF",
 };
 
 const CardActions = styled("div")(({ theme }) => ({
