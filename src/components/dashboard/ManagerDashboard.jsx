@@ -124,15 +124,15 @@ const ManagerDashboard = () => {
         getDataDashboard().then((res) => {
           setDashboardData((dashboardData) => ({
             ...dashboardData,
-            totalShowtimeQuantity: res.showtimeDashboard.totalShowtimeQuantity,
+            newShowtimeQuantity: res.showtimeDashboard.newShowtimeQuantity,
             percentShowtimeChange: res.showtimeDashboard.percentShowtimeChange,
             isShowtimeUpOrDown: res.showtimeDashboard.isShowtimeUpOrDown,
-            totalTicketSoldQuantity:
-              res.ticketSoldDashboard.totalTicketSoldQuantity,
+            newTicketSoldQuantity:
+              res.ticketSoldDashboard.newTicketSoldQuantity,
             percentTicketSoldChange:
               res.ticketSoldDashboard.percentTicketSoldChange,
             isTicketSoldUpOrDown: res.ticketSoldDashboard.isTicketSoldUpOrDown,
-            totalIncome: res.incomeDashboard.totalIncome,
+            newIncome: res.incomeDashboard.newIncome,
             percentIncomeChange: res.incomeDashboard.percentIncomeChange,
             isIncomeUpOrDown: res.incomeDashboard.isIncomeUpOrDown,
           }));
@@ -169,7 +169,7 @@ const ManagerDashboard = () => {
           <Stack direction="row" justifyContent="space-evenly">
             <Box className="info-tab_left">
               <Typography variant="h3" className="info-tab_number">
-                {dashboardData?.totalShowtimeQuantity}
+                {dashboardData?.newShowtimeQuantity}
               </Typography>
               <Typography className="info-tab_desc">
                 Weekly show time
@@ -204,7 +204,7 @@ const ManagerDashboard = () => {
           <Stack direction="row" justifyContent="space-evenly">
             <Box className="info-tab_left">
               <Typography variant="h3" className="info-tab_number">
-                {dashboardData?.totalTicketSoldQuantity}
+                {dashboardData?.newTicketSoldQuantity}
               </Typography>
               <Typography className="info-tab_desc">
                 Weekly tickets sold
@@ -239,7 +239,7 @@ const ManagerDashboard = () => {
           <Stack direction="row" justifyContent="space-evenly">
             <Box className="info-tab_left">
               <Typography variant="h3" className="info-tab_number">
-                {dashboardData?.totalIncome?.toLocaleString("vi-VN", {
+                {dashboardData?.newIncome?.toLocaleString("vi-VN", {
                   style: "currency",
                   currency: "VND",
                 })}
