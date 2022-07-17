@@ -44,7 +44,7 @@ const TheaterDetail = () => {
     status: false,
     type: "success",
   });
-
+  console.log();
   const gridOptions = {
     columns: [
       {
@@ -70,7 +70,6 @@ const TheaterDetail = () => {
       //   type: "boolean",
       //   width: 300,
       // },
-
       {
         field: "actions",
         type: "actions",
