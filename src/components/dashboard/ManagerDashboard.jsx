@@ -190,7 +190,7 @@ const ManagerDashboard = () => {
                   {dashboardData?.percentShowtimeChange?.toFixed(2)}%
                 </Box>
                 <Typography fontWeight="600" sx={{ color: "neutral.700" }}>
-                  this week
+                  this month
                 </Typography>
               </Box>
             </Box>
@@ -225,7 +225,7 @@ const ManagerDashboard = () => {
                   {dashboardData?.percentTicketSoldChange?.toFixed(2)}%
                 </Box>
                 <Typography fontWeight="600" sx={{ color: "neutral.700" }}>
-                  this week
+                  this month
                 </Typography>
               </Box>
             </Box>
@@ -259,7 +259,7 @@ const ManagerDashboard = () => {
                   {dashboardData?.percentIncomeChange?.toFixed(2)}%
                 </Box>
                 <Typography fontWeight="600" sx={{ color: "neutral.700" }}>
-                  this week
+                  this month
                 </Typography>
               </Box>
             </Box>

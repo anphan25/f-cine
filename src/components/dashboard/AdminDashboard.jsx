@@ -179,7 +179,7 @@ const AdminDashboard = () => {
                   {dashboardData?.percentShowtimeChange?.toFixed(2)}%
                 </Box>
                 <Typography fontWeight="600" sx={{ color: "neutral.700" }}>
-                  this week
+                  this month
                 </Typography>
               </Box>
             </Box>
@@ -214,7 +214,7 @@ const AdminDashboard = () => {
                   {dashboardData?.percentTicketSoldChange?.toFixed(2)}%
                 </Box>
                 <Typography fontWeight="600" sx={{ color: "neutral.700" }}>
-                  this week
+                  this month
                 </Typography>
               </Box>
             </Box>
@@ -248,7 +248,7 @@ const AdminDashboard = () => {
                   {dashboardData?.percentIncomeChange?.toFixed(2)}%
                 </Box>
                 <Typography fontWeight="600" sx={{ color: "neutral.700" }}>
-                  this week
+                  this month
                 </Typography>
               </Box>
             </Box>
