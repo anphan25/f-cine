@@ -22,6 +22,7 @@ const RootStyle = styled("div", {
 
 const MainStyle = styled("div")(({ theme }) => ({
   width: "100%",
+  minHeight: "100%",
   marginTop: NAVBAR.BASE_HEIGHT,
   backgroundColor: theme.palette.background[0],
   zIndex: -1,
