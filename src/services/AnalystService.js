@@ -7,5 +7,5 @@ export const getDataChart = async (params) => {
 };
 
 export const getDataDashboard = async (params) => {
-  return await axiosPrivate.get(`${apiPath}/dashboard`);
+  return await axiosPrivate.get(`${apiPath}/dashboard?timetype=month`);
 };
