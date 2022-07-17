@@ -10,6 +10,7 @@ import {
   MenuItem,
   Select,
 } from "@mui/material";
+import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { MdAdd } from "react-icons/md";
 import { GridActionsCellItem } from "@mui/x-data-grid";
@@ -29,6 +30,7 @@ const TheaterDetail = () => {
   const [isDeleteRoomDialogOpen, setIsDeleteRoomDialogOpen] = useState(false);
   const [removedRoomNamed, setRemovedRoomNamed] = useState("");
   const [removedRoomId, setRemovedRoomId] = useState();
+  const userInfo = useSelector((state) => state.auth.auth?.user);
   const [pageState, setPageState] = useState({
     isLoading: false,
     data: [],
@@ -83,15 +85,24 @@ const TheaterDetail = () => {
             onClick={() => {
               navigate(`room/${params.row.id}`);
             }}
+            label="Show Seat Map"
           />,
 
           <GridActionsCellItem
-            icon={<DeleteIcon sx={{ color: "#FF4842" }} />}
+            disabled={userInfo?.Role === "Admin" ? true : false}
+            icon={
+              <DeleteIcon
+                sx={{
+                  color: userInfo?.Role === "Admin" ? "#FFBC99" : "#FF4842",
+                }}
+              />
+            }
             onClick={() => {
               setRemovedRoomNamed(params.row.roomNo);
               setRemovedRoomId(params.row.id);
               handleDeleteRoomDialog();
             }}
+            label="Delete Room"
           />,
         ],
       },
@@ -313,21 +324,21 @@ const TheaterDetail = () => {
             { name: "Room List" },
           ]}
         />
-        <Button
-          variant="contained"
-          startIcon={<MdAdd />}
-          onClick={handleAddRoomDialog}
-        >
-          Add Room
-        </Button>
+        {userInfo?.Role === "Admin" || (
+          <Button
+            variant="contained"
+            startIcon={<MdAdd />}
+            onClick={handleAddRoomDialog}
+          >
+            Add Room
+          </Button>
+        )}
       </Stack>
-
       <DataTable
         gridOptions={gridOptions}
         onPageChange={pageChangeHandler}
         onPageSizeChange={pageSizeChangeHandler}
       ></DataTable>
-
       {/* Add Room Dialog */}
       <CustomDialog
         open={isAddRoomOpen}
@@ -336,7 +347,6 @@ const TheaterDetail = () => {
         children={AddRoomDialogContent()}
         sx={{ "& .MuiDialog-paper": { width: "400px", height: "470px" } }}
       />
-
       {/* Delete Room Dialog */}
       <CustomDialog
         open={isDeleteRoomDialogOpen}
