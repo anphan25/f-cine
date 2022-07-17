@@ -44,34 +44,28 @@ const linksManager = [
   },
   {
     id: 2,
-    to: "/showtimes",
-    icon: <RiSlideshow2Line fontSize="24" />,
-    text: "Showtime",
+    to: "/transactions",
+    icon: <MdPayment fontSize="24" />,
+    text: "Transaction",
   },
   {
     id: 3,
-    to: "/ticket-type",
-    icon: <HiOutlineTicket fontSize="24" />,
-    text: "Ticket Type",
-  },
-  {
-    id: 4,
     to: "/theaters",
     icon: <MdOutlineTheaters fontSize="24" />,
     text: "Theaters",
   },
   {
-    id: 5,
-    to: "/transactions",
-    icon: <MdPayment fontSize="24" />,
-    text: "Transaction",
+    id: 4,
+    to: "/showtimes",
+    icon: <RiSlideshow2Line fontSize="24" />,
+    text: "Showtime",
   },
-  // {
-  //   id: 6,
-  //   to: "/analytics",
-  //   icon: <FiActivity fontSize="24" />,
-  //   text: "Analytics",
-  // },
+  {
+    id: 5,
+    to: "/ticket-type",
+    icon: <HiOutlineTicket fontSize="24" />,
+    text: "Ticket Type",
+  },
 ];
 
 const linksAdmin = [
@@ -83,15 +77,15 @@ const linksAdmin = [
   },
   {
     id: 2,
-    to: "/movies",
-    icon: <BiMoviePlay fontSize="24" />,
-    text: "Movies",
+    to: "/transactions",
+    icon: <MdPayment fontSize="24" />,
+    text: "Transaction",
   },
   {
     id: 3,
-    to: "/companies",
-    icon: <BiBuildings fontSize="24" />,
-    text: "Companies",
+    to: "/movies",
+    icon: <BiMoviePlay fontSize="24" />,
+    text: "Movies",
   },
   {
     id: 4,
@@ -99,30 +93,18 @@ const linksAdmin = [
     icon: <MdOutlineTheaters fontSize="24" />,
     text: "Theaters",
   },
-  // {
-  //   id: 5,
-  //   to: "/customers",
-  //   icon: <HiOutlineShoppingCart fontSize="24" />,
-  //   text: "Customers",
-  // },
   {
     id: 5,
+    to: "/companies",
+    icon: <BiBuildings fontSize="24" />,
+    text: "Companies",
+  },
+  {
+    id: 6,
     to: "/users",
     icon: <FiUsers fontSize="24" />,
     text: "Users",
   },
-  {
-    id: 6,
-    to: "/transactions",
-    icon: <MdPayment fontSize="24" />,
-    text: "Transaction",
-  },
-  // {
-  //   id: 5,
-  //   to: "/analytics",
-  //   icon: <FiActivity fontSize="24" />,
-  //   text: "Analytics",
-  // },
 ];
 
 export const SidebarList = ({ isCollapse }) => {

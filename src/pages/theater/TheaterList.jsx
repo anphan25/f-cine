@@ -474,7 +474,7 @@ const TheaterList = () => {
             autoFocus
             onClick={handleAddTheater}
           >
-            Add Show Time
+            Add Theater
           </Button>
         </DialogActions>
       </Dialog>
