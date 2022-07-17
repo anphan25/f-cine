@@ -12,7 +12,12 @@ import {
   ListItemText,
   Stack,
 } from "@mui/material";
-import { CustomDialog, CustomSnackBar, HeaderBreadcrumbs } from "components";
+import {
+  CustomDialog,
+  CustomSnackBar,
+  HeaderBreadcrumbs,
+  DataTable,
+} from "components";
 import React, { useEffect, useState } from "react";
 import { MdAdd } from "react-icons/md";
 import { HiOutlineTicket } from "react-icons/hi";
@@ -28,23 +33,69 @@ const TicketTypeList = () => {
     type: "success",
   });
   const [ticketTypes, setTicketTypes] = useState([]);
+  const [pageState, setPageState] = useState({
+    isLoading: false,
+    data: [],
+    total: 0,
+    search: "",
+    page: 1,
+    pageSize: 10,
+  });
 
-  const fetchTicketType = () => {
-    setLoading(true);
-    getTicketTypeList()
-      .then((res) => {
-        console.log(res);
-        setTicketTypes(res.result);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setLoading(false);
-      });
+  const gridOptions = {
+    columns: [
+      {
+        headerName: "ID",
+        field: "id",
+        width: 300,
+      },
+      {
+        headerName: "Name",
+        field: "name",
+        width: 350,
+      },
+      {
+        headerName: "Price",
+        field: "defaultPrice",
+        type: "number",
+        width: 350,
+      },
+    ],
+    pageState: pageState,
+  };
+
+  const fetchTicketType = async () => {
+    setPageState((old) => ({ ...old, isLoading: true, data: [] }));
+
+    const res = await getTicketTypeList();
+
+    const dataRow = res.result.map((data) => ({
+      id: data.id,
+      name: data.name,
+      defaultPrice: data.defaultPrice.toLocaleString("vi-VN", {
+        style: "currency",
+        currency: "VND",
+      }),
+    }));
+
+    setPageState((old) => ({
+      ...old,
+      isLoading: false,
+      data: dataRow,
+      // total: res.companies.total,
+    }));
   };
 
   const handleDialog = () => {
     setIsDialogOpen(!isDialogOpen);
+  };
+
+  const pageChangeHandler = (newPage) => {
+    setPageState((old) => ({ ...old, page: newPage + 1 }));
+  };
+
+  const pageSizeChangeHandler = (newPageSize) => {
+    setPageState((old) => ({ ...old, pageSize: newPageSize }));
   };
 
   const handleSubmit = () => {
@@ -89,7 +140,7 @@ const TicketTypeList = () => {
           Add Ticket Type
         </Button>
       </Stack>
-      <Box
+      {/* <Box
         sx={{
           display: "grid",
           gap: 3,
@@ -124,7 +175,13 @@ const TicketTypeList = () => {
             </ListItem>
           </List>
         ))}
-      </Box>
+      </Box> */}
+
+      <DataTable
+        gridOptions={gridOptions}
+        onPageChange={pageChangeHandler}
+        onPageSizeChange={pageSizeChangeHandler}
+      ></DataTable>
 
       {/* Add Tickets Dialog */}
       <CustomDialog

@@ -89,21 +89,30 @@ const TheaterList = () => {
         filterable: false,
         getActions: (params) => [
           <GridActionsCellItem
-            sx={{ fontSize: "60px" }}
             icon={<ListAltIcon sx={{ color: "#623CE7" }} />}
             onClick={() => {
               navigate(`${params.row.id}`);
             }}
+            label="Show Room List"
+            showInMenu
           />,
 
           <GridActionsCellItem
-            sx={{ fontSize: "60px" }}
-            icon={<DeleteIcon sx={{ color: "#FF4842" }} />}
+            disabled={userInfo?.Role === "Admin" ? true : false}
+            icon={
+              <DeleteIcon
+                sx={{
+                  color: "#FF4842",
+                }}
+              />
+            }
             onClick={() => {
               setRemovedTheaterNamed(params.row.name);
               setRemovedTheaterId(params.row.id);
               handleDeleteTheaterDialog();
             }}
+            label="Delete Theater"
+            showInMenu
           />,
         ],
       },
@@ -284,13 +293,15 @@ const TheaterList = () => {
           heading="Theater List"
           links={[{ name: "Dashboard", to: "/" }, { name: "Theater List" }]}
         />
-        <Button
-          variant="contained"
-          startIcon={<MdAdd />}
-          onClick={handleAddDialog}
-        >
-          Add Theater
-        </Button>
+        {userInfo?.Role === "Admin" || (
+          <Button
+            variant="contained"
+            startIcon={<MdAdd />}
+            onClick={handleAddDialog}
+          >
+            Add Theater
+          </Button>
+        )}
       </Stack>
 
       <Box

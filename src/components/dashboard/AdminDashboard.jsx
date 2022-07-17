@@ -266,7 +266,7 @@ const AdminDashboard = () => {
           justifyContent="space-between"
           sx={{ marginBottom: "20px" }}
         >
-          <Typography variant="h4">Total Earning</Typography>
+          <Typography variant="h4">Earning Chart</Typography>
           <Select
             value={year}
             label="Year"
