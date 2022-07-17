@@ -260,7 +260,7 @@ const UserList = () => {
       ...old,
       isLoading: false,
       data: dataRow,
-      total: res.users.maxPage,
+      total: res.users.total,
     }));
   };
 

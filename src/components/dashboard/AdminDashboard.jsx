@@ -48,7 +48,7 @@ const AdminDashboard = () => {
     dataLabels: { enabled: false },
     stroke: { curve: "smooth" },
     xaxis: {
-      type: "number",
+      type: "string",
       categories: months,
     },
     yaxis: {
@@ -61,6 +61,47 @@ const AdminDashboard = () => {
         },
       },
     },
+  };
+
+  const convertMonth = (month) => {
+    switch (month) {
+      case 1: {
+        return "Jan";
+      }
+      case 2: {
+        return "Feb";
+      }
+      case 3: {
+        return "Mar";
+      }
+      case 4: {
+        return "Apr";
+      }
+      case 5: {
+        return "May";
+      }
+      case 6: {
+        return "Jun";
+      }
+      case 7: {
+        return "Jul";
+      }
+      case 8: {
+        return "Aug";
+      }
+      case 9: {
+        return "Sep";
+      }
+      case 10: {
+        return "Oct";
+      }
+      case 11: {
+        return "Nov";
+      }
+      case 12: {
+        return "Dec";
+      }
+    }
   };
 
   const series = [{ name: "Total Incomes", data: incomes }];
@@ -97,7 +138,7 @@ const AdminDashboard = () => {
         year: year,
       });
 
-      setMonths(res.result.map((e) => e.month));
+      setMonths(res.result.map((e) => convertMonth(e.month)));
       setIncomes(res.result.map((e) => e.income));
     };
 
