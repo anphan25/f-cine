@@ -9,7 +9,7 @@ import { getDataChart, getDataDashboard } from "services/AnalystService";
 
 const tabStyle = {
   padding: "20px",
-  width: "32%",
+  width: "32.5%",
   borderRadius: "10px",
 
   "& .info-tab_left": {
