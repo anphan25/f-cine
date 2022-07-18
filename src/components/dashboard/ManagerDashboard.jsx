@@ -172,7 +172,7 @@ const ManagerDashboard = () => {
                 {dashboardData?.newShowtimeQuantity}
               </Typography>
               <Typography className="info-tab_desc">
-                Weekly show time
+                Monthly show time
               </Typography>
               <Box className="info-tab_percentage">
                 <Box
@@ -207,7 +207,7 @@ const ManagerDashboard = () => {
                 {dashboardData?.newTicketSoldQuantity}
               </Typography>
               <Typography className="info-tab_desc">
-                Weekly tickets sold
+              Monthly tickets sold
               </Typography>
               <Box className="info-tab_percentage">
                 <Box
@@ -244,7 +244,7 @@ const ManagerDashboard = () => {
                   currency: "VND",
                 })}
               </Typography>
-              <Typography className="info-tab_desc">Weekly income</Typography>
+              <Typography className="info-tab_desc">Monthly income</Typography>
               <Box className="info-tab_percentage">
                 <Box
                   className={`info-tab_percentage_number ${
